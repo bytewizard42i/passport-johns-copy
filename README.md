@@ -18,7 +18,7 @@ This repository holds the plan, the research that backs it, the reference materi
 
 | If you are… | Read |
 |---|---|
-| A stakeholder wanting the plan | [`site/the-plan.html`](site/the-plan.html) (visual) · [`site/delivery-plan.html`](site/delivery-plan.html) (prose) — or browse them together at [`site/index.html`](site/index.html) |
+| A stakeholder wanting the plan | https://input-output-hk.github.io/arc-passport |
 | A developer joining the team | [`research/README.md`](research/README.md), then [`docs/mvp-architecture.md`](docs/mvp-architecture.md) |
 | A partner evaluating the proposal | [`docs/passport-plan.md`](docs/passport-plan.md) |
 | Looking for the design vision | [`docs/secure-onboarding-design.pdf`](docs/secure-onboarding-design.pdf) |
