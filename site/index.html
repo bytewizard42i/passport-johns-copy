@@ -138,6 +138,11 @@
   .doc-card .open svg { width: 14px; height: 14px; }
 
   footer.landing-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
     border-top: 1px solid var(--line);
     padding: 28px clamp(24px, 5vw, 80px);
     font-family: var(--font-mono);
@@ -149,6 +154,7 @@
   }
   footer.landing-footer a { color: var(--text-mute); text-decoration: none; border-bottom: 1px solid var(--line); }
   footer.landing-footer a:hover { color: var(--iog-infared); border-bottom-color: var(--iog-infared); }
+  .deploy-meta:empty { display: none; }
 
 </style>
 </head>
@@ -200,7 +206,8 @@
 </main>
 
 <footer class="landing-footer">
-  ARC · Input Output Global · Midnight Passport planning workspace
+  <span>ARC · Input Output Global · Midnight Passport planning workspace</span>
+  <span class="deploy-meta"><!-- DEPLOY_META --></span>
 </footer>
 
 <script src="theme-toggle.js"></script>
