@@ -96,7 +96,7 @@ tower-http = "0.6"               # CORS, compression
 
 | Tool | Purpose | Notes |
 |---|---|---|
-| `cargo-nextest` | Faster test runner (already in compact-upstream) | Required for cross-crate integration tests of DKG |
+| `cargo-nextest` | Faster test runner (standard in upstream Midnight crates) | Required for cross-crate integration tests of DKG |
 | `wiremock` | HTTP mocking for account-provider tests | Already pinned |
 | `criterion` + `pprof` | Bench signing latency, flame-graph Poseidon hot spots | Already pinned |
 | `axoupdater` | CLI self-update (Compact pattern) | Applicable to any end-user tooling we ship |
@@ -278,7 +278,7 @@ cargo add tracing tracing-subscriber
 | `frost-core` 3.0.0-rc.0 | `reddsa` (not yet updated to match) | **Gap**: we must either stay on reddsa 0.5.x's transitive frost-core (1.x) or fork/patch to move everyone forward. Raise as a decision item. |
 | `jubjub` 0.10 | `midnight-curves` 0.2.0 | Already validated in experiments |
 | `reddsa` 0.5.x | `pasta_curves` 0.5, `group` 0.13, `jubjub` 0.10 | Fixed at 0.5.0 release |
-| Midnight proof server 8.0.2 | `midnight-ledger` 8.1.0-rc.1 | **Known incompatibility** — see the known-issues log §Known Bugs |
+| Midnight proof server 8.0.2 | upstream `midnight-ledger` crate 8.1.0-rc.1 | **Known incompatibility** — see the known-issues log §Known Bugs |
 
 ---
 

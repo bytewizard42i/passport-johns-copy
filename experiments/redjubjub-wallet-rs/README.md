@@ -32,6 +32,37 @@ All subsequent operations are pure Rust.
 - Rust toolchain (`cargo`, edition 2024)
 - `openssl` (for `.env` secret generation)
 - A deployed contract from the TypeScript experiment (`../redjubjub-wallet`)
+- A sibling checkout of the `midnight-ledger` workspace — see below.
+
+### Sibling checkout: `midnight-ledger`
+
+This experiment consumes the `midnight-ledger` workspace via **path
+dependencies** in `Cargo.toml`. A fresh clone of this repository will
+not build until you provide that workspace as a sibling directory next
+to `redjubjub-wallet-rs/`.
+
+```bash
+# From within this experiments/ directory:
+cd ..   # now inside arc-passport/experiments/
+git clone https://github.com/midnightntwrk/midnight-ledger.git
+cd midnight-ledger
+git checkout ledger-8.0.2   # match the devnet version
+```
+
+The resulting layout should be:
+
+```
+arc-passport/
+  experiments/
+    redjubjub-wallet-rs/
+    midnight-ledger/        ← tag ledger-8.0.2
+```
+
+The path dependencies in `Cargo.toml` reference twelve workspace crates
+via `../midnight-ledger/*`. Do not commit the `midnight-ledger/`
+checkout — it is maintained upstream at
+`midnightntwrk/midnight-ledger` and should be refreshed via `git pull`
+on that sibling, not tracked here.
 
 ## Quick Start
 

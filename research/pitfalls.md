@@ -156,7 +156,7 @@ MVP-02 is "in-circuit threshold-signature verification." The Compact circuit has
 **How to avoid:**
 - For every signature-verification circuit, write a "what's in the challenge" table in the MVP-02 spec. Include: `R`, public key, contract address, tx counter, signing-set digest, domain tag, *every* public parameter the signature must bind.
 - Differential test: try replaying a signature with one public input altered — it must fail.
-- Commission a Fiat-Shamir review of Midnight's Halo2 fork (`experiments/midnight-ledger/`) as a pre-production step.
+- Commission a Fiat-Shamir review of Midnight's Halo2 fork (the upstream `midnight-ledger` crate) as a pre-production step.
 
 **Warning signs:**
 - A spec section that lists "public inputs" separately from "challenge-hash inputs" — they must match.
@@ -701,7 +701,7 @@ CIP mechanics are visible and copyable; CIP governance isn't.
 ### Pitfall O1: Upstream SDK version churn (v8.0.2 vs v8.1.0-rc.1)
 
 **What goes wrong:**
-`midnight-ledger` is at v8.0.2 in some crates, v8.1.0-rc.1 in `experiments/redjubjub-wallet-rs/`. Transaction deserialisation fails because the proof server expects v8.0.2 format. This is an active known bug (`experiments/redjubjub-wallet-rs/.claude/findings.md`).
+`midnight-ledger` is at v8.0.2 in some crates, v8.1.0-rc.1 in `experiments/redjubjub-wallet-rs/`. Transaction deserialisation fails because the proof server expects v8.0.2 format. This is an active known bug.
 
 **Why it happens:**
 Midnight ledger is a research-grade dependency with no API stability. Path dependencies pin to whatever happened to be on disk. Developers update one and not the other.

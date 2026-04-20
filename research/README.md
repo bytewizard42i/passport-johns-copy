@@ -14,7 +14,7 @@ For someone new to the project, the shortest path is:
 
 ## What this is *not*
 
-- **Not the plan.** The plan is in [`../docs/delivery-plan.html`](../docs/delivery-plan.html). If research and plan conflict, the plan is authoritative.
+- **Not the plan.** The plan is in [`../site/delivery-plan.html`](../site/delivery-plan.html). If research and plan conflict, the plan is authoritative.
 - **Not a specification.** Protocol, API, and data-format specifications are published as Midnight Improvement Proposals (MIPs) when the team drafts them.
 - **Not a living document.** Each file is dated. When the context changes materially, the document is updated with a dated correction note rather than silent rewriting — so that earlier decisions remain readable against the evidence available at the time.
 

@@ -7,89 +7,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
 <style>
-  :root {
-    --iog-infared: #E52321;
-    --iog-dawn: #EC641D;
-    --iog-acid-green: #06FF89;
-    --iog-cobalt-pulse: #2C4FFA;
-
-    --bg: #FFFFFF;
-    --bg-soft: #FAFAFA;
-    --bg-alt: #F4F4F2;
-    --bg-code: #F4F4F2;
-    --line: rgba(0,0,0,0.10);
-    --line-strong: rgba(0,0,0,0.22);
-    --text: #0A0A0A;
-    --text-mute: #4A4A4A;
-    --text-faint: #888888;
-
-    --good: #00994A;
-    --good-soft: #E2F5EB;
-    --bad: #E52321;
-    --bad-soft: #FCEAE9;
-    --warn: #A88200;
-    --warn-soft: #FBF1CC;
-    --info: #2C4FFA;
-    --info-soft: #E7EBFE;
-    --accent: #E52321;
-
-    --font-display: 'Barlow', system-ui, sans-serif;
-    --font-body: 'Barlow', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #0A0A0A;
-      --bg-soft: #121212;
-      --bg-alt: #181818;
-      --bg-code: #1A1A1A;
-      --line: rgba(255,255,255,0.10);
-      --line-strong: rgba(255,255,255,0.22);
-      --text: #F4F4F2;
-      --text-mute: #B5B5B5;
-      --text-faint: #7A7A7A;
-
-      --good: #06FF89;
-      --good-soft: #0C2A1C;
-      --bad: #FF5653;
-      --bad-soft: #2A0C0B;
-      --warn: #F2FF58;
-      --warn-soft: #2B2A0B;
-      --info: #8FA3FF;
-      --info-soft: #0E1638;
-    }
-  }
-  html[data-theme="dark"] {
-    --bg: #0A0A0A; --bg-soft: #121212; --bg-alt: #181818; --bg-code: #1A1A1A;
-    --line: rgba(255,255,255,0.10); --line-strong: rgba(255,255,255,0.22);
-    --text: #F4F4F2; --text-mute: #B5B5B5; --text-faint: #7A7A7A;
-    --good: #06FF89; --good-soft: #0C2A1C;
-    --bad: #FF5653; --bad-soft: #2A0C0B;
-    --warn: #F2FF58; --warn-soft: #2B2A0B;
-    --info: #8FA3FF; --info-soft: #0E1638;
-  }
-  html[data-theme="light"] {
-    --bg: #FFFFFF; --bg-soft: #FAFAFA; --bg-alt: #F4F4F2; --bg-code: #F4F4F2;
-    --line: rgba(0,0,0,0.10); --line-strong: rgba(0,0,0,0.22);
-    --text: #0A0A0A; --text-mute: #4A4A4A; --text-faint: #888888;
-    --good: #00994A; --good-soft: #E2F5EB;
-    --bad: #E52321; --bad-soft: #FCEAE9;
-    --warn: #A88200; --warn-soft: #FBF1CC;
-    --info: #2C4FFA; --info-soft: #E7EBFE;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-body);
     font-size: 17px;
     line-height: 1.65;
-    -webkit-font-smoothing: antialiased;
-    transition: background .2s ease, color .2s ease;
   }
 
   main.doc {
@@ -395,31 +317,6 @@
     font-weight: 600;
   }
   .week dl dd { color: var(--text); line-height: 1.55; }
-
-  /* Theme toggle */
-  .theme-toggle {
-    position: fixed;
-    top: 20px; right: 20px;
-    z-index: 50;
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    border: 1px solid var(--line-strong);
-    background: var(--bg);
-    color: var(--text);
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: border-color .15s ease, color .15s ease;
-  }
-  .theme-toggle:hover { border-color: var(--iog-infared); color: var(--iog-infared); }
-  .theme-toggle svg { width: 16px; height: 16px; display: block; }
-  .theme-toggle .icon-sun { display: none; }
-  .theme-toggle .icon-moon { display: block; }
-  html[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
-  html[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
-  @media (prefers-color-scheme: dark) {
-    html:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
-    html:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
-  }
 
   footer.doc-footer {
     border-top: 1px solid var(--line);
@@ -814,27 +711,6 @@
 
 </main>
 
-<script>
-  (function theme() {
-    const root = document.documentElement;
-    const btn = document.getElementById('themeToggle');
-    const saved = localStorage.getItem('passport-spec-theme');
-    if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
-    btn.addEventListener('click', () => {
-      const cur = root.getAttribute('data-theme');
-      let next;
-      if (!cur) next = 'light';
-      else if (cur === 'light') next = 'dark';
-      else next = null;
-      if (next) {
-        root.setAttribute('data-theme', next);
-        localStorage.setItem('passport-spec-theme', next);
-      } else {
-        root.removeAttribute('data-theme');
-        localStorage.removeItem('passport-spec-theme');
-      }
-    });
-  })();
-</script>
+<script src="theme-toggle.js"></script>
 </body>
 </html>

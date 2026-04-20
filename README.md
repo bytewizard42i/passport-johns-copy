@@ -18,7 +18,7 @@ This repository holds the plan, the research that backs it, the reference materi
 
 | If you are… | Read |
 |---|---|
-| A stakeholder wanting the plan | [`docs/the-plan.html`](docs/the-plan.html) (visual) · [`docs/delivery-plan.html`](docs/delivery-plan.html) (prose) |
+| A stakeholder wanting the plan | [`site/the-plan.html`](site/the-plan.html) (visual) · [`site/delivery-plan.html`](site/delivery-plan.html) (prose) — or browse them together at [`site/index.html`](site/index.html) |
 | A developer joining the team | [`research/README.md`](research/README.md), then [`docs/mvp-architecture.md`](docs/mvp-architecture.md) |
 | A partner evaluating the proposal | [`docs/passport-plan.md`](docs/passport-plan.md) |
 | Looking for the design vision | [`docs/secure-onboarding-design.pdf`](docs/secure-onboarding-design.pdf) |
@@ -27,9 +27,11 @@ This repository holds the plan, the research that backs it, the reference materi
 
 ```
 arc-passport/
-├── docs/
+├── site/                        Static web artefacts deployed to GitHub Pages
+│   ├── index.html               Landing page — unified entry to the two plan docs
 │   ├── the-plan.html            Visual stakeholder pre-read
-│   ├── delivery-plan.html       Written delivery specification
+│   └── delivery-plan.html       Written delivery specification
+├── docs/
 │   ├── passport-plan.md         High-level plan summary
 │   ├── mvp-architecture.md      MVP architecture reasoning
 │   ├── KNOWLEDGE_BASE.md        Working knowledge base

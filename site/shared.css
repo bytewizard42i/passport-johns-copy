@@ -1,0 +1,177 @@
+/* Midnight Passport — shared brand tokens, base reset, and theme toggle.
+   Imported by site/index.html, site/the-plan.html, and site/delivery-plan.html. */
+
+:root {
+  /* IOG brand palette — identical in every theme */
+  --iog-infared: #E52321;
+  --iog-dawn: #EC641D;
+  --iog-acid-green: #06FF89;
+  --iog-electric-blue: #16E9D8;
+  --iog-volt-yellow: #F2FF58;
+  --iog-ember-orange: #FF532C;
+  --iog-cobalt-pulse: #2C4FFA;
+  --iog-ultraviolet: #A700FF;
+  --iog-hyper-pink: #FF79FC;
+
+  /* Light theme (default) */
+  --bg: #FFFFFF;
+  --bg-soft: #FAFAFA;
+  --bg-alt: #F4F4F2;
+  --bg-code: #F4F4F2;
+  --line: rgba(0,0,0,0.10);
+  --line-strong: rgba(0,0,0,0.22);
+  --text: #0A0A0A;
+  --text-mute: #4A4A4A;
+  --text-faint: #888888;
+
+  --card-fill: #FFFFFF;
+  --card-soft-fill: #FAFAFA;
+  --card-stroke: #0A0A0A;
+  --card-stroke-soft: #888888;
+  --card-stroke-faint: #E0E0E0;
+  --svg-text: #0A0A0A;
+  --svg-text-mute: #4A4A4A;
+  --svg-text-faint: #888888;
+
+  --good: #00994A;
+  --good-soft: #E2F5EB;
+  --bad: #E52321;
+  --bad-soft: #FCEAE9;
+  --warn: #A88200;
+  --warn-soft: #FBF1CC;
+  --info: #2C4FFA;
+  --info-soft: #E7EBFE;
+  --accent: #E52321;
+
+  --font-display: 'Barlow', system-ui, sans-serif;
+  --font-body: 'Barlow', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0A0A0A;
+    --bg-soft: #121212;
+    --bg-alt: #181818;
+    --bg-code: #1A1A1A;
+    --line: rgba(255,255,255,0.10);
+    --line-strong: rgba(255,255,255,0.22);
+    --text: #F4F4F2;
+    --text-mute: #B5B5B5;
+    --text-faint: #7A7A7A;
+
+    --card-fill: #181818;
+    --card-soft-fill: #121212;
+    --card-stroke: #F4F4F2;
+    --card-stroke-soft: #7A7A7A;
+    --card-stroke-faint: #2A2A2A;
+    --svg-text: #F4F4F2;
+    --svg-text-mute: #B5B5B5;
+    --svg-text-faint: #7A7A7A;
+
+    --good: #06FF89;
+    --good-soft: #0C2A1C;
+    --bad: #FF5653;
+    --bad-soft: #2A0C0B;
+    --warn: #F2FF58;
+    --warn-soft: #2B2A0B;
+    --info: #8FA3FF;
+    --info-soft: #0E1638;
+  }
+}
+
+html[data-theme="dark"] {
+  --bg: #0A0A0A;
+  --bg-soft: #121212;
+  --bg-alt: #181818;
+  --bg-code: #1A1A1A;
+  --line: rgba(255,255,255,0.10);
+  --line-strong: rgba(255,255,255,0.22);
+  --text: #F4F4F2;
+  --text-mute: #B5B5B5;
+  --text-faint: #7A7A7A;
+
+  --card-fill: #181818;
+  --card-soft-fill: #121212;
+  --card-stroke: #F4F4F2;
+  --card-stroke-soft: #7A7A7A;
+  --card-stroke-faint: #2A2A2A;
+  --svg-text: #F4F4F2;
+  --svg-text-mute: #B5B5B5;
+  --svg-text-faint: #7A7A7A;
+
+  --good: #06FF89;
+  --good-soft: #0C2A1C;
+  --bad: #FF5653;
+  --bad-soft: #2A0C0B;
+  --warn: #F2FF58;
+  --warn-soft: #2B2A0B;
+  --info: #8FA3FF;
+  --info-soft: #0E1638;
+}
+
+html[data-theme="light"] {
+  --bg: #FFFFFF;
+  --bg-soft: #FAFAFA;
+  --bg-alt: #F4F4F2;
+  --bg-code: #F4F4F2;
+  --line: rgba(0,0,0,0.10);
+  --line-strong: rgba(0,0,0,0.22);
+  --text: #0A0A0A;
+  --text-mute: #4A4A4A;
+  --text-faint: #888888;
+
+  --card-fill: #FFFFFF;
+  --card-soft-fill: #FAFAFA;
+  --card-stroke: #0A0A0A;
+  --card-stroke-soft: #888888;
+  --card-stroke-faint: #E0E0E0;
+  --svg-text: #0A0A0A;
+  --svg-text-mute: #4A4A4A;
+  --svg-text-faint: #888888;
+
+  --good: #00994A;
+  --good-soft: #E2F5EB;
+  --bad: #E52321;
+  --bad-soft: #FCEAE9;
+  --warn: #A88200;
+  --warn-soft: #FBF1CC;
+  --info: #2C4FFA;
+  --info-soft: #E7EBFE;
+}
+
+/* Base reset */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  transition: background .2s ease, color .2s ease;
+}
+
+/* Theme toggle — Auto · Light · Dark */
+.theme-toggle {
+  position: fixed;
+  top: 20px; right: 20px;
+  z-index: 50;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .15s ease, color .15s ease;
+}
+.theme-toggle:hover { border-color: var(--iog-infared); color: var(--iog-infared); }
+.theme-toggle svg { width: 16px; height: 16px; display: block; }
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+html[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+html[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+  html:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+}

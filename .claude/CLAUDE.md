@@ -22,7 +22,8 @@ This repository is the planning and knowledge-gathering workspace for Midnight P
 
 ## Repository layout
 
-- `docs/` — plan and design documents. `docs/the-plan.html` and `docs/delivery-plan.html` are the stakeholder-facing artefacts.
+- `site/` — static web artefacts deployed to GitHub Pages. `site/the-plan.html` and `site/delivery-plan.html` are the stakeholder-facing artefacts; `site/index.html` is the unified entry point. Uses `../assets/logos/…` so it still renders locally.
+- `docs/` — plan and design documents in prose (markdown and PDF).
 - `research/` — background research informing the plan.
 - `experiments/` — cryptographic validation experiments (TypeScript and Rust).
 - `docs/reference/` — git subtree from `https://github.com/LFDT-Nightstream/MVE-Planning.git`.
