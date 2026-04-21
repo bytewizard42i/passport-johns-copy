@@ -32,9 +32,11 @@ with a passkey, receives a deterministic set of wallet keys
 (Shielded, Night, Dust), registers a name, and transacts on devnet.
 The account provider exists, but only as a name resolver, JWT issuer,
 and rate limiter. A Midnight transaction is signed in the browser
-with a single-signer Schnorr signature over JubJub; the signature is
-verified inside a Compact circuit as a private witness, exactly as in
-`experiments/redjubjub-wallet/` and `experiments/redjubjub-wallet-rs/`.
+with the user's NightExternal key (derived from the passkey-unlocked
+seed); the Midnight node verifies the intent signature against the
+signing pubkey. Compact contracts — including the name registry —
+trust node-level verification of the signing pubkey; no additional
+in-circuit signature check is performed in MVP 1.
 
 ## Architecture in brief
 
@@ -60,10 +62,13 @@ Full depth is in [`architecture.md`](./architecture.md).
    passkey. The account provider is a convenience service for names
    and sponsorship, not a custodian.
 4. **Formal-methods hand-off is closer to ready.** The priority-1
-   target — in-circuit single-signer Schnorr verification — is
-   already implemented and passes; the formal-methods team receives a
-   stable spec immediately rather than waiting for Phase 3 FROST
-   output.
+   target under Plan A is the name-registry commit-reveal scheme
+   with ENSIP-15 normalisation enforced in-circuit — the circuit
+   work that actually remains for MVP 1. The in-circuit
+   single-signer Schnorr primitive from
+   `experiments/redjubjub-wallet*` is preserved and returns as the
+   foundation for multi-device under MVP-09 (see below); it is no
+   longer on the MVP 1 critical path.
 
 ## Downsides — stated honestly
 
@@ -137,12 +142,12 @@ The reference design principles live in
 | Requirement | Plan B | Plan A |
 |---|---|---|
 | **MVP-01** — FROST threshold spec | Phase 3 primary deliverable | **Parked** — retained as Milestone 2 input |
-| **MVP-02** — in-circuit threshold verification | FROST aggregate signature verified in-circuit | **Rewritten** — in-circuit single-signer Schnorr verification (already working in experiments) |
+| **MVP-02** — in-circuit threshold verification | FROST aggregate signature verified in-circuit | **Removed** — folded into MVP-09 as the 1-of-N in-circuit verification pattern for multi-device. MVP 1 relies on the node-level intent-signature check; no in-circuit signature verification is performed |
 | **MVP-03** — account provider API | OAuth-like, handles JWT and recovery hand-off to signing service | **Simplified** — JWT issuer + name resolver + rate limiter; no co-signing |
-| **MVP-04** — name registry | Unchanged | Unchanged |
+| **MVP-04** — name registry | Unchanged | Unchanged — ownership is bound by the NightExternal intent signature that the node already verifies |
 | **MVP-07** — single-node operational model | Required — we run a signing service | **Removed** — no MPC service to operate |
 | **MVP-08** *(new)* — browser support matrix | n/a | Required — names the supported browser / OS pairs. **Status: product-owner-deferred decision** — working recommendation exists, final matrix not locked |
-| **MVP-09** *(new)* — multi-device research programme | n/a | Required — research begins Step 1. Label "research programme" still stands for MVP 1, but delivery is expected sooner than originally scoped because multi-device gates recovery |
+| **MVP-09** *(new)* — multi-device research programme | n/a | Required — research begins Step 1. Label "research programme" still stands for MVP 1, but delivery is expected sooner than originally scoped because multi-device gates recovery. MVP-09 also absorbs the 1-of-N in-circuit Schnorr verification pattern (a natural foundation for multi-device) that was originally MVP-02 |
 
 See `.planning/REQUIREMENTS.md` for the authoritative versions of
 these requirements and their success criteria.
@@ -173,6 +178,18 @@ The provider has **no custody authority**. It cannot produce a
 Schnorr signature under any user's key, because it holds no key
 material and no key share. This is the authority-boundary invariant
 of Plan A and must be preserved end-to-end.
+
+## Authorisation primitive for MVP 1
+
+The NightExternal intent signature is the MVP 1 authorisation
+primitive for every on-chain action, including name registration.
+The user's NightExternal key (derived from the passkey-unlocked seed)
+signs Midnight transaction intents; the node verifies the signature
+against the signing pubkey. Compact contracts — including the name
+registry (MVP-04) — bind ownership to that pubkey and trust the
+node's intent-signature check. There is no separate on-device
+Schnorr key, no per-operation challenge-response with a distinct
+device key, and no in-circuit signature verification in MVP 1.
 
 ## Open risks
 
@@ -236,11 +253,13 @@ work feeds MVP-09; delivery depends on multi-device landing first
   fee-bearing branches independently of user custody.
 - **DUST funding research (`.planning/research/DUST-funding-and-tx-sponsorship-RESEARCH.md`).**
   Applies in full. Plan A does not change Midnight's DUST model.
-- **Formal-methods priority queue.** Priority 1 becomes **in-circuit
-  single-signer Schnorr verification** (shifted up from the old
-  priority list). The reference implementation in
-  `experiments/redjubjub-wallet-rs/` already compiles and runs
-  end-to-end, so the hand-off is close to ready.
+- **Formal-methods priority queue.** Priority 1 under Plan A is the
+  **name-registry commit-reveal scheme with ENSIP-15 normalisation
+  enforced in-circuit** — the circuit work that actually remains
+  for MVP 1. The in-circuit single-signer Schnorr primitive
+  preserved in `experiments/redjubjub-wallet-rs/` is not on the
+  MVP 1 critical path; it returns under MVP-09 as the 1-of-N
+  multi-device foundation.
 - **Domain-separation registry (STD-03).** Still required, but now
   gates fewer artefacts (no FROST challenge to cover). Revisit
   priority — it may drop from Phase 2 cross-cutting into a lighter

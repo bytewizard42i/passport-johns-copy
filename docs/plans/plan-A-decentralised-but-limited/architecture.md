@@ -18,15 +18,16 @@ later — that does not exist yet and is expensive to build.
 
 Plan A takes a different route. It uses the user's **WebAuthn
 passkey as the signing root**, derives Midnight wallet keys in the
-browser, signs Midnight transactions in the browser with the
-single-signer Schnorr scheme already validated in
-`experiments/redjubjub-wallet/` and `experiments/redjubjub-wallet-rs/`,
-and verifies the signature in-circuit as a private witness. The
-account provider becomes a thin service that does not hold keys.
-Midnight Passport is decentralised from Day 1, at the cost of a
-limited browser / OS matrix, no recovery at MVP, and MVP 1 being
-strictly one-device-one-account. Genuine multi-device support is a
-near-term priority after MVP 1 because it gates recovery.
+browser, and signs Midnight transaction intents in the browser with
+the user's NightExternal key. The Midnight node verifies the intent
+signature against the signing pubkey; Compact contracts (including
+the name registry) bind ownership to that pubkey and trust the
+node's intent-signature check. The account provider becomes a thin
+service that does not hold keys. Midnight Passport is decentralised
+from Day 1, at the cost of a limited browser / OS matrix, no
+recovery at MVP, and MVP 1 being strictly one-device-one-account.
+Genuine multi-device support is a near-term priority after MVP 1
+because it gates recovery.
 
 ## 2. Architecture overview
 
@@ -83,11 +84,12 @@ near-term priority after MVP 1 because it gates recovery.
     ┌───────────────────────┐
     │   Midnight Network    │
     │                       │
+    │  Node-level intent-   │
+    │  signature check      │
     │  Name registry        │
     │  (Compact contract)   │
-    │  Single-signer        │
-    │  Schnorr verifier     │
-    │  in user contracts    │
+    │  binds ownership to   │
+    │  the signing pubkey   │
     └───────────────────────┘
 ```
 
@@ -149,35 +151,44 @@ where the seed lives (browser, passkey-derived) and who holds it
 
 ## 4. Signing flow
 
-Plan A uses single-signer Schnorr-on-JubJub exactly as implemented
-in the experiments. There is no threshold step, no DKG, no
-coordinator.
+Plan A signs Midnight transaction intents with the user's
+NightExternal key. There is no threshold step, no DKG, no
+coordinator. There is no separate on-device Schnorr key, no
+per-operation challenge-response with a distinct device key, and no
+in-circuit signature verification in MVP 1 — the signature is
+checked at the node level.
 
 1. The browser constructs the Midnight transaction intent (token,
    amount, recipient, nonce).
 2. The user's passkey is invoked to unlock the derivation seed (for
-   Assertion-based derivation, this is a WebAuthn `get()` with a
+   assertion-based derivation, this is a WebAuthn `get()` with a
    user-verification flag; for the PRF path, it is a `get()` with
    the PRF extension).
-3. The browser computes the Schnorr challenge `c = persistentHash(
-   STD-03 prefix || R || PK || intent-digest)` with the same
-   Poseidon hasher used in the Compact circuit.
-4. The browser computes `s = r + c · sk mod JUBJUB_R`, where `r` is
-   a random scalar and `sk` is the derived secret key for the
-   relevant wallet role. The `r` nonce is generated via
-   `crypto.getRandomValues` and checked against the JUBJUB order
-   with the same retry loop the experiments already implement.
-5. The signature `(R, s)` is fed into the Compact circuit as a
-   private witness. The circuit verifies `s·G == R + c·PK` using
-   `ecMulGenerator`, `ecMul`, and `ecAdd` on JubJub — the same
-   arithmetic that the single-signer experiment validated on devnet.
-6. The ZK proof is emitted by a local or browser-side proof server
-   and submitted to Midnight.
+3. The browser signs the intent with the NightExternal key derived
+   from the unlocked seed.
+4. The ZK proof is emitted by a local or browser-side proof server
+   and submitted to Midnight with the intent signature attached.
+5. The Midnight node verifies the intent signature against the
+   signing pubkey before accepting the transaction. Compact
+   contracts — including the name registry — bind ownership to the
+   pubkey and trust the node's intent-signature check; they do
+   **not** re-verify the signature in-circuit.
 
-Because the signature is consumed as a private witness, the public
-transaction never reveals it. The on-chain verifier only sees the
-proof; the account provider only sees a request body bound to a JWT
-`cnf` claim.
+The account provider only ever sees a request body bound to a JWT
+`cnf` claim, never key material.
+
+### Future: 1-of-N multi-device
+
+The in-circuit Schnorr verification primitive validated in
+`experiments/redjubjub-wallet/` and
+`experiments/redjubjub-wallet-rs/` is preserved but not used in
+MVP 1. It becomes relevant post-MVP under MVP-09, where multiple
+devices register against a single identity: each device holds its
+own `sk_device`, operations are authorised by any one of the N
+signatures, and verification runs in-circuit against a membership
+proof over the set of registered device pubkeys. This is framed
+explicitly as a **1-of-N** pattern — not k-of-N threshold — because
+each device acts independently.
 
 ## 5. Transaction construction and balancing
 
@@ -236,8 +247,9 @@ Unchanged from Plan B. An on-chain Compact contract provides
 commit-reveal registration, multi-address resolution, per-device
 rate limits, ENSIP-15 normalisation enforced in-circuit, and
 dormancy reclaim. The Plan A account provider is a *reader* of this
-contract; writes are user-initiated and signed with the user's
-browser-held Schnorr key.
+contract; writes are user-initiated and are bound by the
+NightExternal intent signature that the Midnight node verifies at
+submission time.
 
 ## 8. Derivation-seed storage and threat model
 
@@ -338,11 +350,11 @@ contract), which can be adopted wholesale once it exists.
 
 ## 11. Formal-methods hand-off candidates (in priority order)
 
-1. **In-circuit single-signer Schnorr verification.** Reference
-   implementation in `experiments/redjubjub-wallet-rs/` already
-   passes; the spec needs a "what is in the challenge" table and
-   differential test vectors (PITFALLS.md C6 defence). Nearly
-   ready for hand-off.
+1. **Name-registry commit-reveal with in-circuit ENSIP-15
+   normalisation.** The circuit work that actually remains for MVP
+   1. Needs a spec covering the commit-reveal ceremony, the
+   homoglyph and normalisation enforcement in-circuit, and the
+   per-device rate-limit logic.
 2. **Passkey-to-seed derivation.** A novel Plan A surface. Needs
    a spec covering PRF-path and assertion-path both, the HKDF
    construction, and the nonce-discipline requirements for the
@@ -351,20 +363,21 @@ contract), which can be adopted wholesale once it exists.
    must be expressible and machine-checkable. This is a
    reformulation of Plan B's original authority-boundary work at a
    smaller scope.
-4. **Name-registry homoglyph and rate-limit logic.** Unchanged from
-   Plan B.
+4. **1-of-N in-circuit Schnorr verification for multi-device.**
+   Preserved from the experiments but no longer on the MVP 1
+   critical path. Returns as the MVP-09 multi-device foundation.
 
 ## 12. Deviations from Plan B
 
 | Area | Plan B architecture | Plan A architecture |
 |---|---|---|
-| Signing scheme | FROST threshold Schnorr (n=5, t=4) | Single-signer Schnorr |
+| Signing scheme | FROST threshold Schnorr (n=5, t=4) | NightExternal key signs Midnight intents; node verifies |
 | Key custody | Distributed across committee via DKG | Derived in browser from passkey |
 | Account provider | OAuth-like with recovery hand-off to committee | Thin: name + JWT + rate-limit + paymaster |
 | Recovery at MVP | Federation-mediated | None |
 | Multi-device at MVP | OAuth-layer multiplicity against one committee-held key | None — one device one account; genuine multi-device is a near-term post-MVP priority (gates recovery) |
-| In-circuit verifier | FROST aggregate verification | Single-signer Schnorr verification (already running) |
-| Formal-methods priority 1 | FROST3 identifiable abort + nonce / domain discipline | In-circuit single-signer Schnorr verification |
+| In-circuit verifier | FROST aggregate verification | **None in MVP 1.** The node-level intent-signature check is sufficient authorisation for Compact contract calls, including name registration. The in-circuit Schnorr primitive returns under MVP-09 as the 1-of-N multi-device foundation |
+| Formal-methods priority 1 | FROST3 identifiable abort + nonce / domain discipline | Name-registry commit-reveal with ENSIP-15 normalisation enforced in-circuit |
 | MPC infrastructure | Required — single-operator committee at MVP | None |
 | Decentralised at MVP | No (centralised operator) | Yes |
 

@@ -26,7 +26,7 @@ complexity-vs-simplicity one.
 | Multi-device at MVP | None — strictly one device one account; genuine multi-device is a near-term post-MVP priority (gates recovery) | Yes |
 | MPC-node dependency | None | Required — single-operator federation to build |
 | Decentralised from Day 1 | Yes | No (centralised operator until Milestone 2 federation) |
-| Formal-methods priority-1 target | In-circuit single-signer Schnorr verification | In-circuit threshold (FROST) verification |
+| Formal-methods priority-1 target | Name-registry commit-reveal with ENSIP-15 normalisation enforced in-circuit | In-circuit threshold (FROST) verification |
 | Platform passkey sync | Apple iCloud Keychain / Google Password Manager — convenient for the user who has enabled it; not a substitute for Passport multi-device; not relied on in the product design | n/a |
 | Reversibility | Plan B work is reusable as Milestone 2 input | Plan A surface stays reusable if we ever flip back |
 
