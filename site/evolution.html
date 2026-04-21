@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Midnight Passport — How the plan evolved</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  body {
+    font-size: 17px;
+    line-height: 1.65;
+  }
+
+  main.doc {
+    max-width: clamp(760px, 64vw, 1040px);
+    margin: 0 auto;
+    padding: 72px clamp(24px, 5vw, 80px) 120px;
+  }
+  @media (max-width: 860px) { main.doc { max-width: 100%; } }
+
+  .doc-logo, .doc-logo-dark {
+    height: clamp(48px, 5vw, 80px);
+    width: auto;
+    display: block;
+    margin-bottom: 32px;
+  }
+  .doc-logo-dark { display: none; }
+  html[data-theme="dark"] .doc-logo { display: none; }
+  html[data-theme="dark"] .doc-logo-dark { display: block; }
+  @media (prefers-color-scheme: dark) {
+    html:not([data-theme="light"]) .doc-logo { display: none; }
+    html:not([data-theme="light"]) .doc-logo-dark { display: block; }
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    color: var(--text);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+  }
+  h1 {
+    font-size: clamp(2.6rem, 5vw, 3.8rem);
+    letter-spacing: -0.035em;
+    margin-bottom: 18px;
+  }
+  h2 {
+    font-size: clamp(1.4rem, 2vw, 1.7rem);
+    margin-top: 56px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  h3 {
+    font-size: 1.15rem;
+    margin-top: 28px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  p { margin-bottom: 16px; color: var(--text); }
+  p.lede {
+    font-size: 1.2rem;
+    color: var(--text-mute);
+    font-weight: 300;
+    line-height: 1.55;
+    margin-bottom: 40px;
+    max-width: 60ch;
+  }
+
+  a {
+    color: var(--iog-infared);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color .12s ease;
+  }
+  a:hover { border-bottom-color: var(--iog-infared); }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--bg-code);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--text);
+  }
+
+  strong { font-weight: 600; color: var(--text); }
+
+  /* "Updated" chip */
+  .updated-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--warn-soft);
+    color: var(--warn);
+    border: 1px solid var(--warn);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    padding: 5px 12px;
+    border-radius: 3px;
+    margin-bottom: 24px;
+  }
+  .updated-chip .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--iog-volt-yellow);
+    border: 1px solid var(--warn);
+    display: inline-block;
+  }
+
+  /* Header frontmatter */
+  header.frontmatter {
+    border-bottom: 1px solid var(--line-strong);
+    padding-bottom: 32px;
+    margin-bottom: 48px;
+  }
+  .kind {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--iog-infared);
+    font-weight: 600;
+    margin-bottom: 18px;
+  }
+
+  /* Comparison table */
+  table.compare {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0 32px;
+    font-size: 0.95rem;
+  }
+  table.compare th, table.compare td {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  table.compare thead th {
+    background: var(--bg-alt);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-mute);
+    border-bottom: 1px solid var(--line-strong);
+  }
+  table.compare thead th.plan-a {
+    color: var(--iog-infared);
+    border-bottom-color: var(--iog-infared);
+  }
+  table.compare thead th.plan-b {
+    color: var(--text-mute);
+  }
+  table.compare tbody tr:hover { background: var(--bg-soft); }
+  table.compare td.dim { color: var(--text-mute); }
+  table.compare td.dimension {
+    font-weight: 600;
+    color: var(--text);
+    width: 34%;
+  }
+
+  /* What survives callout */
+  .survives {
+    margin-top: 48px;
+    padding: 28px 32px;
+    background: var(--bg-alt);
+    border: 1px solid var(--line-strong);
+    border-left: 4px solid var(--iog-volt-yellow);
+    border-radius: 6px;
+  }
+  .survives h3 {
+    margin-top: 0;
+    margin-bottom: 14px;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-family: var(--font-mono);
+    color: var(--text);
+  }
+  .survives ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px 24px;
+  }
+  .survives ul li {
+    position: relative;
+    padding-left: 22px;
+    font-size: 0.96rem;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .survives ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--iog-infared);
+    font-weight: 600;
+  }
+
+  /* CTAs */
+  .ctas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: 56px;
+  }
+  .cta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 22px 26px;
+    color: var(--text);
+    background: var(--bg);
+    text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cta:hover {
+    border-color: var(--iog-infared);
+    background: var(--bg-soft);
+  }
+  .cta .cta-kind {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--iog-infared);
+    font-weight: 600;
+  }
+  .cta .cta-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+  .cta .cta-desc {
+    font-size: 0.92rem;
+    color: var(--text-mute);
+    line-height: 1.5;
+  }
+
+  footer.doc-footer {
+    border-top: 1px solid var(--line);
+    padding-top: 32px;
+    margin-top: 72px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-faint);
+  }
+  footer.doc-footer p { color: var(--text-faint); margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle colour scheme" title="Auto · Light · Dark">
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+  </svg>
+</button>
+
+<main class="doc">
+
+<header class="frontmatter">
+  <img class="doc-logo" src="../assets/logos/Full Logo/Input Output_Full Logo_RGB_Red POS.png" alt="Input Output">
+  <img class="doc-logo-dark" src="../assets/logos/Full Logo/Input Output_Full Logo_RGB_Red NEG.png" alt="Input Output">
+
+  <div class="kind">ARC · Midnight Passport · Plan update</div>
+  <span class="updated-chip"><span class="dot" aria-hidden="true"></span>Updated 2026/04/21</span>
+  <h1>The plan evolved.</h1>
+  <p class="lede">A cleaner path to the same MVP. Same product, same June 2026 target, same user experience — a different custody model underneath.</p>
+</header>
+
+<h2>What we set out to build</h2>
+<p>A named, self-sovereign, privacy-preserving identity on Midnight — <code>alice.midnight</code>, passkey onboarding, three wallets derived from one seedless root, no raw addresses, no gas-token purchase screens. Six design principles drawn from the <em>secure-onboarding-design</em> spec, a standards-track pipeline of MIPs the wider ecosystem can adopt, and an MVP delivered by the end of June 2026 under a weekly-demo cadence. That vision is unchanged.</p>
+
+<h2>What the research surfaced</h2>
+<p>Two things emerged from the DUST funding and transaction-sponsorship research earlier in April. First, a gap in the original fee-payment story that needed closing before the MVP could ship. Second, a cleaner architectural path that avoids standing up an MPC federation at all. Once the new sponsorship primitives were on the table, the cost of operating a threshold-signing committee — infrastructure, re-sharing cadence, Byzantine monitoring, committee-recovery UX — became hard to justify when a simpler route reached the same user-facing outcome.</p>
+
+<h2>What we chose — the current MVP path</h2>
+<p>The user's <strong>passkey is the signing root</strong>. All cryptographic operations run client-side in the browser: key derivation, Schnorr signing over JubJub, proof construction. The account provider is a lighter service — JWT issuance, name resolution, rate limiting, optional sponsorship relaying — with no custody authority and no key material. Midnight Passport is decentralised from day one. The trade-off is scope: a limited browser and operating-system matrix at MVP, and account recovery deferred behind genuine multi-device support. One device, one account at MVP 1.</p>
+
+<h2>What we kept — the original plan</h2>
+<p>Plan B — the FROST threshold-signing committee with universal browser support and federation-mediated recovery by design — is preserved in full. It becomes the foundation for Milestone 2 cross-chain support, where the threshold-signing substrate is the natural fit. It also remains the fallback: if Plan A hits a blocking risk, the Plan B artefacts are still current and still reviewable.</p>
+
+<h2>Plan A vs Plan B — compact comparison</h2>
+<table class="compare">
+  <thead>
+    <tr>
+      <th>Dimension</th>
+      <th class="plan-a">Plan A — current MVP path</th>
+      <th class="plan-b">Plan B — preserved</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="dimension">Custody model</td>
+      <td>User's passkey is the signing root; all crypto client-side</td>
+      <td class="dim">FROST n=5 / t=4 threshold committee</td>
+    </tr>
+    <tr>
+      <td class="dimension">Browser / OS matrix at MVP</td>
+      <td>Limited: Browser A × {OS-1, OS-2} — product-owner-deferred</td>
+      <td class="dim">Universal</td>
+    </tr>
+    <tr>
+      <td class="dimension">Account recovery at MVP</td>
+      <td>None — explicit user contract at onboarding</td>
+      <td class="dim">Yes — federation-mediated by design</td>
+    </tr>
+    <tr>
+      <td class="dimension">Multi-device at MVP</td>
+      <td>None — one physical device, one account; priority after MVP</td>
+      <td class="dim">Yes</td>
+    </tr>
+    <tr>
+      <td class="dimension">MPC-node dependency</td>
+      <td>None</td>
+      <td class="dim">Required — single-operator federation to build</td>
+    </tr>
+    <tr>
+      <td class="dimension">Decentralised from day 1</td>
+      <td>Yes</td>
+      <td class="dim">No — centralised operator until federation lands</td>
+    </tr>
+    <tr>
+      <td class="dimension">Formal-methods priority-1 target</td>
+      <td>In-circuit single-signer Schnorr verification (already passing)</td>
+      <td class="dim">In-circuit threshold (FROST) verification</td>
+    </tr>
+  </tbody>
+</table>
+
+<aside class="survives" aria-label="What survives unchanged">
+  <h3>What survives unchanged</h3>
+  <ul>
+    <li>The end-of-June-2026 MVP target</li>
+    <li>The <code>alice.midnight</code> name registry (MVP-04)</li>
+    <li>Passkey onboarding and the seedless UX contract</li>
+    <li>No seed phrase, no raw address, no gas-token purchase screen</li>
+    <li>Single seed, three wallets (Shielded, Night, Dust) via CIP-1852</li>
+    <li>The six secure-onboarding design principles</li>
+    <li>The weekly-demo cadence; every Friday, one thing that works</li>
+    <li>The MIP standards track — key derivation, address format, domain separation</li>
+  </ul>
+</aside>
+
+<nav class="ctas" aria-label="Further reading">
+  <a class="cta" href="the-plan.html">
+    <span class="cta-kind">Current path · Plan A</span>
+    <span class="cta-title">Read the current plan</span>
+    <span class="cta-desc">The visual narrative walkthrough — vision, architecture, phases, standards track, and the path to June.</span>
+  </a>
+  <a class="cta" href="delivery-plan.html">
+    <span class="cta-kind">Current path · delivery</span>
+    <span class="cta-title">Read the delivery plan</span>
+    <span class="cta-desc">The prose companion — what we are building, why it is phased, and what lands when.</span>
+  </a>
+  <a class="cta" href="the-plan-b.html">
+    <span class="cta-kind">Preserved · Plan B</span>
+    <span class="cta-title">Read the original Plan B</span>
+    <span class="cta-desc">The original MVP plan, preserved in full as the foundation for Milestone 2 cross-chain and as the fallback.</span>
+  </a>
+</nav>
+
+<footer class="doc-footer">
+  <p>ARC · Input Output Global · Midnight Passport planning workspace · Plan updated <code>2026/04/21</code></p>
+  <p>Source: <code>docs/plans/plan-A-decentralised-but-limited/</code> · <code>docs/plans/plan-B-slow-but-universal/</code> · <code>docs/plans/README.md</code></p>
+</footer>
+
+</main>
+
+<script src="theme-toggle.js"></script>
+</body>
+</html>
