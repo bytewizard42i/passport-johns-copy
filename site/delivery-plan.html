@@ -452,7 +452,7 @@
   <ul>
     <li><strong>Midnight Foundation</strong> — aligning on the platform surface (curves, proof pipeline, APIs, CAIP namespace), the Midnight Improvement Proposal (MIP) process, and ensuring the architecture we build is one the Foundation recognises as the Midnight-native direction.</li>
     <li><strong>Lace</strong> — the team building <strong>Lace ID</strong>. Their existing key-derivation and address implementation directly informs the first two standards we plan to publish: the <strong>key-derivation MIP</strong> and the <strong>Bech32m address-format MIP</strong>. Their ID product is also a natural consumer of the credential layer we will add later.</li>
-    <li><strong>Cryptographic reviewer</strong> (Jesus Diaz Vico) and <strong>formal methods</strong> (James Chapman's team) — per-phase review and long-running rigour, respectively.</li>
+    <li><strong>Cryptographic reviewer</strong> (Jesus Diaz Vico) and <strong>formal methods</strong> (James Chapman's team) — per-phase review and long-running rigour/guardrails, respectively.</li>
   </ul>
 
   <h4>How we plan to get there</h4>
@@ -524,6 +524,12 @@
         <li><strong>Private / incognito mode unsupported.</strong> The MVP surface refuses onboarding in private mode rather than creating an account that silently disappears at the end of the session.</li>
       </ul>
 
+      <p><strong>Formal methods</strong> work in this milestone will balance
+      developing a strategy to leakage-freeness and speculative
+      execution safeguards using tools such as easycrypt, jasmin, and
+      cryptoline; and modelling key derivation using specialist tools
+      such as proverif/tamarin</p>
+
       <h4>What ships at the June demo</h4>
       <p>Passkey onboarding → browser-derived wallet keys (Shielded, Night, Dust) → name registration (<code>alice.midnight</code>) → first sponsored transaction on Midnight devnet. Plus the account-loss sad paths shown honestly. Plus "what's next" pointing to multi-device.</p>
     </div>
@@ -537,12 +543,18 @@
         <span class="step-window">Brought forward · ahead of the original Milestone 2 slot</span>
       </div>
       <div class="step-title">Genuine multi-device accounts and the path to recovery</div>
+      
 
       <p>Genuine Passport-engineered multi-device — two or more physical devices under a single account, with a device-add ceremony and per-device keys — is a near-term priority after MVP 1. It is brought forward ahead of the original Milestone 2 slot because <strong>it gates recovery</strong>. The MVP-09 label "research programme" still applies during MVP 1; exact delivery timing is refined in the next planning pass.</p>
 
       <p>Likely shape: a per-device key registered under the user's on-chain account, with a device-add ceremony between the existing and new browser. This converges toward the multi-key account contract (MIP-4 in the preserved plan), which can be adopted wholesale once it exists.</p>
 
       <p>Recovery design work feeds the multi-device programme. The order is firm: <strong>multi-device first, recovery second.</strong> Design space (sketched, not committed) covers DeRec-style social recovery and encrypted-blob backup; neither is in MVP 1.</p>
+
+      <p><strong>Formal Methods</strong> work in this milestone will involve
+      modelling the device registry protocol using either
+      general purpose tooling (e.g., Lean/Agda) or specialised cryptographic tooling (e.g., easycrypt)
+      depending on the draft protocol.</p>
     </div>
   </section>
 
@@ -556,7 +568,14 @@
       <div class="step-title">Cross-chain substrate and the dApp-wallet connection protocol</div>
 
       <p>Milestone 2 delivers the <strong>dApp-wallet connection protocol</strong> as a formal MIP with named external co-authors — the Midnight equivalent of Cardano's CIP-30 — and introduces the cross-chain substrate. The preserved threshold-signing artefacts (<a href="the-plan-b.html">Plan B</a> work) become the natural foundation for cross-chain custody and inter-party federation — they were not wasted work.</p>
+
+      <p><strong>Formal Methods</strong> work in this milestone will focus on
+      modelling the dApp-wallet connection protocol in support of the
+      preparation of the MIP</p>
+
       <p>Milestone 2 also consolidates the multi-key account pattern on-chain (the Stream A work from the original plan), moving device-to-account mapping from the account provider onto the chain.</p>
+
+
     </div>
   </section>
 
@@ -578,6 +597,12 @@
         <li><strong>DeRec-based decentralised social recovery</strong> — the boss-priority recovery feature, built on the multi-device foundation landed earlier.</li>
         <li><strong>On-device cryptography</strong> — Principles 1 and 2 delivered in their strongest form; the browser-held root migrates into device TEEs (Secure Enclave, StrongBox) for platforms that support it.</li>
       </ul>
+
+    <p><strong>Formal methods</strong> work in this milestone will balance
+    modelling the recovery protocol with actioning the
+    leakage-freeness and speculative execution mitigation strategy
+      developed in MVP 1</p>
+    
     </div>
   </section>
 
