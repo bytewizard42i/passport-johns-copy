@@ -28,8 +28,28 @@ users prove identity attributes without revealing personal data, or
 how accounts span multiple devices. Each implementor solves these
 problems independently and incompatibly.
 
-Midnight Passport addresses this by defining a common architecture and
-the standards needed to make it interoperable.
+Midnight Passport addresses this by defining a common architecture
+and the Midnight Improvement Proposals (MIPs) that make it
+interoperable. The standards pipeline covers the lower-layer
+primitives that are hardest to change once users are onboarded — the
+TEE-backed custody root, the encryption key-chain that wraps private
+state, and the recovery path — and the upper-layer interface that
+third-party wallets and dApps need from day one:
+
+- **Key derivation** — CIP-1852-aligned hierarchical derivation for
+  Midnight (coin type 2400), aligned with the Open Wallet Standard
+  (OWS) where applicable.
+- **Multi-key account** — the on-chain multi-device account contract
+  that gates genuine multi-device and unblocks recovery.
+- **dApp-wallet connection** — the Midnight equivalent of Cardano's
+  CIP-30, published with named external co-authors.
+- **DecentralisedAuth** — privacy-preserving authentication for dApp
+  sign-in flows against a Passport account.
+- **Recovery** — social and encrypted-blob recovery paths built on
+  the multi-device foundation, aligned with OWS where applicable.
+
+Each MIP ships with a named external co-author; unilateral drafts
+become shelfware.
 
 ## Two paths under evaluation
 
@@ -95,9 +115,9 @@ gitignored internal planning workspace).
   [`plans/plan-A-decentralised-but-limited/architecture.md`](./plans/plan-A-decentralised-but-limited/architecture.md).
 - Plan B is documented in full at
   [`plans/plan-B-slow-but-universal/`](./plans/plan-B-slow-but-universal/).
-- The site (`site/the-plan.html`, `site/delivery-plan.html`) has **not
-  yet** been updated to reflect this pivot and is stale until the next
-  HTML revision lands.
+- The site (`site/the-plan.html`, `site/delivery-plan.html`) is
+  aligned with Plan A; the earlier Plan B pages are preserved at
+  `site/the-plan-b.html` and `site/delivery-plan-b.html` as archive.
 - The internal roadmap (`.planning/ROADMAP.md`) and requirements
   register (`.planning/REQUIREMENTS.md`) have been updated against
   Plan A; the FROST work (MVP-01) is retained as Milestone 2 input.
@@ -110,10 +130,11 @@ target; after June the plan continues on a 90-day cadence through
 Milestone 2 (cross-chain and recovery), Milestone 3+ (credentials,
 chain abstraction, SDK). Each milestone is an independently demoable
 artefact; the user experience is intended to be stable across them
-even as the trust model underneath evolves. The current week-by-week
-schedule is still expressed in
-[`site/delivery-plan.html`](../site/delivery-plan.html) against the
-old Plan B assumptions and will be revised in the next HTML pass.
+even as the trust model underneath evolves. The Plan A delivery
+schedule is expressed in
+[`site/delivery-plan.html`](../site/delivery-plan.html); the original
+Plan B schedule is preserved as archive at
+[`site/delivery-plan-b.html`](../site/delivery-plan-b.html).
 
 ---
 
