@@ -187,7 +187,7 @@ export function writeEvidence(testId: string, payload: Omit<Evidence, 'ranAt' | 
     ...payload,
     ranAt: new Date().toISOString(),
     sdkVersions,
-    nodeVersion: process.env.MIDNIGHT_NODE_IMAGE ?? 'midnightntwrk/midnight-node:0.22.0',
+    nodeVersion: process.env.MIDNIGHT_NODE_IMAGE ?? 'midnightntwrk/midnight-node:0.22.5',
   };
   writeFileSync(filePath, JSON.stringify(full, null, 2) + '\n');
   return filePath;

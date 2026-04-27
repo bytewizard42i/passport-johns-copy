@@ -36,5 +36,5 @@
     "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
     "@midnight-ntwrk/zswap": "^4.0.0"
   },
-  "nodeVersion": "midnightntwrk/midnight-node:0.22.0"
+  "nodeVersion": "midnightntwrk/midnight-node:0.22.5"
 }
