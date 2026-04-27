@@ -2,19 +2,29 @@
   "test": "S3",
   "name": "cross-tx-custody",
   "verdict": "FAIL",
-  "errorCode": "js-error",
-  "note": "Threw: Unexpected error executing scoped transaction '<unnamed>': ContractRuntimeError: Error executing circuit 'send_held_shielded'",
+  "errorCode": "no-mt-index-surface",
+  "note": "No contract-held-note lookup surface found in the SDK. The mt_index for the contract-owned note could not be recovered, so send_held_shielded was called with mt_index=0 and (correctly) rejected. The probe trace in `details.probes` records every surface that was checked.",
   "evidence": {
-    "error": {
-      "name": "Error",
-      "message": "Unexpected error executing scoped transaction '<unnamed>': ContractRuntimeError: Error executing circuit 'send_held_shielded'",
-      "stack": "Error: Unexpected error executing scoped transaction '<unnamed>': ContractRuntimeError: Error executing circuit 'send_held_shielded'\n    at scoped (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/node_modules/@midnight-ntwrk/midnight-js-contracts/src/internal/transaction.ts:222:21)\n    at async Object.action (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/src/tests/s3-cross-tx-custody.ts:114:24)\n    at async runTest (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/src/test-helpers.ts:110:14)\n    at async <anonymous> (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/src/tests/s3-cross-tx-custody.ts:27:1)",
-      "cause": {
-        "message": "Error executing circuit 'send_held_shielded'"
+    "mintTx": "00199a1e0d2f8382e87643454bfd42d7e76d4f1118999a4bb1576b8fdafbc86ca2",
+    "mintNonce": "8d22162ef6beb823939c33b3a3c0ae7b3a94db66f2db57a644da52715a74db80",
+    "contractScopedColor": "0000000000000000000000000000000000000000000000000000000000000003",
+    "derivedOnChainColor": "5d314dcaadb97a7dae25bf11cb4fef81008aa83c1faa0517af06c3c389806765",
+    "amount": "500",
+    "mtIndex": "0",
+    "mtIndexSource": "fallback-0",
+    "sendError": "Unexpected error executing scoped transaction '<unnamed>': ContractRuntimeError: Error executing circuit 'send_held_shielded'",
+    "probes": [
+      {
+        "surface": "wallet.state.shielded.availableCoins",
+        "result": "total=8 matching-derived-color=0"
+      },
+      {
+        "surface": "contract.<probe-set>",
+        "result": "none of {shieldedCoins, getShieldedCoins, currentShieldedCoinState, queryShieldedNotes} present"
       }
-    }
+    ]
   },
-  "ranAt": "2026-04-27T13:47:59.003Z",
+  "ranAt": "2026-04-27T21:25:23.304Z",
   "sdkVersions": {
     "@midnight-ntwrk/compact-runtime": "^0.15.0",
     "@midnight-ntwrk/ledger-v8": "^8.0.3",

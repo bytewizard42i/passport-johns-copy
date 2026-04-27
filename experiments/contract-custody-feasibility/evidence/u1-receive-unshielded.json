@@ -2,15 +2,15 @@
   "test": "U1",
   "name": "receive-unshielded",
   "verdict": "PASS",
-  "txHash": "0024e98fab2ef08e54cd5c031002f2e7aca46bae89ca5cf7154d174cf957c4a33a",
+  "txHash": "00e096b4a06c942423dd91792f44e2ea1cf974b42b461aa74ade8ff4b8aa8ca101",
   "note": "receiveUnshielded landed on devnet.",
   "evidence": {
-    "contractAddress": "cdfbf1befd452e8ac04cba92f7e3d3ad24b0416df3227d1037cfef273c49bf8e",
+    "contractAddress": "712456baf9a5c5b4acc6f1e8dd31c1f53b1b95ab7631247e39a398e34ea98452",
     "color": "0000000000000000000000000000000000000000000000000000000000000000",
     "amount": "1000",
     "blockHeight": 24
   },
-  "ranAt": "2026-04-27T13:42:50.886Z",
+  "ranAt": "2026-04-27T21:20:13.963Z",
   "sdkVersions": {
     "@midnight-ntwrk/compact-runtime": "^0.15.0",
     "@midnight-ntwrk/ledger-v8": "^8.0.3",

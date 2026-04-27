@@ -2,14 +2,14 @@
   "test": "S1",
   "name": "mint-to-self",
   "verdict": "PASS",
-  "txHash": "00e97bd53df7c0e9d8925e05e87dff66b752ddfd2860159157319be08defeef24b",
+  "txHash": "00cdee17e382646257fe5c13c030727b6174474af783b8a2a3e50c8412cd8052b4",
   "note": "mintShieldedToken → kernel.self() landed.",
   "evidence": {
-    "contractAddress": "cdfbf1befd452e8ac04cba92f7e3d3ad24b0416df3227d1037cfef273c49bf8e",
+    "contractAddress": "712456baf9a5c5b4acc6f1e8dd31c1f53b1b95ab7631247e39a398e34ea98452",
     "color": "0000000000000000000000000000000000000000000000000000000000000001",
     "amount": "1000"
   },
-  "ranAt": "2026-04-27T13:45:56.913Z",
+  "ranAt": "2026-04-27T21:23:19.894Z",
   "sdkVersions": {
     "@midnight-ntwrk/compact-runtime": "^0.15.0",
     "@midnight-ntwrk/ledger-v8": "^8.0.3",

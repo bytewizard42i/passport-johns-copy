@@ -2,10 +2,10 @@
   "test": "U3",
   "name": "send-to-user",
   "verdict": "PASS",
-  "txHash": "00ceeca8940d88894dab4c5e00c298fde01c86f4e954fdbcc23ff812fd33e1eb0f",
+  "txHash": "00d687c60f8f2af6df37488fbd5a215b89cf63ac0d1c2581bae423f8a42bf863e4",
   "note": "sendUnshielded → UserAddress accepted (regression check on v1).",
   "evidence": {
-    "from": "cdfbf1befd452e8ac04cba92f7e3d3ad24b0416df3227d1037cfef273c49bf8e",
+    "from": "712456baf9a5c5b4acc6f1e8dd31c1f53b1b95ab7631247e39a398e34ea98452",
     "toUser": {
       "type": "addr",
       "network": "undeployed",
@@ -50,7 +50,7 @@
     "color": "0000000000000000000000000000000000000000000000000000000000000000",
     "amount": "50"
   },
-  "ranAt": "2026-04-27T13:44:13.860Z",
+  "ranAt": "2026-04-27T21:21:38.224Z",
   "sdkVersions": {
     "@midnight-ntwrk/compact-runtime": "^0.15.0",
     "@midnight-ntwrk/ledger-v8": "^8.0.3",
