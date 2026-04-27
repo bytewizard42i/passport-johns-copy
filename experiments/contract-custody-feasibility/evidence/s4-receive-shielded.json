@@ -1,0 +1,38 @@
+{
+  "test": "S4",
+  "name": "receive-shielded",
+  "verdict": "FAIL",
+  "errorCode": "js-error",
+  "note": "Threw: Unexpected error submitting scoped transaction '<unnamed>': (FiberFailure) Wallet.InsufficientFunds: Insufficient funds\n    at Object.catch (file:///Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/node_modules/@midnight-ntwrk/wallet-sdk-shielded/dist/v1/Transacting.js:182:32)\n    at Module.evaluate (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/node_modules/effect/src/Either.ts:265:33)\n    at TransactingCapabilityImplementation.<anonymous> (file:///Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/node_modules/@midnight-ntwrk/wallet-sdk-shielded/dist/v1/Transacting.js:167:52)",
+  "evidence": {
+    "error": {
+      "name": "Error",
+      "message": "Unexpected error submitting scoped transaction '<unnamed>': (FiberFailure) Wallet.InsufficientFunds: Insufficient funds\n    at Object.catch (file:///Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/node_modules/@midnight-ntwrk/wallet-sdk-shielded/dist/v1/Transacting.js:182:32)\n    at Module.evaluate (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/node_modules/effect/src/Either.ts:265:33)\n    at TransactingCapabilityImplementation.<anonymous> (file:///Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/node_modules/@midnight-ntwrk/wallet-sdk-shielded/dist/v1/Transacting.js:167:52)",
+      "stack": "Error: Unexpected error submitting scoped transaction '<unnamed>': (FiberFailure) Wallet.InsufficientFunds: Insufficient funds\n    at Object.catch (file:///Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/node_modules/@midnight-ntwrk/wallet-sdk-shielded/dist/v1/Transacting.js:182:32)\n    at Module.evaluate (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/node_modules/effect/src/Either.ts:265:33)\n    at TransactingCapabilityImplementation.<anonymous> (file:///Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/node_modules/@midnight-ntwrk/wallet-sdk-shielded/dist/v1/Transacting.js:167:52)\n    at scoped (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/node_modules/@midnight-ntwrk/midnight-js-contracts/src/internal/transaction.ts:266:23)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async Object.action (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/src/tests/s4-receive-shielded.ts:92:20)\n    at async runTest (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/src/test-helpers.ts:110:14)",
+      "cause": {
+        "message": "Insufficient funds"
+      }
+    }
+  },
+  "ranAt": "2026-04-27T13:49:06.878Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.15.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:0.22.0"
+}

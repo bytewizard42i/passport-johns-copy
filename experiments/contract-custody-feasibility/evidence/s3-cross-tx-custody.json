@@ -1,0 +1,38 @@
+{
+  "test": "S3",
+  "name": "cross-tx-custody",
+  "verdict": "FAIL",
+  "errorCode": "js-error",
+  "note": "Threw: Unexpected error executing scoped transaction '<unnamed>': ContractRuntimeError: Error executing circuit 'send_held_shielded'",
+  "evidence": {
+    "error": {
+      "name": "Error",
+      "message": "Unexpected error executing scoped transaction '<unnamed>': ContractRuntimeError: Error executing circuit 'send_held_shielded'",
+      "stack": "Error: Unexpected error executing scoped transaction '<unnamed>': ContractRuntimeError: Error executing circuit 'send_held_shielded'\n    at scoped (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/node_modules/@midnight-ntwrk/midnight-js-contracts/src/internal/transaction.ts:222:21)\n    at async Object.action (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/src/tests/s3-cross-tx-custody.ts:114:24)\n    at async runTest (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/src/test-helpers.ts:110:14)\n    at async <anonymous> (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/contract-custody-feasibility/src/tests/s3-cross-tx-custody.ts:27:1)",
+      "cause": {
+        "message": "Error executing circuit 'send_held_shielded'"
+      }
+    }
+  },
+  "ranAt": "2026-04-27T13:47:59.003Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.15.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:0.22.0"
+}

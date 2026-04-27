@@ -1,0 +1,40 @@
+{
+  "test": "D2",
+  "name": "contract-paymaster",
+  "verdict": "FAIL",
+  "txHash": "003f75fe9bdf3bd2f6a2df9ac70b6b23c90892ccf7c3b9b14cca22c8f9964aed8c",
+  "errorCode": "no-paymaster-tx-shape",
+  "note": "No public SDK surface for contract paymaster on this v1. The transaction format does not (or not yet) permit a separate contract-signed fee branch alongside a user-signed auth branch.",
+  "evidence": {
+    "baselineTx": "003f75fe9bdf3bd2f6a2df9ac70b6b23c90892ccf7c3b9b14cca22c8f9964aed8c",
+    "candidatesProbed": [
+      "balanceWithSponsor",
+      "balanceWithPaymaster",
+      "attachContractFeeBranch",
+      "sponsorTransaction"
+    ],
+    "candidatesPresent": [],
+    "indexerHasGetDustBalance": false
+  },
+  "ranAt": "2026-04-27T13:50:44.678Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.15.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:0.22.0"
+}
