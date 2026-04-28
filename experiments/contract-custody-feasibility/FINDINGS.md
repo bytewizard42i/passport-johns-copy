@@ -1,6 +1,6 @@
 # Contract Custody Feasibility — Findings
 
-> **Status: executed 2026/04/27 against devnet `midnight-node:0.22.5` /
+> **Status: executed 2026/04/28 against devnet `midnight-node:0.22.5` /
 > the latest published `@midnight-ntwrk/*` family.** Five tests PASS
 > with on-chain tx hashes, five FAIL — three of the five with documented
 > upstream causes (one node bug, two missing SDK surfaces), two with
@@ -59,10 +59,10 @@
 
 | Field                          | Value                                              |
 | ------------------------------ | -------------------------------------------------- |
-| Date run                       | 2026/04/27                                         |
+| Date run                       | 2026/04/28                                         |
 | Devnet image (node)            | `midnightntwrk/midnight-node:0.22.5`               |
-| Devnet image (indexer)         | `midnightntwrk/indexer-standalone:4.0.0`           |
-| Devnet image (proof srv)       | `midnightntwrk/proof-server:8.0.2`                 |
+| Devnet image (indexer)         | `midnightntwrk/indexer-standalone:4.2.1`           |
+| Devnet image (proof srv)       | `midnightntwrk/proof-server:8.0.3`                 |
 | Compact toolchain manager      | `compact 0.5.1` (active compiler `0.30.0`)         |
 | Contract `language_version`    | `0.22`                                             |
 | `@midnight-ntwrk/compact-runtime` | `^0.15.0` (latest published)                    |
@@ -134,16 +134,16 @@ compiler error captured in this session's transcript.
 
 | Test | Status  | Tx hash / error code | Note                                         |
 | ---- | ------- | -------------------- | -------------------------------------------- |
-| U1   | PASS    | 00e096b4...a8ca101   | receiveUnshielded landed on devnet.          |
+| U1   | PASS    | 00b9cbc1...5be7c13   | receiveUnshielded landed on devnet.          |
 | U2   | FAIL    | js-error             | Threw: Unexpected error submitting scoped tr |
-| U3   | PASS    | 00d687c6...bf863e4   | sendUnshielded → UserAddress accepted (regre |
+| U3   | PASS    | 0079c163...7023da7   | sendUnshielded → UserAddress accepted (regre |
 | U4   | FAIL    | js-error             | Threw: Unexpected error submitting scoped tr |
-| S1   | PASS    | 00cdee17...d8052b4   | mintShieldedToken → kernel.self() landed.    |
-| S2   | PASS    | 006eebc7...623714f   | sendImmediateShielded landed (atomic mint+se |
+| S1   | PASS    | 00930ab3...32db4cd   | mintShieldedToken → kernel.self() landed.    |
+| S2   | PASS    | 003bd75d...e9fefc5   | sendImmediateShielded landed (atomic mint+se |
 | S3   | FAIL    | no-mt-index-surface  | No contract-held-note lookup surface found i |
-| S4   | PASS    | 0011af46...77e8d05   | receive_shielded user → contract confirmed o |
-| D1   | FAIL    | 00b8a438...426c666   | No public SDK surface for contract-paid Dust |
-| D2   | FAIL    | 00e51b2e...dce429a   | No public SDK surface for contract paymaster |
+| S4   | PASS    | 0084252a...6a44321   | receive_shielded user → contract confirmed o |
+| D1   | FAIL    | 0099ad66...465ee31   | No public SDK surface for contract-paid Dust |
+| D2   | FAIL    | 009d526e...22bb6ae   | No public SDK surface for contract paymaster |
 
 <!-- END-RESULTS-TABLE -->
 

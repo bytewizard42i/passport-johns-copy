@@ -2,11 +2,11 @@
   "test": "D2",
   "name": "contract-paymaster",
   "verdict": "FAIL",
-  "txHash": "00e51b2e91a8bdf1b79ee272bf6586187b101acbc0d222c9dd773850537dce429a",
+  "txHash": "009d526eb22ce1de04c850a744cf9b1ed4852f603758dd9bb8df719098422bb6ae",
   "errorCode": "no-paymaster-tx-shape",
   "note": "No public SDK surface for contract paymaster on this v1. The transaction format does not (or not yet) permit a separate contract-signed fee branch alongside a user-signed auth branch.",
   "evidence": {
-    "baselineTx": "00e51b2e91a8bdf1b79ee272bf6586187b101acbc0d222c9dd773850537dce429a",
+    "baselineTx": "009d526eb22ce1de04c850a744cf9b1ed4852f603758dd9bb8df719098422bb6ae",
     "candidatesProbed": [
       "balanceWithSponsor",
       "balanceWithPaymaster",
@@ -16,7 +16,7 @@
     "candidatesPresent": [],
     "indexerHasGetDustBalance": false
   },
-  "ranAt": "2026-04-27T21:28:26.265Z",
+  "ranAt": "2026-04-28T13:06:20.526Z",
   "sdkVersions": {
     "@midnight-ntwrk/compact-runtime": "^0.15.0",
     "@midnight-ntwrk/ledger-v8": "^8.0.3",

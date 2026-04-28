@@ -2,17 +2,17 @@
   "test": "D1",
   "name": "contract-self-payment",
   "verdict": "FAIL",
-  "txHash": "00b8a438c086997f8e0a843102ec5ca0d1f6ff96d2d8ed94f6e1aa9ae4f426c666",
+  "txHash": "0099ad6688a53c1245fe08c0b0ebdc5022fb9c271532c55c63bbbe63702465ee31",
   "errorCode": "no-paymaster-api",
   "note": "No public SDK surface for contract-paid Dust fees on this v1.",
   "evidence": {
     "contractDustBalance": null,
     "dustQueryError": "publicDataProvider has no getDustBalance method",
-    "baselineTx": "00b8a438c086997f8e0a843102ec5ca0d1f6ff96d2d8ed94f6e1aa9ae4f426c666",
+    "baselineTx": "0099ad6688a53c1245fe08c0b0ebdc5022fb9c271532c55c63bbbe63702465ee31",
     "probeError": "No contract-fee API exposed by WalletFacade",
     "ledgerLibVersion": "reachable"
   },
-  "ranAt": "2026-04-27T21:27:38.078Z",
+  "ranAt": "2026-04-28T13:05:32.347Z",
   "sdkVersions": {
     "@midnight-ntwrk/compact-runtime": "^0.15.0",
     "@midnight-ntwrk/ledger-v8": "^8.0.3",

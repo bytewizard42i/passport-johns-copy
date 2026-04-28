@@ -2,17 +2,17 @@
   "test": "S4",
   "name": "receive-shielded",
   "verdict": "PASS",
-  "txHash": "0011af46a175df3531f751e7d4e4e2675c06d41acaa22b0ac58499708b377e8d05",
+  "txHash": "0084252a553be6df893a1db4b3eee14cdd7458eb0915a078f4ded9c80856a44321",
   "note": "receive_shielded user → contract confirmed on devnet using the rawTokenType-derived on-chain color. Shielded contract custody is feasible on v1 with a public ledger-v8 surface.",
   "evidence": {
-    "contractAddress": "712456baf9a5c5b4acc6f1e8dd31c1f53b1b95ab7631247e39a398e34ea98452",
+    "contractAddress": "a4f3e92bd54fac777afb5620a789bd17053db7354347f80006ba9e2db79a962e",
     "contractScopedColor": "0000000000000000000000000000000000000000000000000000000000000004",
-    "derivedOnChainColor": "22510ddd9e931d96561aba8ca96681a96db974297d3bb7e2e0b35dbeed316c1b",
+    "derivedOnChainColor": "c14547534c138d7d7994bcd670ca0dcb2c5eb9a4015865cd6695fea9716e4590",
     "amount": "500",
-    "setupTx": "00084f7808df14f2fef3b14b946242f8c2038f385668640a2cf7fc8bd1601ad2de",
+    "setupTx": "00aa4cdd904f4710ca0f64eea091f2934504ca5c1e64d372476197a6ee15c6f969",
     "recipe": "receive_shielded({nonce, color: encodeRawTokenType(rawTokenType(color, contractAddress)), value})"
   },
-  "ranAt": "2026-04-27T21:26:49.943Z",
+  "ranAt": "2026-04-28T13:04:44.147Z",
   "sdkVersions": {
     "@midnight-ntwrk/compact-runtime": "^0.15.0",
     "@midnight-ntwrk/ledger-v8": "^8.0.3",
