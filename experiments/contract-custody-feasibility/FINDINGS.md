@@ -199,6 +199,16 @@ Inbound paths and contract-issued tokens work end-to-end:
   );
   await contract.callTx.receive_shielded({ nonce, color: onChainColor, value });
   ```
+  We now know why the off-chain derivation is needed: when a contract
+  circuit calls `mintShieldedToken(X, …)`, the runtime implicitly
+  applies `rawTokenType(X, kernel.self())`, so the resulting note's
+  on-chain colour is the contract-scoped derivation of `X` — never
+  `X` itself. Two different contracts that both mint with the same
+  local `X` therefore produce *distinct* on-chain colours; the
+  derivation is intentional, specifically to prevent two contracts
+  from minting the same on-chain token type. The off-chain
+  `receive_shielded` call must apply the same derivation so the
+  `ShieldedCoinInfo.color` matches the on-chain note.
 
 Outbound from contract-held notes does not, by a single missing API:
 
