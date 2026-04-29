@@ -18,6 +18,7 @@
     "test:s3": "tsx src/tests/s3-cross-tx-custody.ts",
     "test:s4": "tsx src/tests/s4-receive-shielded.ts",
     "test:s5": "tsx src/tests/s5-manual-witness-shielded-spend.ts",
+    "test:s6": "tsx src/tests/s6-oz-pattern-shielded-spend.ts",
     "test:d1": "tsx src/tests/d1-self-payment.ts",
     "test:d2": "tsx src/tests/d2-paymaster.ts",
     "test:all": "tsx src/run-all.ts"

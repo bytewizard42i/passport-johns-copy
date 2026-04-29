@@ -5,10 +5,10 @@
   "errorCode": "no-mt-index-surface",
   "note": "No contract-held-note lookup surface found in the SDK. The mt_index for the contract-owned note could not be recovered, so send_held_shielded was called with mt_index=0 and (correctly) rejected. The probe trace in `details.probes` records every surface that was checked.",
   "evidence": {
-    "mintTx": "002d289deab6660e9b9eaf866b25ec275b7f0d4d54eff84253248c459d0460f7ce",
-    "mintNonce": "6cc5334967b18ebf42164f8dac5e3f29fb57c128867cdb666719ae95720d609d",
+    "mintTx": "0003ba69ec5fb9b210f0980687bca4aa4ccf2ea6681694e55ebfaa3310c67fc06a",
+    "mintNonce": "dda70732aff002b3ff4a6481084bf85fa42432ca4ab5768c20ec113fb9fb0bc0",
     "contractScopedColor": "0000000000000000000000000000000000000000000000000000000000000003",
-    "derivedOnChainColor": "dfce1bb00040b984af989c9ccfcd823176e3f5880568aab71fd80b28694358fa",
+    "derivedOnChainColor": "b8fcdd77b405f687d4b216d5d1c9e704a18f72413b267dd129201e21747d8db9",
     "amount": "500",
     "mtIndex": "0",
     "mtIndexSource": "fallback-0",
@@ -24,7 +24,7 @@
       }
     ]
   },
-  "ranAt": "2026-04-28T13:03:17.523Z",
+  "ranAt": "2026-04-29T14:23:41.407Z",
   "sdkVersions": {
     "@midnight-ntwrk/compact-runtime": "^0.15.0",
     "@midnight-ntwrk/ledger-v8": "^8.0.3",

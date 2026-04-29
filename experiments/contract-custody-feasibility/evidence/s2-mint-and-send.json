@@ -2,14 +2,14 @@
   "test": "S2",
   "name": "mint-and-send",
   "verdict": "PASS",
-  "txHash": "00a620c6ca174d8181cf9f2c2e9e78b166627459421ddc94b3d0c7a1ecb78b0f21",
+  "txHash": "000996bc1a7c2f1048c80feecdc19fa05645359ca672e42a94d0258ce1f71518dc",
   "note": "sendImmediateShielded landed (atomic mint+send regression OK).",
   "evidence": {
-    "contractAddress": "3e5e3ebdf33adfc1029a9ea15c73c1b75ef302f8a7b7fac4895a43522604d94d",
+    "contractAddress": "b3853eb5de0d474a9cf45e40c0d4bac131fdeda08bac959d5ed82c6e3c7ab399",
     "color": "0000000000000000000000000000000000000000000000000000000000000002",
     "amount": "500"
   },
-  "ranAt": "2026-04-29T13:37:38.780Z",
+  "ranAt": "2026-04-29T14:22:32.860Z",
   "sdkVersions": {
     "@midnight-ntwrk/compact-runtime": "^0.15.0",
     "@midnight-ntwrk/ledger-v8": "^8.0.3",

@@ -1,0 +1,45 @@
+{
+  "test": "S6",
+  "name": "oz-pattern-shielded-spend",
+  "verdict": "PASS",
+  "txHash": "00cdaf640bb97d72cbba74cad577fbf66e22a04aac440de0699c0a3e559fc2d5b1",
+  "note": "OZ pattern works on Midnight v1 today: contract-held shielded spend via `Map<Bytes<32>,QualifiedShieldedCoinInfo>` + `Map.insertCoin` after `receiveShielded`, and `Map.lookup` + `sendShielded` (with `sendImmediateShielded` for change) at spend time. S5's Gap 2 diagnosis was an artefact of using the wrong contract pattern; S3's \"missing client API\" framing is also wrong since discovery lives in contract ledger state, not in the SDK.",
+  "evidence": {
+    "outcome": "oz-pattern-works",
+    "setupTx": "009399a2b49be9537be912d058585297e5534aabfd526a10f5ef182eb3ff58a989",
+    "setupNonce": "cbd85abb64717b9d3c1e036d0091f7f82405960f3e2ef82f049699e453f41348",
+    "depositTx": "00f582ddffc51368ee94c7c17864bfb732f52f201f49c2466df0f61507429f5fe6",
+    "sendTx": "00cdaf640bb97d72cbba74cad577fbf66e22a04aac440de0699c0a3e559fc2d5b1",
+    "contractScopedColor": "0000000000000000000000000000000000000000000000000000000000000006",
+    "derivedOnChainColor": "bf18cecd309fc4e63688138ea274f34d2c348bccd27ceb77adc7ec343005e330",
+    "amount": "500",
+    "pattern": [
+      "ledger Map<Bytes<32>,QualifiedShieldedCoinInfo>",
+      "after receiveShielded → Map.insertCoin(color, coin, selfAsRecipient())",
+      "at spend → Map.lookup(color) → sendShielded",
+      "change → sendImmediateShielded + Map.insertCoin (else Map.remove)"
+    ],
+    "referenceContract": "https://github.com/OpenZeppelin/compact-contracts/blob/add-multisig/contracts/src/multisig/ShieldedTreasury.compact"
+  },
+  "ranAt": "2026-04-29T14:28:20.645Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.15.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:0.22.5"
+}

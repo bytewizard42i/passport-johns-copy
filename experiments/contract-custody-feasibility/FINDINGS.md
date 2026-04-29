@@ -1,12 +1,15 @@
 # Contract Custody Feasibility — Findings
 
-> **Status: executed 2026/04/28, S5 added 2026/04/29, against devnet
-> `midnight-node:0.22.5` / the latest published `@midnight-ntwrk/*`
-> family.** Five tests PASS with on-chain tx hashes; six FAIL — two
-> with the same SDK-side multi-contract-call bug, two with missing
-> Dust paymaster APIs, and two (S3 client-discovery / S5 SDK-runtime)
-> that together demarcate contract-held shielded spending as blocked
-> at *two* layers, not one. Verdict and Passport-account-model
+> **Status: executed 2026/04/28, S5 + S6 added 2026/04/29, against
+> devnet `midnight-node:0.22.5` / the latest published
+> `@midnight-ntwrk/*` family.** Six tests PASS with on-chain tx
+> hashes; six FAIL — two with the same SDK-side multi-contract-call
+> bug, two with missing Dust paymaster APIs, and two (S3 / S5) whose
+> "blocked" framing is **invalidated by S6**: the OpenZeppelin
+> `Map<color, QualifiedShieldedCoinInfo>` + `Map.insertCoin` pattern
+> enables contract-held shielded spending on Midnight v1 today,
+> end-to-end on devnet (deposit `00f582dd…f5fe6` and spend
+> `00cdaf64…fc2d5b1`). Verdict and Passport-account-model
 > implications below.
 
 ## Headline findings
@@ -43,31 +46,40 @@
    the focused minimal reproducer is at
    [`../../midnight-error-186-repro/`](../../midnight-error-186-repro/).
 
-3. **Contract-held shielded *spending* is blocked at two layers, not
-   one — a client discovery gap *and* an SDK / runtime gap.** S3
-   documented the first half: no public `midnight-js 4.0.4` surface
-   enumerates contract-owned shielded notes (the user wallet's
-   `availableCoins` correctly excludes them; no analogous
-   provider-side or wallet-side API exists; the S3 runner's probe
-   trace is in `evidence/s3-cross-tx-custody.json`). S5 then asks the
-   follow-on: *if* a client could supply a correctly-formed
-   `QualifiedShieldedCoinInfo`, would the runtime accept the spend?
-   It does not. With (nonce, color, value) recorded at deposit time
-   and `mt_index` recovered manually from the indexer
-   (`transactions(offset:{identifier}).startIndex`), the off-chain
-   compact-runtime crashes during proof construction with
-   `ContractRuntimeError → TypeError: Cannot read properties of
-   undefined (reading 'buffer')` (full causeChain in
-   `evidence/s5-manual-witness-shielded-spend.json`). The transaction
-   never reaches the node. The proposed
-   `getContractShieldedCoins(address) → QualifiedShieldedCoinInfo[]`
-   client surface would be necessary but **not sufficient**: the
-   `compact-runtime ^0.15.0` / `midnight-js 4.0.4` proof-builder
-   itself has no working contract-as-shielded-spender code path.
-   This is the wall OpenZeppelin's archived `ShieldedToken.compact`
-   flagged as a future-work item ("*Enable the Shielded contract
-   itself to transfer*"), now confirmed empirically against
-   `midnight-node:0.22.5`.
+3. **Contract-held shielded spending works on Midnight v1 today —
+   via the OpenZeppelin `Map<color, QSCI>` + `insertCoin` pattern.**
+   S3 and S5 jointly suggested the path was "blocked at two layers"
+   (a missing client-discovery API plus an SDK / runtime gap). S6
+   invalidates that framing. OpenZeppelin's `add-multisig` branch
+   (`contracts/src/multisig/ShieldedTreasury.compact`) showed a
+   different contract-side recipe: track each held coin in a ledger
+   `Map<Bytes<32>, QualifiedShieldedCoinInfo>`, register it via
+   `Map.insertCoin(color, coin, selfAsRecipient())` immediately
+   after `receiveShielded`, and at spend time pull the QSCI back via
+   `Map.lookup(color)` before passing it to `sendShielded`. The
+   runtime fills in `mt_index` post-block automatically, and change
+   is re-deposited via `sendImmediateShielded` + another
+   `insertCoin` (or `Map.remove` if the spend consumed the full
+   coin). All four primitives — `mergeCoinImmediate`,
+   `Map.insertCoin`, `sendImmediateShielded`, and the
+   `ShieldedSendResult.{change, sent}` shape — compile against
+   `compact 0.30.0`. S6 ports the recipe verbatim (as `oz_deposit` /
+   `oz_send_to_user` in `custody.compact`) and lands a full
+   user→contract deposit followed by a cross-block contract→user
+   spend on `midnight-node:0.22.5`: deposit
+   `00f582ddffc51368…f5fe6`, spend
+   `00cdaf640bb97d72…fc2d5b1` (`evidence/s6-…json`). What S5
+   *actually* showed is that taking a `QualifiedShieldedCoinInfo`
+   as a witness parameter (instead of reading it from contract
+   ledger state) is the wrong contract pattern — the runtime needs
+   the QSCI bound to the contract's local Zswap state via
+   `insertCoin`, which is what `Map.lookup` returns. S3's
+   "missing client API" framing is also wrong: discovery lives in
+   the contract's ledger map, not in the SDK. The pattern is real
+   today — what's missing is **documentation**: none of Midnight's
+   developer guides mention `Map.insertCoin` or
+   `sendImmediateShielded`, and we discovered both by reading OZ's
+   work-in-progress branch.
 
 4. **Dust paymaster has no public API.** The wallet always pays.
    D1 (contract pays own tx fee) and D2 (contract pays user's tx
@@ -123,10 +135,13 @@ compiler error captured in this session's transcript.
   "Qualified" variant adds `mt_index` to the basic `ShieldedCoinInfo`.
   This is what S3 trips over: with no SDK surface for contract-owned
   notes, the dApp cannot recover the held note's Merkle-tree index.
-- **All 12 circuits compile** (S5 added a structurally-identical
-  sister of `send_held_shielded` named `send_held_shielded_manual`,
-  to keep the S3 evidence intact while exercising the manual-witness
-  spend path). Largest is `send_held_shielded` (k=15, 19,636 rows);
+- **All 14 circuits compile** (S5 added the structurally-identical
+  `send_held_shielded_manual`; S6 added `oz_deposit` and
+  `oz_send_to_user`, the latter exercising
+  `Map.insertCoin`, `Map.lookup`, `sendImmediateShielded`, and
+  `mergeCoinImmediate` — all real Compact stdlib surfaces, verified
+  by isolated compilation against the same `compact 0.30.0`
+  toolchain). Largest is `send_held_shielded` (k=15, 19,636 rows);
   `send_held_shielded_manual` matches it. Other notable sizes:
   `mint_*_shielded` (k=14, ~10.7k rows), `receive_shielded` (k=13,
   6,602 rows). The k=15 circuit is at the upper bound for which
@@ -161,11 +176,12 @@ compiler error captured in this session's transcript.
 | U2   | FAIL    | js-error             | Threw: Unexpected error submitting scoped tr |
 | U3   | PASS    | 0079c163...7023da7   | sendUnshielded → UserAddress accepted (regre |
 | U4   | FAIL    | js-error             | Threw: Unexpected error submitting scoped tr |
-| S1   | PASS    | 0032207d...3ed25e6   | mintShieldedToken → kernel.self() landed.    |
-| S2   | PASS    | 00a620c6...78b0f21   | sendImmediateShielded landed (atomic mint+se |
+| S1   | PASS    | 00b5c14f...28e2480   | mintShieldedToken → kernel.self() landed.    |
+| S2   | PASS    | 000996bc...71518dc   | sendImmediateShielded landed (atomic mint+se |
 | S3   | FAIL    | no-mt-index-surface  | No contract-held-note lookup surface found i |
-| S4   | PASS    | 00315481...7bed570   | receive_shielded user → contract confirmed o |
+| S4   | PASS    | 00c70bf8...a4da773   | receive_shielded user → contract confirmed o |
 | S5   | FAIL    | contract-runtime-error | Off-chain compact-runtime crashed during pro |
+| S6   | PASS    | 00cdaf64...fc2d5b1   | OZ pattern works on Midnight v1 today: contr |
 | D1   | FAIL    | 0099ad66...465ee31   | No public SDK surface for contract-paid Dust |
 | D2   | FAIL    | 009d526e...22bb6ae   | No public SDK surface for contract paymaster |
 
@@ -175,7 +191,8 @@ compiler error captured in this session's transcript.
 > `contract-runtime-error` rows:
 > - **U2, U4 hop-2:** `RpcError: 1010: Invalid Transaction: Custom error: 186` — node-side rejection. Tracked upstream as `midnight-ledger#233`.
 > - **S3:** the runner gracefully reports `no-mt-index-surface` after probing every candidate API for contract-held coin enumeration; see `evidence/s3-cross-tx-custody.json` `details.probes` for the trace.
-> - **S5:** with the manual witness reconstructed from indexer state (`mt_index = startIndex` of the deposit tx), `send_held_shielded_manual` fails inside off-chain proof construction (`ContractRuntimeError → TypeError: Cannot read properties of undefined (reading 'buffer')`). The transaction never reaches the node; full causeChain in `evidence/s5-manual-witness-shielded-spend.json`. Disambiguates the S3 finding: the upstream ask is *two* layers (client discovery API + runtime / proof-builder support), not one.
+> - **S5:** with the manual witness reconstructed from indexer state (`mt_index = startIndex` of the deposit tx), `send_held_shielded_manual` fails inside off-chain proof construction (`ContractRuntimeError → TypeError: Cannot read properties of undefined (reading 'buffer')`). The transaction never reaches the node; full causeChain in `evidence/s5-manual-witness-shielded-spend.json`. Re-interpreted by S6 as a wrong-contract-pattern artefact: `sendShielded` requires the QSCI to come from `Map.lookup` against the contract's ledger map (where `insertCoin` bound it to the local Zswap state), not from a witness parameter.
+> - **S6:** `oz_deposit` lands (deposit `00f582dd…f5fe6`), and a *cross-block* `oz_send_to_user` lands (spend `00cdaf64…fc2d5b1`). Contract-held shielded spending works on `midnight-node:0.22.5` today, via the OpenZeppelin `Map<color, QSCI>` + `insertCoin` pattern. Pattern lifted from [`OpenZeppelin/compact-contracts@add-multisig:.../ShieldedTreasury.compact`](https://github.com/OpenZeppelin/compact-contracts/blob/add-multisig/contracts/src/multisig/ShieldedTreasury.compact).
 
 ## Per-asset-type summary
 
@@ -214,7 +231,7 @@ remains the same `1010: Custom error: 186` we observed; the upstream
 symptom-tracker is `midnightntwrk/midnight-ledger#233`, and the
 focused minimal reproducer is at `midnight-error-186-repro/`.
 
-### Shielded (Zswap) — PARTIAL (deposit-side fully feasible)
+### Shielded (Zswap) — FEASIBLE end-to-end (S6 PASS)
 
 Inbound paths and contract-issued tokens work end-to-end:
 
@@ -283,16 +300,39 @@ gaps, one stacked on the other:
   Full causeChain in `evidence/s5-manual-witness-shielded-spend.json`.
   The transaction never reaches the node.
 
-The narrow restatement of the gap: **the proposed
-`getContractShieldedCoins(address) → QualifiedShieldedCoinInfo[]`
-client surface alone does not unblock contract-held shielded
-spending.** The off-chain `compact-runtime ^0.15.0` /
-`midnight-js 4.0.4` proof-builder also has no working
-contract-as-shielded-spender path on `midnight-node:0.22.5`. The
-upstream ask is therefore two-layered: client discovery API *and*
-runtime / proof-builder support for contract-spend of shielded
-notes (the same future-work item OZ flagged in their archived
-`ShieldedToken.compact`).
+**S6 then invalidates the apparent gap.** OpenZeppelin's
+`add-multisig` branch on
+[`compact-contracts`](https://github.com/OpenZeppelin/compact-contracts/blob/add-multisig/contracts/src/multisig/ShieldedTreasury.compact)
+shows a contract-side pattern that bypasses both layers: store the
+held coin in a ledger `Map<Bytes<32>, QualifiedShieldedCoinInfo>`,
+register it via `Map.insertCoin` after `receiveShielded`, look it
+up via `Map.lookup` before `sendShielded`, and re-deposit change
+via `sendImmediateShielded` + another `insertCoin`. Ported into
+our contract as `oz_deposit` / `oz_send_to_user`, the full
+user→contract→user lifecycle lands across blocks:
+
+- **S6 PASS** (deposit `00f582ddffc51368…f5fe6`, spend
+  `00cdaf640bb97d72…fc2d5b1`): the contract holds shielded notes
+  across blocks and spends them later. End-to-end on devnet,
+  `midnight-node:0.22.5`. **No client-side `getContractShieldedCoins`
+  API is needed** — the QSCI is read from contract ledger state, not
+  the SDK.
+
+What S5 actually demonstrated, in light of S6, is that
+`sendShielded` against a `QualifiedShieldedCoinInfo` arriving as a
+witness parameter (rather than from `Map.lookup`) is *the wrong
+contract pattern* — the off-chain proof builder needs the QSCI to
+be bound to the contract's local Zswap state via the prior
+`insertCoin` call. S5 isn't a runtime gap; it's a contract-design
+mistake.
+
+What is genuinely missing is **documentation**: none of Midnight's
+published developer guides mention `Map.insertCoin`,
+`sendImmediateShielded`, or `mergeCoinImmediate`. The primitives
+exist in the Compact stdlib (we verified by compiling against the
+same `compact 0.30.0` toolchain) and OZ has working tests, but the
+recipe is not yet on docs.midnight.network. Filing a documentation
+ask with the Midnight Foundation rather than an API ask.
 
 ### Dust — NOT FEASIBLE TODAY
 
@@ -312,26 +352,25 @@ addressable by this SDK version.
 
 ## Verdict
 
-**Feasible for {U1, U3, S1, S2, S4}; not feasible today for {S3, S5 —
-contract-held shielded spending blocked at *both* the client-side
-discovery and the SDK / runtime proof-builder layers}; not feasible
-today for {U2, U4 — blocked by two pending SDK fixes (midnight-js
-multi-contract-call utility, wallet fee-balancing); D1, D2 — no v1
-surface}.**
+**Feasible for {U1, U3, S1, S2, S4, S6 — full shielded contract
+custody lifecycle including cross-block contract-held spend};
+not feasible today for {U2, U4 — blocked by two pending SDK fixes
+(midnight-js multi-contract-call utility, wallet fee-balancing);
+D1, D2 — no v1 surface}. S3 and S5 record FAILs but are
+re-interpreted by S6 as wrong-contract-pattern artefacts, not
+actual platform gaps.**
 
 In words: contract custody on Midnight v1
 (`midnight-node:0.22.5` + the latest published SDK family) supports
-**user↔contract Night** in both directions, **contract self-mint and
-atomic mint+send shielded**, and **user→contract shielded deposit**
-via the `rawTokenType` recipe. It does **not** support
-contract↔contract Night today (the protocol's intentional pairing
-requirement is fine; the dApp-side path is blocked by two pending
-SDK fixes), **does not support `sendShielded` from contract-held
-notes** (S3 confirmed the client API is missing; S5 confirmed that
-even with a manually-reconstructed witness, the off-chain
-compact-runtime crashes during proof construction — both layers need
-upstream work), and **does not support contract-paid Dust fees** in
-any form (no public API).
+**user↔contract Night** in both directions, **contract self-mint
+and atomic mint+send shielded**, **user→contract shielded
+deposit** via the `rawTokenType` recipe, and — via OpenZeppelin's
+`Map<color, QualifiedShieldedCoinInfo>` + `Map.insertCoin` pattern
+— **cross-block contract-held shielded spend** end-to-end. It
+does **not** support contract↔contract Night today (the protocol's
+intentional pairing requirement is fine; the dApp-side path is
+blocked by two pending SDK fixes), and **does not support
+contract-paid Dust fees** in any form (no public API).
 
 ## Implications for the Passport account model
 
@@ -359,23 +398,20 @@ The experiment's clarified shape:
    accept shielded notes from a user** via `receive_shielded` using
    the `rawTokenType` recipe. The end-to-end recipe is documented and
    verified at `experiments/midnight-receive-shielded-sdk-gap-repro/`.
-4. **Shielded withdraw-side custody is blocked at two layers, not
-   one.** S3 documents that no SDK surface enumerates contract-owned
-   notes (the client-discovery layer). S5 then disambiguates: even
-   with the `QualifiedShieldedCoinInfo` reconstructed manually from
-   indexer data — bypassing the missing client API entirely — the
-   off-chain `compact-runtime` proof-builder crashes inside circuit
-   execution (`ContractRuntimeError → TypeError: Cannot read
-   properties of undefined (reading 'buffer')`). The transaction
-   never reaches the node. So the upstream ask is **not** "one new
-   public function" — it is **two coordinated changes**: a client
-   surface returning a contract's `QualifiedShieldedCoinInfo[]` *and*
-   contract-as-shielded-spender support inside the proof-builder /
-   compact-runtime. This blocks designs where the contract acts as a
-   vault that users can withdraw from. The workaround for some token
-   classes is contract-issued tokens that the contract can re-mint
-   (S2 pattern). For shielded NIGHT or any other protocol-issued
-   token, the gap stands until both layers ship upstream.
+4. **Shielded withdraw-side custody is feasible on v1 today via the
+   OZ `Map<color, QSCI>` + `insertCoin` pattern.** S3 / S5 had the
+   experiment looking for a missing API, but S6 demonstrates the
+   complete cycle works without any new SDK surface: the contract
+   stores each held coin in a ledger map, `Map.insertCoin` registers
+   it after `receiveShielded` (runtime fills in `mt_index`
+   post-block), and `sendShielded` against `Map.lookup(color)`
+   succeeds at spend time. Change is re-deposited via
+   `sendImmediateShielded` + another `insertCoin`, or `Map.remove`
+   for full spends. Contract-as-vault designs are now in scope for
+   the Passport account model. The remaining ask is **documentation,
+   not API** — these primitives exist in the Compact stdlib but are
+   not yet on docs.midnight.network; we discovered them by reading
+   OZ's work-in-progress branch.
 5. **Dust paymaster does not exist.** The "user without Dust" version
    of the Passport onboarding flow — where the contract pays the user's
    Dust fee out of its own balance — is **not implementable on v1
@@ -387,27 +423,26 @@ The concrete recommendation for the post-MVP multi-device milestone:
   paths on v1.** A Passport contract can custody Night fully and
   receive Zswap; both deposit flows (Night and shielded) are verified
   end-to-end with on-chain transactions.
-- **Shielded withdraw is a *two-layer* upstream ask.** Filing with
-  the Midnight Foundation: (a) *"please add
-  `getContractShieldedCoins(address) → QualifiedShieldedCoinInfo[]`
-  on `publicDataProvider` (or equivalent on the wallet facade)."*
-  AND (b) *"please add a working contract-as-shielded-spender code
-  path in `compact-runtime` / `midnight-js` so that
-  `sendShielded(coin, recipient, amount)` from a contract circuit
-  succeeds when the off-chain caller passes a correctly-formed
-  `QualifiedShieldedCoinInfo` for a contract-owned note."* S5
-  empirically demonstrated that the protocol primitive cannot be
-  reached via the dApp path on `midnight-node:0.22.5` — the
-  proof-builder crashes before tx submission. (a) alone is not
-  sufficient.
-- **Plan for the shielded-withdraw decision two ways.** Either (a)
-  wait for both upstream layers and keep the contract-vault design,
-  or (b) redesign the Zswap path so tokens stay user-side and the
-  contract only authorises actions. (a) is preferable if the
-  timeline allows; (b) is the fallback that doesn't require any
-  upstream change. Given S5 expanded the upstream ask from one new
-  function to two coordinated layers, (b) becomes more attractive
-  than the previous run suggested.
+- **Shielded withdraw is feasible today; the upstream ask is
+  documentation, not API.** Filing with the Midnight Foundation:
+  *"please document `Map.insertCoin(key, coin, owner)`,
+  `sendImmediateShielded`, `mergeCoinImmediate`, and the
+  `ShieldedSendResult.{change, sent}` shape on
+  docs.midnight.network — the OpenZeppelin
+  [`ShieldedTreasury.compact`](https://github.com/OpenZeppelin/compact-contracts/blob/add-multisig/contracts/src/multisig/ShieldedTreasury.compact)
+  pattern works end-to-end against `midnight-node:0.22.5` and is
+  not currently discoverable from the public guides."* S6 tx
+  evidence: deposit `00f582dd…f5fe6`, spend `00cdaf64…fc2d5b1`.
+- **Adopt the OZ `Map<color, QSCI>` + `insertCoin` pattern in any
+  Passport contract that custodies shielded notes.** The Passport
+  account-model contract should mirror OZ's
+  `ShieldedTreasury.compact` shape: ledger
+  `Map<Bytes<32>, QualifiedShieldedCoinInfo>` keyed by on-chain
+  colour, deposit via `receiveShielded` + `Map.insertCoin`, spend
+  via `Map.lookup` + `sendShielded`, change handling via
+  `sendImmediateShielded` + `insertCoin`/`Map.remove`. No
+  redesign-as-fallback is needed — the contract-vault design is
+  back on the table.
 - **Contract↔contract Night routing should be re-validated** on each
   new `midnight-js` and `midnight-wallet` release until the
   multi-contract-call utility and the wallet fee-balancing fix have

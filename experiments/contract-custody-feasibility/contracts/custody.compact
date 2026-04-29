@@ -24,6 +24,7 @@ import CompactStandardLibrary;
 //   mint_and_send_shielded        → S2 (atomic mint+send within one circuit)
 //   send_held_shielded            → S3 (cross-transaction shielded custody)
 //   send_held_shielded_manual     → S5 (manual-witness shielded spend)
+//   oz_deposit + oz_send_to_user  → S6 (OpenZeppelin Map<color,QSCI> pattern)
 //   receive_shielded              → S4 (the most critical net-new test)
 //   bump_counter                  → D1 + D2 (any state-changing op works for
 //                                            Dust fee-source tests; the test
@@ -39,6 +40,19 @@ export ledger tx_count: Uint<64>;
 export ledger shielded_mint_count: Uint<64>;
 // Increments only on shielded mint operations. Used by S3 to detect that the
 // mint actually landed before attempting a later-block send.
+
+// S6 ledger state — OpenZeppelin pattern.
+//
+// `Map<Bytes<32>, QualifiedShieldedCoinInfo>` keyed by on-chain colour, with
+// `Map.insertCoin` registering each held coin (and the runtime filling in
+// `mt_index` post-block). This is the missing piece S5 lacked: the
+// off-chain proof builder reads the contract's held coin from this map
+// rather than receiving it as a witness, which is what allows
+// `sendShielded` to construct the spend proof.
+//
+// Pattern lifted verbatim from
+// https://github.com/OpenZeppelin/compact-contracts/blob/add-multisig/contracts/src/multisig/ShieldedTreasury.compact
+export ledger oz_coins: Map<Bytes<32>, QualifiedShieldedCoinInfo>;
 
 constructor() {
   tx_count            = 0 as Uint<64>;
@@ -220,6 +234,84 @@ export circuit send_held_shielded_manual(
 // shielded-viable. If no → capture the node error.
 export circuit receive_shielded(coin: ShieldedCoinInfo): [] {
   receiveShielded(disclose(coin));
+  tx_count = disclose((tx_count + (1 as Uint<64>)) as Uint<64>);
+}
+
+// S6: contract-held shielded spend, OpenZeppelin pattern.
+//
+// S5 established that `sendShielded` against a contract-held coin fails
+// when the QualifiedShieldedCoinInfo arrives as a witness parameter — the
+// off-chain compact-runtime crashes inside circuit execution. S6 ports the
+// pattern OpenZeppelin uses on their `add-multisig` branch's
+// `ShieldedTreasury.compact`:
+//
+//   1. After `receiveShielded`, register the held coin in the contract's
+//      ledger via `Map.insertCoin(key, coin, owner)`. The runtime fills
+//      in `mt_index` post-block so the QSCI persisted on-chain is valid
+//      for a later-block spend.
+//   2. At spend time, look up the QSCI from the map (`Map.lookup`) and
+//      pass it to `sendShielded`. The runtime can construct the spend
+//      proof because the coin is bound to the contract's local Zswap
+//      state via the `insertCoin` registration.
+//   3. If `sendShielded` returns change, re-deposit it via
+//      `sendImmediateShielded` and another `insertCoin` so the contract's
+//      remaining balance stays tracked. If the full coin is spent,
+//      `Map.remove` clears the entry.
+//
+// `mergeCoinImmediate`, `Map.insertCoin`, `sendImmediateShielded`, and
+// the `ShieldedSendResult.{change, sent}` shape are all real Compact
+// stdlib surfaces (verified by compiling the OZ-style pattern against
+// the same `compact 0.30.0` toolchain we use elsewhere in this contract).
+
+export circuit oz_deposit(coin: ShieldedCoinInfo): [] {
+  receiveShielded(disclose(coin));
+  const c = disclose(coin.color);
+  if (oz_coins.member(c)) {
+    const merged = mergeCoinImmediate(oz_coins.lookup(c), disclose(coin));
+    oz_coins.insertCoin(
+      c,
+      disclose(merged),
+      right<ZswapCoinPublicKey, ContractAddress>(kernel.self()),
+    );
+  } else {
+    oz_coins.insertCoin(
+      c,
+      disclose(coin),
+      right<ZswapCoinPublicKey, ContractAddress>(kernel.self()),
+    );
+  }
+  tx_count = disclose((tx_count + (1 as Uint<64>)) as Uint<64>);
+}
+
+// Send to a user. `recipient` is wrapped to `Either<ZswapCoinPublicKey,
+// ContractAddress>` inside the circuit so the TS-side caller passes the
+// raw `ZswapCoinPublicKey` without constructing the Either by hand —
+// matching the convention used by S2 / S3 / S5 elsewhere in this file.
+export circuit oz_send_to_user(
+  recipient: ZswapCoinPublicKey,
+  color:     Bytes<32>,
+  amount:    Uint<128>,
+): [] {
+  const coin = oz_coins.lookup(disclose(color));
+  const result = sendShielded(
+    disclose(coin),
+    left<ZswapCoinPublicKey, ContractAddress>(disclose(recipient)),
+    disclose(amount),
+  );
+  if (disclose(result.change.is_some)) {
+    sendImmediateShielded(
+      disclose(result.change.value),
+      right<ZswapCoinPublicKey, ContractAddress>(kernel.self()),
+      disclose(result.change.value.value),
+    );
+    oz_coins.insertCoin(
+      disclose(color),
+      result.change.value,
+      right<ZswapCoinPublicKey, ContractAddress>(kernel.self()),
+    );
+  } else {
+    oz_coins.remove(disclose(color));
+  }
   tx_count = disclose((tx_count + (1 as Uint<64>)) as Uint<64>);
 }
 
