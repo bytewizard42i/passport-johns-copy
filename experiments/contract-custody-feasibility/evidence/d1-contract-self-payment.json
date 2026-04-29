@@ -1,0 +1,36 @@
+{
+  "test": "D1",
+  "name": "contract-self-payment",
+  "verdict": "FAIL",
+  "txHash": "0099ad6688a53c1245fe08c0b0ebdc5022fb9c271532c55c63bbbe63702465ee31",
+  "errorCode": "no-paymaster-api",
+  "note": "No public SDK surface for contract-paid Dust fees on this v1.",
+  "evidence": {
+    "contractDustBalance": null,
+    "dustQueryError": "publicDataProvider has no getDustBalance method",
+    "baselineTx": "0099ad6688a53c1245fe08c0b0ebdc5022fb9c271532c55c63bbbe63702465ee31",
+    "probeError": "No contract-fee API exposed by WalletFacade",
+    "ledgerLibVersion": "reachable"
+  },
+  "ranAt": "2026-04-28T13:05:32.347Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.15.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:0.22.5"
+}

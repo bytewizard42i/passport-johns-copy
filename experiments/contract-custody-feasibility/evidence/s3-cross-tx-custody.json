@@ -1,0 +1,48 @@
+{
+  "test": "S3",
+  "name": "cross-tx-custody",
+  "verdict": "FAIL",
+  "errorCode": "no-mt-index-surface",
+  "note": "No contract-held-note lookup surface found in the SDK. The mt_index for the contract-owned note could not be recovered, so send_held_shielded was called with mt_index=0 and (correctly) rejected. The probe trace in `details.probes` records every surface that was checked.",
+  "evidence": {
+    "mintTx": "0003ba69ec5fb9b210f0980687bca4aa4ccf2ea6681694e55ebfaa3310c67fc06a",
+    "mintNonce": "dda70732aff002b3ff4a6481084bf85fa42432ca4ab5768c20ec113fb9fb0bc0",
+    "contractScopedColor": "0000000000000000000000000000000000000000000000000000000000000003",
+    "derivedOnChainColor": "b8fcdd77b405f687d4b216d5d1c9e704a18f72413b267dd129201e21747d8db9",
+    "amount": "500",
+    "mtIndex": "0",
+    "mtIndexSource": "fallback-0",
+    "sendError": "Unexpected error executing scoped transaction '<unnamed>': ContractRuntimeError: Error executing circuit 'send_held_shielded'",
+    "probes": [
+      {
+        "surface": "wallet.state.shielded.availableCoins",
+        "result": "total=8 matching-derived-color=0"
+      },
+      {
+        "surface": "contract.<probe-set>",
+        "result": "none of {shieldedCoins, getShieldedCoins, currentShieldedCoinState, queryShieldedNotes} present"
+      }
+    ]
+  },
+  "ranAt": "2026-04-29T14:23:41.407Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.15.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:0.22.5"
+}
