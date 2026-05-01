@@ -28,6 +28,11 @@ fallback? Product-owner-signed matrix.
 **Native app vs browser.** If we ship a mobile native app, does it use
 platform WebAuthn or platform secure enclave directly?
 
+**Hardware-backed external authenticators.** WebAuthn permits external
+authenticators (FIDO2 / YubiKey / Ledger) alongside platform passkeys.
+First-class device, fallback path, or unsupported? Stakeholders likely
+to ask.
+
 ## Failure modes
 
 **Passkey not recoverable on device loss.** If passkey isn't synced
@@ -41,6 +46,10 @@ failure rate above threshold.
 
 **Cross-origin attack.** Passkey scoped wrongly; another origin can
 exercise it. *Detection:* security review of WebAuthn `rpId` binding.
+
+**Hardware token gap.** Partners or users who expect FIDO2 / YubiKey /
+Ledger can't onboard with their preferred device. *Detection:*
+stakeholder request with no provisioned answer in the spec.
 
 ## Alternatives
 

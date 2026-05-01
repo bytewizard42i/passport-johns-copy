@@ -30,6 +30,11 @@ progress callbacks / pre-computed proofs / circuit optimisation?
 environments. Design doc references a `compact-runtime` library; what's
 actually shipped per platform?
 
+**Proof-server portability.** A Rust proof server doesn't run unmodified
+in a browser, on iOS, or on Android. Single committed location, or
+portable subset across all three? Porting cost is a real risk, not a
+footnote.
+
 ## Failure modes
 
 **Browser-side proof too slow.** User abandonment due to wait time.
@@ -41,6 +46,11 @@ witnesses across a network boundary.
 
 **Memory exhaustion.** Large circuits exceed mobile-device memory.
 *Detection:* proof generation crashes on supported target devices.
+
+**Proof-server porting cost overrun.** A target platform has no usable
+proof-generation path by the time the MVP needs it. *Detection:* WASM
+throughput insufficient or mobile-native port stalls past the phase
+boundary.
 
 ## Alternatives
 
