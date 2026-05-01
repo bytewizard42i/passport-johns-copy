@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Midnight Passport — The October demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  body {
+    font-size: 17px;
+    line-height: 1.65;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  main { flex: 1; }
+  .container {
+    max-width: clamp(820px, 80vw, 1280px);
+    margin: 0 auto;
+    padding: 0 clamp(24px, 5vw, 80px);
+    width: 100%;
+  }
+
+  section.hero { padding: 64px 0 40px; }
+
+  .doc-logo, .doc-logo-dark {
+    height: clamp(40px, 4vw, 72px);
+    width: auto;
+    display: block;
+    margin-bottom: 36px;
+  }
+  .doc-logo-dark { display: none; }
+  html[data-theme="dark"] .doc-logo { display: none; }
+  html[data-theme="dark"] .doc-logo-dark { display: block; }
+  @media (prefers-color-scheme: dark) {
+    html:not([data-theme="light"]) .doc-logo { display: none; }
+    html:not([data-theme="light"]) .doc-logo-dark { display: block; }
+  }
+
+  .breadcrumb {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-faint);
+    margin-bottom: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+  .breadcrumb a {
+    color: var(--text-mute);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: color .12s ease, border-color .12s ease;
+  }
+  .breadcrumb a:hover { color: var(--iog-infared); border-bottom-color: var(--iog-infared); }
+  .breadcrumb .sep { opacity: 0.5; }
+
+  .kind {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--iog-infared);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 4.6vw, 3.4rem);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  p.subtitle {
+    font-size: 1.1rem;
+    color: var(--text-mute);
+    font-weight: 300;
+    line-height: 1.55;
+    max-width: 64ch;
+    margin: 0;
+  }
+
+  .symbiosis-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+    padding: 10px 16px;
+    border: 1px dashed var(--line-strong);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--text-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .symbiosis-banner a {
+    color: var(--iog-infared);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px solid currentColor;
+  }
+  .symbiosis-banner a:hover { color: var(--iog-dawn); }
+
+  /* Sections */
+  section.section {
+    padding: 40px 0;
+    border-top: 1px solid var(--line);
+  }
+  .section-head { margin-bottom: 28px; }
+  .section-kind {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--iog-infared);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .section-head h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .section-head p {
+    color: var(--text-mute);
+    max-width: 70ch;
+    line-height: 1.55;
+  }
+
+  /* "What ships" bulleted list */
+  .ships-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .ships-list li {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px 22px;
+    background: var(--bg);
+  }
+  .ships-list li b {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .ships-list li span {
+    font-size: 0.92rem;
+    color: var(--text-mute);
+    line-height: 1.55;
+  }
+
+  /* Phase cards */
+  .phases {
+    display: grid;
+    gap: 14px;
+  }
+  .phase-card {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 22px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 20px 24px;
+    background: var(--bg);
+  }
+  @media (max-width: 640px) {
+    .phase-card { grid-template-columns: 1fr; gap: 10px; }
+  }
+  .phase-marker {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--iog-infared);
+  }
+  .phase-window {
+    color: var(--text-faint);
+    margin-top: 4px;
+    font-size: 0.72rem;
+  }
+  .phase-name {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .phase-focus {
+    font-size: 0.94rem;
+    color: var(--text-mute);
+    line-height: 1.55;
+    margin-bottom: 10px;
+  }
+  .phase-comps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+  .comp-chip {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--iog-infared);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 1px 8px;
+    background: transparent;
+    text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .comp-chip:hover {
+    border-color: var(--iog-infared);
+    background: var(--bad-soft);
+  }
+  .phase-artefact {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-top: 8px;
+    border-top: 1px dashed var(--line);
+  }
+  .phase-artefact b { color: var(--iog-infared); margin-right: 6px; }
+
+  /* Picks table */
+  .picks-table-wrap {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .picks-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg);
+  }
+  .picks-table thead th {
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-faint);
+    padding: 12px 16px;
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--line);
+  }
+  .picks-table tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.92rem;
+    color: var(--text);
+    vertical-align: top;
+  }
+  .picks-table tbody tr:last-child td { border-bottom: 0; }
+  .picks-id {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--iog-infared);
+    text-decoration: none;
+  }
+  .picks-id:hover { text-decoration: underline; }
+  .picks-alt {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--text);
+    width: 64px;
+  }
+  .picks-note { color: var(--text-mute); }
+
+  /* Crossovers */
+  .crossovers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .crossover-card {
+    border: 1px dashed var(--line-strong);
+    border-radius: 8px;
+    padding: 20px 22px;
+    background: var(--bg-soft);
+  }
+  .crossover-title {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .crossover-summary {
+    font-size: 0.92rem;
+    color: var(--text-mute);
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+  .crossover-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .cx-chip {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--iog-infared);
+    border: 1px solid var(--iog-infared);
+    border-radius: 4px;
+    padding: 3px 9px;
+    text-decoration: none;
+    background: transparent;
+    transition: background .12s ease;
+  }
+  .cx-chip:hover { background: var(--bad-soft); }
+
+  /* Footer */
+  footer.landing-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--line);
+    padding: 28px clamp(24px, 5vw, 80px);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    max-width: clamp(820px, 80vw, 1280px);
+    margin: 0 auto;
+    width: 100%;
+  }
+  footer.landing-footer a { color: var(--text-mute); text-decoration: none; border-bottom: 1px solid var(--line); }
+  footer.landing-footer a:hover { color: var(--iog-infared); border-bottom-color: var(--iog-infared); }
+  .footer-meta { font-size: 0.74rem; color: var(--text-faint); }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle colour scheme" title="Auto · Light · Dark">
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+  </svg>
+</button>
+
+<main>
+
+  <section class="hero">
+    <div class="container">
+      <img class="doc-logo" src="../assets/logos/Full Logo/Input Output_Full Logo_RGB_Red POS.png" alt="Input Output">
+      <img class="doc-logo-dark" src="../assets/logos/Full Logo/Input Output_Full Logo_RGB_Red NEG.png" alt="Input Output">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Midnight Passport</a>
+        <span class="sep">›</span>
+        <span>The October demo</span>
+      </nav>
+
+      <div class="kind">ARC · Delivery · October 2026</div>
+      <h1>The October demo</h1>
+      <p class="subtitle">An end-to-end Passport account on a screen, with a recovery sad-path. Six monthly phases, drawn against the components that exist by then. Architectural picks favour the cheapest path that works; the standards-and-spec body lands the principled path on a continuous timeline.</p>
+
+      <div class="symbiosis-banner">
+        Parallel delivery — see <a href="standards.html">Standards &amp; v1.0 →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <header class="section-head">
+        <div class="section-kind">What ships</div>
+        <h2>What runs on the screen in October</h2>
+        <p>Seven walkthroughs covering the full account lifecycle, plus a managed-recovery sad-path. The demo runs single-device and uses managed signing through a partner-operated MPC committee — these are the architectural picks the demo accepts; the standards path retires them.</p>
+      </header>
+
+      <ul class="ships-list">
+        <li><b>Passkey login</b><span>First visit registers a passkey (Face ID, Touch ID, Windows Hello). Subsequent visits authenticate biometrically. No seed phrase shown at any point.</span></li>
+        <li><b>Name registration</b><span>User registers <code>alice.midnight</code>; on-chain confirmation visible. Name uniqueness enforced at the registry.</span></li>
+        <li><b>Wallet view</b><span>Three role addresses (Shielded, Night, Dust) with balances synced via view key and a hosted indexer.</span></li>
+        <li><b>Signing primitive</b><span>User signs arbitrary data and a Night transfer. Signatures verify cross-implementation (TypeScript signer ↔ Rust verifier).</span></li>
+        <li><b>Function-call key grants</b><span>User issues, rotates, and revokes scoped function-call keys for dApp authorisation. Multi-device peer behaviour is deferred.</span></li>
+        <li><b>Sign-in with Passport</b><span>A pseudo third-party app requests scoped access; user approves with biometric; transaction signed; function-call key issued.</span></li>
+        <li><b>Recovery walkthrough</b><span>User &quot;loses&quot; their passkey. Recovery via the auth provider's flow — alt-passkey on a fallback device or backup credential. On-chain account state unchanged; passkey-to-account binding re-established.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <header class="section-head">
+        <div class="section-kind">Phasing</div>
+        <h2>Six phases, May to October</h2>
+        <p>Each phase ends with a demoable artefact — the smallest thing that proves that month's work landed. Component IDs link back to the canvas on the index page.</p>
+      </header>
+
+      <div class="phases" id="phases"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <header class="section-head">
+        <div class="section-kind">Picks</div>
+        <h2>Component picks for the demo build</h2>
+        <p>Each component has alternatives in its canvas; the table below records which alternative the demo build runs. Click any component ID to open its full design space on the index page.</p>
+      </header>
+
+      <div class="picks-table-wrap">
+        <table class="picks-table">
+          <thead>
+            <tr>
+              <th style="width:64px;">ID</th>
+              <th>Component</th>
+              <th style="width:64px;">Alt</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          <tbody id="picksBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <header class="section-head">
+        <div class="section-kind">Symbiosis</div>
+        <h2>Shared with the standards path</h2>
+        <p>Where the demo and the standards-and-spec body converge. Same primitives, same evidence, same direction — different deliverables.</p>
+      </header>
+
+      <div class="crossovers-grid" id="crossovers"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="landing-footer">
+  <span>ARC · Input Output Global · Midnight Passport · <a href="index.html">overview</a> · <a href="standards.html">standards</a></span>
+  <span class="footer-meta">Drafted 2026/05/01</span>
+</footer>
+
+<script src="data.js"></script>
+<script>
+(function () {
+  'use strict';
+  const data = window.PASSPORT_DATA;
+  if (!data) { console.error('PASSPORT_DATA not loaded'); return; }
+
+  const componentById = Object.fromEntries(data.components.map(c => [c.id, c]));
+  const mipById = Object.fromEntries((data.mips || []).map(m => [m.id, m]));
+  const expById = Object.fromEntries((data.experiments || []).map(e => [e.id, e]));
+
+  function escapeHtml(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  // Phases
+  const phasesHost = document.getElementById('phases');
+  if (phasesHost) {
+    phasesHost.innerHTML = (data.demo_phases || []).map(p => `
+      <div class="phase-card">
+        <div>
+          <div class="phase-marker">Phase ${p.id}</div>
+          <div class="phase-window">${escapeHtml(p.window)}</div>
+        </div>
+        <div>
+          <div class="phase-name">${escapeHtml(p.name)}</div>
+          <div class="phase-focus">${escapeHtml(p.focus)}</div>
+          ${p.components && p.components.length ? `
+            <div class="phase-comps">
+              ${p.components.map(cid => {
+                const c = componentById[cid];
+                return c
+                  ? `<a class="comp-chip" href="index.html#${cid}" title="${escapeHtml(c.name)}">${cid}</a>`
+                  : `<span class="comp-chip">${cid}</span>`;
+              }).join('')}
+            </div>
+          ` : ''}
+          <div class="phase-artefact"><b>Artefact</b> ${escapeHtml(p.artefact)}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Picks
+  const picksHost = document.getElementById('picksBody');
+  if (picksHost) {
+    picksHost.innerHTML = (data.demo_selections || []).map(s => {
+      const c = componentById[s.component];
+      return `
+        <tr>
+          <td><a class="picks-id" href="index.html#${s.component}">${s.component}</a></td>
+          <td>${c ? escapeHtml(c.name) : ''}</td>
+          <td class="picks-alt">${escapeHtml(s.alt || '—')}</td>
+          <td class="picks-note">${escapeHtml(s.note || '')}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // Crossovers
+  const cxHost = document.getElementById('crossovers');
+  if (cxHost) {
+    cxHost.innerHTML = (data.crossovers || []).map(cx => {
+      const items = (cx.items || []).map(id => {
+        if (cx.kind === 'components' && componentById[id]) {
+          return `<a class="cx-chip" href="index.html#${id}" title="${escapeHtml(componentById[id].name)}">${id}</a>`;
+        }
+        if (cx.kind === 'mips' && mipById[id]) {
+          return `<a class="cx-chip" href="standards.html#${id}" title="${escapeHtml(mipById[id].title)}">${id}</a>`;
+        }
+        if (cx.kind === 'experiments' && expById[id]) {
+          return `<span class="cx-chip" title="${escapeHtml(expById[id].name)}">${id}</span>`;
+        }
+        return `<span class="cx-chip">${escapeHtml(id)}</span>`;
+      }).join('');
+      return `
+        <div class="crossover-card">
+          <div class="crossover-title">${escapeHtml(cx.title)}</div>
+          <div class="crossover-summary">${escapeHtml(cx.summary)}</div>
+          ${items ? `<div class="crossover-items">${items}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+  }
+})();
+</script>
+<script src="theme-toggle.js"></script>
+</body>
+</html>

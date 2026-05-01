@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Midnight Passport — Standards & v1.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  body {
+    font-size: 17px;
+    line-height: 1.65;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  main { flex: 1; }
+  .container {
+    max-width: clamp(820px, 80vw, 1280px);
+    margin: 0 auto;
+    padding: 0 clamp(24px, 5vw, 80px);
+    width: 100%;
+  }
+
+  section.hero { padding: 64px 0 40px; }
+
+  .doc-logo, .doc-logo-dark {
+    height: clamp(40px, 4vw, 72px);
+    width: auto;
+    display: block;
+    margin-bottom: 36px;
+  }
+  .doc-logo-dark { display: none; }
+  html[data-theme="dark"] .doc-logo { display: none; }
+  html[data-theme="dark"] .doc-logo-dark { display: block; }
+  @media (prefers-color-scheme: dark) {
+    html:not([data-theme="light"]) .doc-logo { display: none; }
+    html:not([data-theme="light"]) .doc-logo-dark { display: block; }
+  }
+
+  .breadcrumb {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-faint);
+    margin-bottom: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+  .breadcrumb a {
+    color: var(--text-mute);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: color .12s ease, border-color .12s ease;
+  }
+  .breadcrumb a:hover { color: var(--iog-infared); border-bottom-color: var(--iog-infared); }
+  .breadcrumb .sep { opacity: 0.5; }
+
+  .kind {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--iog-infared);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 4.6vw, 3.4rem);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  p.subtitle {
+    font-size: 1.1rem;
+    color: var(--text-mute);
+    font-weight: 300;
+    line-height: 1.55;
+    max-width: 64ch;
+    margin: 0;
+  }
+
+  .symbiosis-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+    padding: 10px 16px;
+    border: 1px dashed var(--line-strong);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--text-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .symbiosis-banner a {
+    color: var(--iog-infared);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px solid currentColor;
+  }
+  .symbiosis-banner a:hover { color: var(--iog-dawn); }
+
+  /* Sections */
+  section.section {
+    padding: 40px 0;
+    border-top: 1px solid var(--line);
+  }
+  .section-head { margin-bottom: 28px; }
+  .section-kind {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--iog-infared);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .section-head h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .section-head p {
+    color: var(--text-mute);
+    max-width: 70ch;
+    line-height: 1.55;
+  }
+
+  /* MIP cards */
+  .mips {
+    display: grid;
+    gap: 14px;
+  }
+  .mip-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 22px 24px;
+    background: var(--bg);
+    transition: border-color .15s ease, background .15s ease;
+    scroll-margin-top: 90px;
+  }
+  .mip-card:target {
+    border-color: var(--iog-infared);
+    background: var(--bg-soft);
+  }
+  .mip-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .mip-id {
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--iog-infared);
+    letter-spacing: 0.06em;
+  }
+  .mip-prereq-badge {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--warn);
+    border: 1px solid var(--warn);
+    background: var(--warn-soft);
+    border-radius: 4px;
+    padding: 1px 7px;
+  }
+  .mip-title {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--text);
+    margin: 0;
+  }
+  .mip-detail {
+    font-size: 0.94rem;
+    color: var(--text-mute);
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+  .mip-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px 18px;
+    border-top: 1px dashed var(--line);
+    padding-top: 12px;
+    font-size: 0.86rem;
+  }
+  .mip-meta dt {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-faint);
+    margin-bottom: 4px;
+  }
+  .mip-meta dd {
+    margin: 0;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .mip-meta a { color: var(--iog-infared); text-decoration: none; }
+  .mip-meta a:hover { text-decoration: underline; }
+
+  /* Reviews */
+  .reviews-table-wrap {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .reviews-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg);
+  }
+  .reviews-table th {
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-faint);
+    padding: 12px 16px;
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--line);
+  }
+  .reviews-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.92rem;
+    color: var(--text);
+    vertical-align: top;
+  }
+  .reviews-table tbody tr:last-child td { border-bottom: 0; }
+  .reviews-id {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--iog-infared);
+    text-decoration: none;
+  }
+  .reviews-id:hover { text-decoration: underline; }
+  .review-kind {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* Promise → MIP map */
+  .promise-map {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+  }
+  .promise-map-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px 20px;
+    background: var(--bg);
+  }
+  .promise-map-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .promise-map-id {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--iog-infared);
+    letter-spacing: 0.04em;
+  }
+  .promise-map-name {
+    font-family: var(--font-display);
+    font-size: 0.98rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .promise-map-mips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .map-chip {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--iog-infared);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 2px 8px;
+    text-decoration: none;
+  }
+  .map-chip:hover {
+    border-color: var(--iog-infared);
+    background: var(--bad-soft);
+  }
+  .map-empty {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--text-faint);
+    font-style: italic;
+  }
+
+  /* Crossovers (shared with demo.html) */
+  .crossovers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .crossover-card {
+    border: 1px dashed var(--line-strong);
+    border-radius: 8px;
+    padding: 20px 22px;
+    background: var(--bg-soft);
+  }
+  .crossover-title {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .crossover-summary {
+    font-size: 0.92rem;
+    color: var(--text-mute);
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+  .crossover-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .cx-chip {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--iog-infared);
+    border: 1px solid var(--iog-infared);
+    border-radius: 4px;
+    padding: 3px 9px;
+    text-decoration: none;
+    background: transparent;
+    transition: background .12s ease;
+  }
+  .cx-chip:hover { background: var(--bad-soft); }
+
+  /* Footer */
+  footer.landing-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--line);
+    padding: 28px clamp(24px, 5vw, 80px);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    max-width: clamp(820px, 80vw, 1280px);
+    margin: 0 auto;
+    width: 100%;
+  }
+  footer.landing-footer a { color: var(--text-mute); text-decoration: none; border-bottom: 1px solid var(--line); }
+  footer.landing-footer a:hover { color: var(--iog-infared); border-bottom-color: var(--iog-infared); }
+  .footer-meta { font-size: 0.74rem; color: var(--text-faint); }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle colour scheme" title="Auto · Light · Dark">
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+  </svg>
+</button>
+
+<main>
+
+  <section class="hero">
+    <div class="container">
+      <img class="doc-logo" src="../assets/logos/Full Logo/Input Output_Full Logo_RGB_Red POS.png" alt="Input Output">
+      <img class="doc-logo-dark" src="../assets/logos/Full Logo/Input Output_Full Logo_RGB_Red NEG.png" alt="Input Output">
+
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Midnight Passport</a>
+        <span class="sep">›</span>
+        <span>Standards &amp; v1.0</span>
+      </nav>
+
+      <div class="kind">ARC · Delivery · Continuous</div>
+      <h1>Standards &amp; feature-complete v1.0</h1>
+      <p class="subtitle">A standards-and-spec body that survives external review. Each MIP needs a named external co-author so what we ratify is a shared standard, not a Passport-only document. Cryptographer and formal-methods reviews are scheduled against component stability, not against a Passport-internal calendar.</p>
+
+      <div class="symbiosis-banner">
+        Parallel delivery — see <a href="demo.html">The October demo →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <header class="section-head">
+        <div class="section-kind">Pipeline</div>
+        <h2>The MIP pipeline</h2>
+        <p>Sequenced by dependency. Each MIP needs a named external co-author so what we ratify is portable across wallets — not a Passport-shaped specification with broader aspirations. STD-03 is a cryptographic prerequisite that ships before any MIP that hashes user state.</p>
+      </header>
+
+      <div class="mips" id="mipsList"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <header class="section-head">
+        <div class="section-kind">Reviews</div>
+        <h2>Cryptographer &amp; formal-methods sign-off</h2>
+        <p>Scheduled against component stability, not against the calendar. Each review unblocks downstream specification work; together they form the &quot;defensible against external review&quot; bar that v1.0 must meet.</p>
+      </header>
+
+      <div class="reviews-table-wrap">
+        <table class="reviews-table">
+          <thead>
+            <tr>
+              <th style="width:80px;">Component</th>
+              <th>Touch point</th>
+              <th style="width:160px;">Reviewer</th>
+              <th>Trigger</th>
+            </tr>
+          </thead>
+          <tbody id="reviewsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <header class="section-head">
+        <div class="section-kind">Coverage</div>
+        <h2>Promise → MIP map</h2>
+        <p>Which MIPs lock down which promises. A promise without at least one MIP carrying it is a promise the standards body doesn't yet hold. This section is the audit trail for &quot;is the standards path complete enough to call v1.0 feature-complete?&quot;.</p>
+      </header>
+
+      <div class="promise-map" id="promiseMap"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <header class="section-head">
+        <div class="section-kind">Symbiosis</div>
+        <h2>Shared with the demo</h2>
+        <p>Where the standards-and-spec body and the October demo converge. Same primitives, same evidence, same direction — different deliverables.</p>
+      </header>
+
+      <div class="crossovers-grid" id="crossovers"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="landing-footer">
+  <span>ARC · Input Output Global · Midnight Passport · <a href="index.html">overview</a> · <a href="demo.html">demo</a></span>
+  <span class="footer-meta">Drafted 2026/05/01</span>
+</footer>
+
+<script src="data.js"></script>
+<script>
+(function () {
+  'use strict';
+  const data = window.PASSPORT_DATA;
+  if (!data) { console.error('PASSPORT_DATA not loaded'); return; }
+
+  const componentById = Object.fromEntries(data.components.map(c => [c.id, c]));
+  const promiseById = Object.fromEntries(data.promises.map(p => [p.id, p]));
+  const mipById = Object.fromEntries((data.mips || []).map(m => [m.id, m]));
+  const expById = Object.fromEntries((data.experiments || []).map(e => [e.id, e]));
+
+  function escapeHtml(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  // MIPs
+  const mipsHost = document.getElementById('mipsList');
+  if (mipsHost) {
+    mipsHost.innerHTML = (data.mips || []).map(m => {
+      const c = componentById[m.component];
+      return `
+        <div class="mip-card" id="${m.id}">
+          <div class="mip-head">
+            <span class="mip-id">${m.id}</span>
+            ${m.kind === 'prerequisite' ? '<span class="mip-prereq-badge">Prerequisite</span>' : ''}
+            <h3 class="mip-title">${escapeHtml(m.title)}</h3>
+          </div>
+          <p class="mip-detail">${escapeHtml(m.detail || '')}</p>
+          <dl class="mip-meta">
+            <div>
+              <dt>Status</dt>
+              <dd>${escapeHtml(m.status || '—')}</dd>
+            </div>
+            <div>
+              <dt>Co-author target</dt>
+              <dd>${escapeHtml(m.co_author || '—')}</dd>
+            </div>
+            <div>
+              <dt>Component</dt>
+              <dd>${c ? `<a href="index.html#${m.component}">${m.component} · ${escapeHtml(c.name)}</a>` : escapeHtml(m.component || '—')}</dd>
+            </div>
+            <div>
+              <dt>Promises</dt>
+              <dd>${(m.promises || []).map(p => {
+                const pr = promiseById[p];
+                return pr ? `<a href="index.html#${p}" title="${escapeHtml(pr.name)}">${p}</a>` : p;
+              }).join(' · ') || '—'}</dd>
+            </div>
+          </dl>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Reviews
+  const reviewsHost = document.getElementById('reviewsBody');
+  if (reviewsHost) {
+    reviewsHost.innerHTML = (data.reviews || []).map(r => {
+      const c = componentById[r.target];
+      return `
+        <tr>
+          <td><a class="reviews-id" href="index.html#${r.target}">${r.target}</a></td>
+          <td>${escapeHtml(r.label)}${r.note ? ` <span style="color:var(--text-faint);">— ${escapeHtml(r.note)}</span>` : ''}</td>
+          <td><span class="review-kind">${escapeHtml(r.kind)}</span></td>
+          <td>${escapeHtml(r.trigger)}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // Promise → MIP map
+  const promiseMapHost = document.getElementById('promiseMap');
+  if (promiseMapHost) {
+    const mipsByPromise = {};
+    data.promises.forEach(p => { mipsByPromise[p.id] = []; });
+    (data.mips || []).forEach(m => {
+      (m.promises || []).forEach(pid => {
+        if (mipsByPromise[pid]) mipsByPromise[pid].push(m.id);
+      });
+    });
+    promiseMapHost.innerHTML = data.promises.map(p => {
+      const ids = mipsByPromise[p.id];
+      return `
+        <div class="promise-map-card">
+          <div class="promise-map-head">
+            <span class="promise-map-id">${p.id}</span>
+            <span class="promise-map-name">${escapeHtml(p.name)}</span>
+          </div>
+          <div class="promise-map-mips">
+            ${ids.length
+              ? ids.map(mid => `<a class="map-chip" href="#${mid}" title="${escapeHtml(mipById[mid].title)}">${mid}</a>`).join('')
+              : '<span class="map-empty">No MIP assigned yet</span>'}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Crossovers
+  const cxHost = document.getElementById('crossovers');
+  if (cxHost) {
+    cxHost.innerHTML = (data.crossovers || []).map(cx => {
+      const items = (cx.items || []).map(id => {
+        if (cx.kind === 'components' && componentById[id]) {
+          return `<a class="cx-chip" href="index.html#${id}" title="${escapeHtml(componentById[id].name)}">${id}</a>`;
+        }
+        if (cx.kind === 'mips' && mipById[id]) {
+          return `<a class="cx-chip" href="#${id}" title="${escapeHtml(mipById[id].title)}">${id}</a>`;
+        }
+        if (cx.kind === 'experiments' && expById[id]) {
+          return `<span class="cx-chip" title="${escapeHtml(expById[id].name)}">${id}</span>`;
+        }
+        return `<span class="cx-chip">${escapeHtml(id)}</span>`;
+      }).join('');
+      return `
+        <div class="crossover-card">
+          <div class="crossover-title">${escapeHtml(cx.title)}</div>
+          <div class="crossover-summary">${escapeHtml(cx.summary)}</div>
+          ${items ? `<div class="crossover-items">${items}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+  }
+})();
+</script>
+<script src="theme-toggle.js"></script>
+</body>
+</html>
