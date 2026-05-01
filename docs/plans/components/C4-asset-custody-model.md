@@ -107,7 +107,8 @@ QSCI publicity for contract-held shielded coins. Dust takes a separate
 path (see C24).
 
 **A′ — Contract-custody with QSCI mitigations.** Same as A, with privacy
-mitigations layered on (padding, dummy entries, value-bucketing). Cost:
+mitigations layered on (padding, dummy entries, value-bucketing, salted
+commitments). Cost:
 additional contract complexity and on-chain state. Open question: are the
 mitigations sufficient, or do they only narrow the leak?
 
