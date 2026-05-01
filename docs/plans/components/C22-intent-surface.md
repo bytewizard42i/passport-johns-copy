@@ -3,7 +3,7 @@
 > **Workstream.** What abstraction does Passport present over the ledger
 > Intent and the upstream trade-intent layers?
 
-**Serves:** principle tagging carried in the workstream itself; bears on
+**Serves:** promise tagging carried in the workstream itself; bears on
 P7, P8, P10.
 
 ## Outcome

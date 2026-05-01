@@ -9,8 +9,8 @@ historical reference. **Neither reflects the current direction.**
 Two events on 2026/04/30 superseded the fork:
 
 1. **Scope expansion.** Cross-chain returned to v1.0 (feature-complete) scope,
-   CAKE was adopted as the framework of reference, and the principles surface
-   was re-derived as ten user-facing promises (P1 – P10) with explicit
+   CAKE was adopted as the framework of reference, and the user-facing
+   surface was re-derived as ten promises (P1 – P10) with explicit
    invariants. The earlier six-principle frame still informs v1.0 but is no
    longer the unit of planning.
 2. **Track split.** The hard timeline shifted from end-of-June 2026 to
@@ -34,6 +34,6 @@ more, into a single v1.0.
 ## Where to look now
 
 - [`../README.md`](../README.md) — current converged v1.0 overview.
-- [`../PRINCIPLES.md`](../PRINCIPLES.md) — v1.0 user-facing promises and
+- [`../PROMISES.md`](../PROMISES.md) — v1.0 user-facing promises and
   invariants.
 - [`../components/`](../components/) — per-component canvases (C1 – C25).

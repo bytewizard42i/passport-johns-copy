@@ -2,8 +2,8 @@
 
 The functional surfaces feature-complete v1.0 needs to provide. A
 *component* is named at the level where alternative mechanisms exist for
-the same surface — not abstract enough to be a principle (those live in
-[`../PRINCIPLES.md`](../PRINCIPLES.md)), not specific enough to be an
+the same surface — not abstract enough to be a promise (those live in
+[`../PROMISES.md`](../PROMISES.md)), not specific enough to be an
 implementation. Each component carries a five-field canvas: outcome,
 dependencies, open questions, failure modes, alternatives.
 
@@ -97,11 +97,11 @@ Technologies; Passport integrates against that architecture via C25.
 |----|-----------|-------------|--------|
 | [**C23**](C23-dapp-connection-protocol.md) | dApp connection protocol | The CAIP-25-shaped, EIP-6963-discoverable protocol surface that lets third-party dApps request scoped grants — including the Sign-In-with-Passport (DecentralisedAuth) authentication half of the same surface. | P7 · P8 |
 
-## Principles → components map
+## Promises → components map
 
-Every principle has at least one component serving it.
+Every promise has at least one component serving it.
 
-| Principle | Components |
+| Promise | Components |
 |---|---|
 | **P1** Seedless | C1 · C9 · C14 · C16 · C24 |
 | **P2** Named | C2 · (C3 tentative) |

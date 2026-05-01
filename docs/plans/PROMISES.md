@@ -1,15 +1,14 @@
-# Midnight Passport — v1.0 Principles
+# Midnight Passport — v1.0 Promises
 
-The invariants that feature-complete Midnight Passport (v1.0) must satisfy.
-Stated as **user-facing promises** — what a user, dApp developer, or
-ecosystem partner can rely on when v1.0 ships — and refined into testable
-**invariants** that a future component (UI surface, API, service) could
-plausibly violate and that we could detect.
+The user-facing promises feature-complete Midnight Passport (v1.0) makes —
+what a user, dApp developer, or ecosystem partner can rely on when v1.0
+ships — refined into testable **invariants** that a future component (UI
+surface, API, service) could plausibly violate and that we could detect.
 
-These principles describe v1.0 (the feature-complete destination), not any
+These promises describe v1.0 (the feature-complete destination), not any
 particular release. Initial-release sequencing — what ships first, what
 follows, what depends on upstream work elsewhere in the ecosystem — is a
-delivery question, recorded separately. Every principle on this page applies
+delivery question, recorded separately. Every promise on this page applies
 to v1.0 in full.
 
 ## At a glance
@@ -261,7 +260,7 @@ and selective disclosure — not the cross-chain machinery itself.
 
 ---
 
-## Out of scope for v1.0 principles
+## Out of scope for v1.0 promises
 
 Recorded so the omission is not later mistaken for an oversight.
 
@@ -270,17 +269,15 @@ Recorded so the omission is not later mistaken for an oversight.
   delivery contract.
 - **Operating the cross-chain machinery** (solver network, threshold-Schnorr
   vaults on external chains, intent escrow contract). Owned upstream by
-  Shielded Technologies. Passport's principles cover what Passport
+  Shielded Technologies. Passport's promises cover what Passport
   *delivers*; the cross-chain capability is delivered through integration
   with the upstream architecture, not by Passport building it.
 
 ---
 
-## Compressed principles checklist
+## Promises by invariant range
 
-The ten promises become ten named principles. Three merge candidates were
-considered and rejected; their separation is load-bearing for component
-design.
+A summary view including the invariant ranges for each promise.
 
 | ID | Name | Invariants |
 |----|------|------------|
@@ -296,6 +293,9 @@ design.
 | **P10** | Chain abstraction | I-10.1 … I-10.5 |
 
 ### Merge candidates considered and rejected
+
+Three merge candidates were considered and rejected; their separation is
+load-bearing for component design.
 
 - **P4 + P5 → "user can recover".** Rejected: P4 (one device lost) and P5
   (all devices lost) fail under different threat models and demand different
@@ -315,7 +315,7 @@ design.
 
 ## Cross-reference map
 
-Pairs of principles that share invariants or imply each other. Component
+Pairs of promises that share invariants or imply each other. Component
 design must respect these edges; component-level dependency analysis lives in
 [`components/`](components/).
 
@@ -375,10 +375,11 @@ rather than how the system implements it.
 
 The shifts from the inherited six-principle frame:
 
-- *Mechanism stripped from principle level.* TEE specificity, BIP39 seed
-  layout, and the "ZK witnesses" framing were demoted from principle-level
-  claims to design choices recorded in the components canvases. The
-  principles state the *invariant*; the components state the *mechanism*.
+- *Mechanism stripped from the principle level.* TEE specificity, BIP39
+  seed layout, and the "ZK witnesses" framing were demoted from
+  principle-level claims (in the inherited frame) to design choices
+  recorded in the components canvases. The promises state the *invariant*;
+  the components state the *mechanism*.
 - *Failure-mode and steady-state separated.* The inherited "one key per
   device" carried both a daily-use claim and a failure-mode claim. Split
   into P3 (peer-device, steady state) and P4 (revoke-and-continue, failure

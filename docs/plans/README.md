@@ -16,7 +16,7 @@ threshold-signature work.
 v1.0 is the **destination**, not a release date. What ships first, what
 follows, and what depends on upstream work elsewhere in the ecosystem is a
 delivery question, recorded separately. Every promise on
-[`PRINCIPLES.md`](PRINCIPLES.md) applies to v1.0 in full.
+[`PROMISES.md`](PROMISES.md) applies to v1.0 in full.
 
 ## Delivery shape: one body of code, two tracks
 
@@ -39,7 +39,7 @@ in [`components/`](components/) records both readings — the
 ## What lives here
 
 - [`README.md`](README.md) — this index.
-- [`PRINCIPLES.md`](PRINCIPLES.md) — the ten v1.0 user-facing promises
+- [`PROMISES.md`](PROMISES.md) — the ten v1.0 user-facing promises
   (P1 – P10) and their testable invariants (I-N.M).
 - [`components/`](components/) — per-component canvases (C1 – C25). Each
   component carries its outcome, dependencies, open questions, failure
@@ -50,12 +50,12 @@ in [`components/`](components/) records both readings — the
 
 ## Where to start reading
 
-- **Evaluating coherence.** Read [`PRINCIPLES.md`](PRINCIPLES.md) end to
-  end, then skim [`components/README.md`](components/README.md) to confirm
-  the component inventory covers what the principles demand.
+- **Evaluating coherence.** Read [`PROMISES.md`](PROMISES.md) end to end,
+  then skim [`components/README.md`](components/README.md) to confirm the
+  component inventory covers what the promises demand.
 - **Looking at a specific surface.** Go straight to the relevant canvas in
   [`components/`](components/). The component README maps every component
-  to the principles it serves.
+  to the promises it serves.
 - **Onboarding to the project.** Start with the repo-level
   [`docs/passport-plan.md`](../passport-plan.md) for the project overview
   and audience framing, then return here for the v1.0 detail.
@@ -64,7 +64,7 @@ in [`components/`](components/) records both readings — the
 
 - [`docs/PRINCIPLES.md`](../PRINCIPLES.md) — the six inherited
   secure-onboarding principles. Antecedent for the ten v1.0 promises;
-  see the Lineage section of `PRINCIPLES.md` here.
+  see the Lineage section of `PROMISES.md` here.
 - [`docs/FEATURES.md`](../FEATURES.md) — demo-mappable feature list.
 - [`docs/MIPS.md`](../MIPS.md) — the MIP pipeline Midnight Passport
   produces.
