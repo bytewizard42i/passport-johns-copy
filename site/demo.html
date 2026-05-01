@@ -6,7 +6,7 @@
 <title>Midnight Passport — The October demo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Bricolage+Grotesque:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 <style>
   body {
@@ -35,7 +35,7 @@
   .doc-logo-dark { display: none; }
   html[data-theme="dark"] .doc-logo { display: none; }
   html[data-theme="dark"] .doc-logo-dark { display: block; }
-  @media (prefers-color-scheme: dark) {
+  @media (not (prefers-color-scheme: light)) {
     html:not([data-theme="light"]) .doc-logo { display: none; }
     html:not([data-theme="light"]) .doc-logo-dark { display: block; }
   }

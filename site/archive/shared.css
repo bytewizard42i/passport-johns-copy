@@ -43,12 +43,12 @@
   --info-soft: #E7EBFE;
   --accent: #E52321;
 
-  --font-display: 'Barlow', 'Bricolage Grotesque', system-ui, sans-serif;
-  --font-body: 'Barlow', 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-display: 'Barlow', system-ui, sans-serif;
+  --font-body: 'Barlow', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
 }
 
-@media (not (prefers-color-scheme: light)) {
+@media (prefers-color-scheme: dark) {
   :root {
     --bg: #0A0A0A;
     --bg-soft: #121212;
@@ -232,7 +232,7 @@ body {
 .theme-toggle .icon-moon { display: block; }
 html[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
 html[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
-@media (not (prefers-color-scheme: light)) {
+@media (prefers-color-scheme: dark) {
   html:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
   html:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
 }

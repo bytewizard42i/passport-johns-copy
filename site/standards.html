@@ -6,7 +6,7 @@
 <title>Midnight Passport — Standards & v1.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Bricolage+Grotesque:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 <style>
   body {
@@ -35,7 +35,7 @@
   .doc-logo-dark { display: none; }
   html[data-theme="dark"] .doc-logo { display: none; }
   html[data-theme="dark"] .doc-logo-dark { display: block; }
-  @media (prefers-color-scheme: dark) {
+  @media (not (prefers-color-scheme: light)) {
     html:not([data-theme="light"]) .doc-logo { display: none; }
     html:not([data-theme="light"]) .doc-logo-dark { display: block; }
   }
@@ -424,7 +424,7 @@
 
       <div class="kind">ARC · Delivery · Continuous</div>
       <h1>Standards &amp; feature-complete v1.0</h1>
-      <p class="subtitle">A standards-and-spec body that survives external review. Each MIP needs a named external co-author so what we ratify is a shared standard, not a Passport-only document. Cryptographer and formal-methods reviews are scheduled against component stability, not against a Passport-internal calendar.</p>
+      <p class="subtitle">A standards-and-spec body that survives external review. Every MIP carries a named external co-author from the start — a wallet partner or ecosystem reviewer — so what we ratify is a shared standard, portable across wallets. Cryptographer and formal-methods reviews are scheduled against component stability, not against a Passport-internal calendar.</p>
 
       <div class="symbiosis-banner">
         Parallel delivery — see <a href="demo.html">The October demo →</a>
@@ -437,7 +437,7 @@
       <header class="section-head">
         <div class="section-kind">Pipeline</div>
         <h2>The MIP pipeline</h2>
-        <p>Sequenced by dependency. Each MIP needs a named external co-author so what we ratify is portable across wallets — not a Passport-shaped specification with broader aspirations. STD-03 is a cryptographic prerequisite that ships before any MIP that hashes user state.</p>
+        <p>Sequenced by dependency. Every MIP carries a named external co-author from the start — that's what makes it portable across wallets rather than a Passport-shaped specification. STD-03 is a cryptographic prerequisite that ships before any MIP that hashes user state.</p>
       </header>
 
       <div class="mips" id="mipsList"></div>

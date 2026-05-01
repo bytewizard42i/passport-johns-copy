@@ -28,9 +28,10 @@ This repository holds the plan, the research that backs it, the reference materi
 ```
 arc-passport/
 ├── site/                        Static web artefacts deployed to GitHub Pages
-│   ├── index.html               Landing page — unified entry to the two plan docs
-│   ├── the-plan.html            Visual stakeholder pre-read
-│   └── delivery-plan.html       Written delivery specification
+│   ├── index.html               Landing page and unified entry point
+│   ├── demo.html                Demo workstream — what the team builds toward October 2026
+│   ├── standards.html           Standards workstream — promises ↔ MIPs map
+│   └── archive/                 Earlier plan artefacts kept for historical reference
 ├── docs/
 │   ├── passport-plan.md         High-level plan summary
 │   ├── mvp-architecture.md      MVP architecture reasoning

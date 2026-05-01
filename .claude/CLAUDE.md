@@ -10,19 +10,19 @@ This repository is the planning and knowledge-gathering workspace for Midnight P
 
 **Audience:** internal IOG ARC, the Midnight Foundation, partner wallet and dApp developers, and the wider standards community (MIPs, and where relevant CIPs).
 
-**Core value:** produce a coordinated plan — scope, sequencing, delegation, decision records — that lets a small team deliver demonstrable weekly progress toward a Midnight Passport MVP, and ultimately a set of MIPs and CIPs the wider ecosystem can adopt.
+**Core value:** produce a coordinated plan — scope, parallelisation map, delegation, decision records — that identifies what can be built simultaneously across teams (or sequenced by a single team), drives toward a public demo in October 2026, and ultimately produces a set of MIPs and CIPs the wider ecosystem can adopt.
 
 ## Constraints
 
-- **Timeline (hard):** MVP target is end of June 2026. After June, 90-day cadence for major milestones.
-- **Timeline (soft, firm):** demonstrable progress every week. The weekly commit is the contract; the June MVP is the aspiration. If a week's intended deliverable slips, show the next thing that works rather than a broken thing.
+- **Timeline:** there is no fixed MVP deadline. We are aiming at a public demo in October 2026, but the plan's job is to map the work — not to enforce a critical path. Identify what can run in parallel across different teams (or be sequenced by the same team) so progress is bounded by capacity, not by one ordered chain of dependencies.
+- **Weekly cadence:** demonstrable progress every week remains the preferred rhythm but is no longer a hard contract. If a week's intended deliverable slips, show the next thing that works rather than a broken thing.
 - **Ecosystem dependency:** protocols we draft must be adoptable by the Midnight Foundation, Lace, and third-party wallets. Unilateral design produces shelfware.
 - **Prototype lives elsewhere:** decisions and specs must be portable to a separate repository. Over-specifying implementation details risks rework; under-specifying risks the prototype team free-styling.
 - **Research vs. specification balance:** every standard we draft is backed by evidence — an experiment, an upstream extraction, or a cryptographer review. Speculative specs do not compel adoption.
 
 ## Repository layout
 
-- `site/` — static web artefacts deployed to GitHub Pages. `site/the-plan.html` and `site/delivery-plan.html` are the stakeholder-facing artefacts; `site/index.html` is the unified entry point. Uses `../assets/logos/…` so it still renders locally.
+- `site/` — static web artefacts deployed to GitHub Pages. `site/index.html` is the unified entry point; `site/demo.html` and `site/standards.html` are the stakeholder-facing artefacts. Earlier plan documents (`the-plan.html`, `delivery-plan.html`, plus their Plan-B variants) live in `site/archive/` for historical reference. Uses `../assets/logos/…` so it still renders locally.
 - `docs/` — plan and design documents in prose (markdown and PDF).
 - `research/` — background research informing the plan.
 - `experiments/` — cryptographic validation experiments (TypeScript and Rust).
