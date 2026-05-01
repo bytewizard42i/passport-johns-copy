@@ -191,7 +191,7 @@ window.PASSPORT_DATA = {
     },
     {
       id: 'C2', name: 'Name service', category: 'identity',
-      serves: ['P2', 'P8'],
+      serves: ['P2', 'P8', 'P10'],
       outcome: 'Name ↔ account binding plus name resolution. Every account has a stable, human-readable name. Resolves to chain-native addresses for transfers and to the account anchor for protocol operations.',
       hard_deps: ['C1', 'C8', 'C25'],
       associations: ['C18', 'C19', 'C20', 'C21'],
@@ -385,7 +385,7 @@ window.PASSPORT_DATA = {
     },
     {
       id: 'C10', name: 'Scoped grants', category: 'authz',
-      serves: ['P7'],
+      serves: ['P7', 'P10'],
       outcome: 'The authorisation primitive — operation type × object × quantitative bounds. Used for both intra-user (device-to-device) and dApp grants.',
       hard_deps: ['C1', 'C25'],
       associations: ['C11', 'C12', 'C23'],
@@ -685,7 +685,7 @@ window.PASSPORT_DATA = {
     },
     {
       id: 'C23', name: 'dApp connection protocol', category: 'dapp',
-      serves: ['P7', 'P8'],
+      serves: ['P7', 'P8', 'P10'],
       outcome: 'The CAIP-25-shaped, EIP-6963-discoverable protocol surface that lets third-party dApps request scoped grants — including the Sign-In-with-Passport authentication half of the same surface.',
       hard_deps: ['C10', 'C20', 'C22'],
       associations: [],

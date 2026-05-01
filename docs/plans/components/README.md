@@ -32,7 +32,7 @@ ecosystem; Passport integrates against that architecture via C25.
 | ID | Component | Description | Serves |
 |----|-----------|-------------|--------|
 | [**C1**](C1-account-custody-contract.md) | Account-custody contract | The on-chain object representing an account — holds device set, name binding, grants. Whether it also holds assets directly is contingent on C4. | P1 · P3 · P4 · P5 · P8 |
-| [**C2**](C2-name-service.md) | Name service | Name ↔ account binding plus resolution. Internal split between Registry (`name → owner`) and Resolver (`name → addresses`) is an alternative. | P2 · P8 |
+| [**C2**](C2-name-service.md) | Name service | Name ↔ account binding plus resolution. Internal split between Registry (`name → owner`) and Resolver (`name → addresses`) is an alternative. | P2 · P8 · P10 |
 | [**C3**](C3-did-surface.md) | DID surface | Interop with W3C DID standards — whether `alice.midnight` is itself the DID, or DID is a separate layer over Passport identity. **Workstream.** | P2 (tentative) |
 
 ### Asset custody and cryptographic operations
@@ -55,7 +55,7 @@ ecosystem; Passport integrates against that architecture via C25.
 
 | ID | Component | Description | Serves |
 |----|-----------|-------------|--------|
-| [**C10**](C10-scoped-grant-primitive.md) | Scoped grant primitive | The authorisation primitive — operation type × object × quantitative bounds. Used for both intra-user and dApp grants. | P7 |
+| [**C10**](C10-scoped-grant-primitive.md) | Scoped grant primitive | The authorisation primitive — operation type × object × quantitative bounds. Used for both intra-user and dApp grants. | P7 · P10 |
 | [**C11**](C11-grant-lifecycle.md) | Grant lifecycle | Issue, modify, revoke, expire of grants. | P4 · P7 |
 | [**C12**](C12-chain-side-enforcement.md) | Chain-side enforcement | Verifier contracts that reject out-of-scope operations. The protocol — not the application — enforces grant scope. | P4 · P7 |
 
@@ -95,7 +95,7 @@ ecosystem; Passport integrates against that architecture via C25.
 
 | ID | Component | Description | Serves |
 |----|-----------|-------------|--------|
-| [**C23**](C23-dapp-connection-protocol.md) | dApp connection protocol | The CAIP-25-shaped, EIP-6963-discoverable protocol surface that lets third-party dApps request scoped grants — including the Sign-In-with-Passport (DecentralisedAuth) authentication half of the same surface. | P7 · P8 |
+| [**C23**](C23-dapp-connection-protocol.md) | dApp connection protocol | The CAIP-25-shaped, EIP-6963-discoverable protocol surface that lets third-party dApps request scoped grants — including the Sign-In-with-Passport (DecentralisedAuth) authentication half of the same surface. | P7 · P8 · P10 |
 
 ## Promises → components map
 
@@ -112,7 +112,7 @@ Every promise has at least one component serving it.
 | **P7** Scoped grants | C10 · C11 · C12 · C22 · C23 · C25 |
 | **P8** Chain-only | C1 · C2 · C6 · C15 · C17 · C22 · C23 · C24 · C25 |
 | **P9** Selective disclosure | C8 · C18 · C19 · C20 · C21 |
-| **P10** Chain abstraction | C2 · C5 · C7 · C10 · C22 · C23 · C24 · C25 |
+| **P10** Chain abstraction | C2 · C10 · C22 · C23 · C25 |
 
 ## Workstreams
 
