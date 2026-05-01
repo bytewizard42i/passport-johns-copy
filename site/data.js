@@ -653,7 +653,7 @@ window.PASSPORT_DATA = {
     },
     {
       id: 'C22', name: 'Intent surface', category: 'network',
-      serves: ['P10'], workstream: true,
+      serves: ['P7', 'P8', 'P10'], workstream: true,
       outcome: 'Passport\'s wallet-side intent surface: how the user-facing trade intent is translated into the ledger Intent struct that the user authorises by signing, what the wallet UI presents before signing, and what shape the dApp connection protocol passes between dApps and the wallet. The ledger Intent format and any trade-intent semantics are defined upstream in the Midnight ecosystem; Passport integrates with what exists, contributing only what is needed for the wallet- and dApp-side surfaces, and inventing a stop-gap shape only if no upstream format is available in time.',
       hard_deps: ['C5', 'C6', 'C7', 'C10', 'C20', 'C25'],
       associations: ['C11', 'C12', 'C23'],

@@ -87,7 +87,7 @@ ecosystem; Passport integrates against that architecture via C25.
 
 | ID | Component | Description | Serves |
 |----|-----------|-------------|--------|
-| [**C22**](C22-intent-surface.md) | Intent surface | How the user / dApp expresses operations relative to Midnight's native intent model. Whether intents are user-visible or internal-only is open. **Workstream.** | (tagged in workstream) |
+| [**C22**](C22-intent-surface.md) | Intent surface | How the user / dApp expresses operations relative to Midnight's native intent model. Whether intents are user-visible or internal-only is open. **Workstream.** | P7 · P8 · P10 |
 | [**C24**](C24-fee-model.md) | Fee model | How transaction fees are paid given DUST's non-transferability and NIGHT-derived regeneration. Covers zero-DUST user bootstrap, sponsor patterns, DUST generation semantics, and the substitutability of any sponsor service. **Workstream.** | P1 · P3 · P5 · P8 |
 | [**C25**](C25-cross-chain-integration-interface.md) | Cross-chain integration interface | The boundary between Passport and the upstream cross-chain architecture (solver network, threshold-Schnorr vaults, intent escrow contract). Defines what Passport hands off and what Passport consumes. **Placeholder — owned upstream; Passport-side integration sequenced post-v1.0 initial release.** | P3 · P5 · P7 · P8 · P10 |
 
@@ -109,8 +109,8 @@ Every promise has at least one component serving it.
 | **P4** Revoke-and-continue | C1 · C4 · C11 · C12 · C13 |
 | **P5** Recover-from-zero | C1 · C4 · C14 · C15 · C24 · C25 |
 | **P6** Key-bound | C4 · C5 · C6 · C7 · C8 · C9 · C14 · C16 |
-| **P7** Scoped grants | C10 · C11 · C12 · C23 · C25 |
-| **P8** Chain-only | C1 · C2 · C6 · C15 · C17 · C23 · C24 · C25 |
+| **P7** Scoped grants | C10 · C11 · C12 · C22 · C23 · C25 |
+| **P8** Chain-only | C1 · C2 · C6 · C15 · C17 · C22 · C23 · C24 · C25 |
 | **P9** Selective disclosure | C8 · C18 · C19 · C20 · C21 |
 | **P10** Chain abstraction | C2 · C5 · C7 · C10 · C22 · C23 · C24 · C25 |
 
