@@ -40,15 +40,18 @@ jobs:
           <p>Redirecting to <a href="site/">Midnight Passport</a>…</p>
           HTML
 
-          # Inject deploy metadata (short SHA · timestamp · link to commit)
-          # into the landing page footer. The <!-- DEPLOY_META --> comment in
-          # site/index.html is the substitution anchor; if this step fails or
-          # is skipped, the comment stays invisible and nothing breaks.
+          # Inject deploy metadata (last-commit date · short SHA · link to
+          # commit) into each live page's footer. The <!--DEPLOY-->…
+          # <!--/DEPLOY--> markers in the HTML files are the substitution
+          # anchors; if this step is skipped, the markers stay invisible
+          # and the static fallback inside them remains visible.
+          LAST_COMMIT_DATE="$(git log -1 --format=%cd --date=format:%Y/%m/%d)"
           SHORT_SHA="${GITHUB_SHA:0:7}"
-          DEPLOY_TS="$(date -u '+%Y-%m-%d %H:%M UTC')"
           COMMIT_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}"
-          DEPLOY_META="Deployed ${DEPLOY_TS} · commit <a href=\"${COMMIT_URL}\">${SHORT_SHA}</a>"
-          sed -i "s|<!-- DEPLOY_META -->|${DEPLOY_META}|" _site/site/index.html
+          DEPLOY_META="Updated ${LAST_COMMIT_DATE}<br>commit <a href=\"${COMMIT_URL}\">${SHORT_SHA}</a>"
+          for f in _site/site/index.html _site/site/demo.html _site/site/standards.html; do
+            sed -i "s|<!--DEPLOY-->.*<!--/DEPLOY-->|${DEPLOY_META}|" "$f"
+          done
 
       - name: Configure Pages
         uses: actions/configure-pages@v6
