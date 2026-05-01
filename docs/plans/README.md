@@ -69,8 +69,7 @@ and the **v1.0 deliverable target**.
   secure-onboarding principles. Antecedent for the ten v1.0 promises;
   see the Lineage section of `PROMISES.md` here.
 - [`docs/FEATURES.md`](../FEATURES.md) — demo-mappable feature list.
-- [`docs/MIPS.md`](../MIPS.md) — the MIP pipeline Midnight Passport
-  produces.
+- [`MIPS.md`](MIPS.md) — the MIP pipeline Midnight Passport produces.
 - [`docs/RESEARCH.md`](../RESEARCH.md) — accumulated research; cited where
   it bears on a question.
 - [`docs/secure-onboarding-design.pdf`](../secure-onboarding-design.pdf) —
