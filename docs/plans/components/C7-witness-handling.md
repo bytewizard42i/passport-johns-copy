@@ -1,0 +1,52 @@
+# C7 · Witness handling
+
+**Serves:** P6.
+
+## Outcome
+
+The pipeline by which key material flows from secure storage (C16) into
+proof generation (C6) without leaking outside the trusted boundary. The
+interaction point between P6 (key non-exfiltration) and the cryptographic
+stack.
+
+## Dependencies
+
+- **C5** — signs over witness commitments.
+- **C6** — consumes witnesses.
+- **C16** — source of key material.
+- **C8** — domain-separated witness construction.
+
+## Open questions
+
+**Local IPC vs in-process.** Per design doc, the proof server runs
+locally and witnesses cross IPC. Is in-process safer? Different platforms
+(browser vs native) have different answers.
+
+**Zeroisation discipline.** Design doc says "immediately after
+derivation". Does the runtime guarantee this, or is it client-side
+discipline?
+
+**`mlock` enforcement.** Design doc references `mlock` to prevent
+page-out to swap. Does v1.0 enforce on every supported platform, or
+best-effort?
+
+## Failure modes
+
+**Witness crosses network.** A code path inadvertently transmits a
+witness over a network boundary. *Detection:* network capture or code
+review.
+
+**Memory page-out.** OS pages witness-containing memory to disk.
+*Detection:* swap analysis on shipped builds.
+
+**Zeroisation skipped on error.** Exception path skips zeroisation; key
+material lingers. *Detection:* fuzz-test triggered errors leaving
+identifiable patterns in memory.
+
+## Alternatives
+
+**A — Local IPC to proof server** (design doc default).
+
+**B — In-process proof generation** (no IPC; tighter coupling).
+
+**C — Per-platform** (browser uses in-process WASM; native uses IPC).
