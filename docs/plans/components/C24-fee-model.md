@@ -137,12 +137,12 @@ Hardest UX; incompatible with the "newcomer" persona.
 surface, it would obviate the sponsor model entirely. Not on v1.0;
 tracked as a v1+ enhancement.*
 
-## Track readings
+## Readings
 
-- **Track 1 (Demo):** B (NIGHT airdrop) — operationally simplest;
+- **MVP (October demo):** B (NIGHT airdrop) — operationally simplest;
   bootstraps from a single transfer and avoids the
   shared-balancing/round-trip complexity for a demo timeline.
-- **Track 2 (Spec / v1.0):** A (wallet-level fee splitting) — the
+- **v1.0 deliverable:** A (wallet-level fee splitting) — the
   principled path; conditional on the planned end-to-end devnet
   experiment landing. C (hybrid) is a serious contender if A is
   confirmed end-to-end.

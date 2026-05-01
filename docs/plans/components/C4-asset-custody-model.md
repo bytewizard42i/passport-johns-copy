@@ -127,12 +127,12 @@ and a Dust paymaster API are available. Risk: indefinite — Dust paymaster
 has no announced timeline; inter-contract Night fix has PRs but no merge
 date.
 
-## Track readings
+## Readings
 
-- **Track 1 (Demo):** B (address-custody) — fastest to ship; sidesteps the
+- **MVP (October demo):** B (address-custody) — fastest to ship; sidesteps the
   QSCI publicity question; takes the seed-existing-but-wrapped reading of
   P1.
-- **Track 2 (Spec / v1.0):** A or A′ (contract-custody) — the principled
+- **v1.0 deliverable:** A or A′ (contract-custody) — the principled
   path; requires resolving the QSCI publicity question and either
   accepting the trade-off or layering mitigations. The cryptographic-stack
   design downstream of this canvas is calibrated to A / A′ as the v1.0

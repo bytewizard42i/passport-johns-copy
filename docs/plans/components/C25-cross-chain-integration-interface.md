@@ -102,7 +102,7 @@ adapter patterns.
 **Hand-off shape forces wallet UX compromise.** The upstream interface
 demands Passport surface ledger-Intent-shaped objects to users when the
 wallet UX target is declarative trade intents. *Detection:* C22's
-"Track 2 target" alternative becomes infeasible because the upstream
+v1.0 deliverable alternative becomes infeasible because the upstream
 boundary requires alternative B or D.
 
 **Cross-chain identity leak.** The mechanism that preserves Passport
@@ -144,11 +144,11 @@ contributes to the upstream interface design rather than only consuming
 it. Higher coordination cost; only viable if upstream invites
 co-authorship.
 
-## Track readings
+## Readings
 
-- **Track 1 (Demo):** Out of demo entirely. The October demo is
+- **MVP (October demo):** Out of MVP entirely. The October demo is
   Midnight-only; cross-chain comes online additively when the upstream
   work lands.
-- **Track 2 (Spec / v1.0):** A (integrate verbatim against upstream
+- **v1.0 deliverable:** A (integrate verbatim against upstream
   PRD / ARD), with C (wait until upstream ships) as the sequencing
   default.

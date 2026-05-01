@@ -1,8 +1,8 @@
 # Midnight Passport — Plans
 
 The plan for **feature-complete v1.0** of Midnight Passport — what v1.0
-promises, the components that deliver it, and how the two-track delivery
-shape converges into one body of code.
+promises, the components that deliver it, and how the October MVP
+consumes those deliverables early.
 
 ## What v1.0 is
 
@@ -18,23 +18,26 @@ follows, and what depends on upstream work elsewhere in the ecosystem is a
 delivery question, recorded separately. Every promise on
 [`PROMISES.md`](PROMISES.md) applies to v1.0 in full.
 
-## Delivery shape: one body of code, two tracks
+## Delivery shape: v1.0 deliverables and the October MVP
 
-v1.0 is delivered by two parallel, **symbiotic** tracks. They are not
-separate deliverables — both feed the same feature-complete v1.0.
+Feature-complete v1.0 is a body of deliverables — specs, MIPs,
+formal-methods sign-off on critical components, and cryptographer reviews
+on the cross-cutting registry. The October 2026 demo is an MVP that
+consumes those deliverables early, built with partners.
 
-- **Track 1 — Demo.** Hard date October 2026. A runnable, end-to-end
-  demonstration. Track 1 borrows from Track 2's findings and may pick the
-  simplest workable mechanism for a given component (the "make it run by
-  October" path).
-- **Track 2 — Spec.** Specs, standards, prototypes, formal methods.
-  Continuous; not bounded by the demo date. Track 2 carries the principled
-  alternative for each component (the "feature-complete v1.0" path) and is
-  informed by what Track 1 surfaces in implementation.
+- **The v1.0 deliverables.** Continuous; not bounded by the demo date.
+  Each deliverable carries the principled mechanism for its component —
+  the "feature-complete v1.0" target — and is informed by what the MVP
+  surfaces in implementation.
+- **The October MVP.** Hard date October 2026. A runnable, end-to-end
+  demonstration that consumes deliverables as they firm up. Where a
+  deliverable isn't yet mature, the MVP picks the simplest workable
+  mechanism (the "make it run by October" path) and records a migration
+  plan back to the principled spec.
 
 Where a component admits more than one mechanism, the per-component canvas
-in [`components/`](components/) records both readings — the
-"track-1 candidate" (Demo) and the "track-2 target" (Spec).
+in [`components/`](components/) records both readings — the **MVP pick**
+and the **v1.0 deliverable target**.
 
 ## What lives here
 

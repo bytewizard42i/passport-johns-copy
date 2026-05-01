@@ -167,10 +167,10 @@ ship v1.0 with no DID surface and revisit when credential interop demands
 it. Cost: external VC integrations during v1.0 must use the name
 directly, which they may not support.
 
-## Track readings
+## Readings
 
-- **Track 1 (Demo):** A or F — no DID layer for the demo. Parks the
+- **MVP (October demo):** A or F — no DID layer for the demo. Parks the
   question; the demo uses `alice.midnight` directly.
-- **Track 2 (Spec / v1.0):** B (DID == name), with method-name
+- **v1.0 deliverable:** B (DID == name), with method-name
   coordination as the live sub-question. Adopting the current
   `midnight-did` spec as the starting point shortens the path.

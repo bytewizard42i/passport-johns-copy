@@ -976,7 +976,7 @@ window.PASSPORT_DATA = {
     {
       id: 'X-shared',
       title: 'Shared primitives',
-      summary: 'Components where the demo\'s implementation IS the standards-path spec — same code, evolving in lockstep.',
+      summary: 'Components where the MVP\'s implementation IS the v1.0 deliverable — same code, evolving in lockstep.',
       kind: 'components',
       items: ['C8', 'C16', 'C1', 'C5'],
     },

@@ -44,18 +44,18 @@ signing path from outside the secure boundary.
 ## Alternatives
 
 **A — Schnorr-on-Jubjub per device** (current — verified by experiments).
-**Track 2 / v1.0 target.**
+**v1.0 deliverable target.**
 
 **B — FROST committee under user control.** Rejected as a v1.0 target —
-the partner-operated cousin is the Track-1 model below.
+the partner-operated cousin is the MVP model below.
 
 **C — Per-device with periodic rotation** (variant of A with rotation
 policy).
 
-**D — FROST-Jubjub via partner-operated MPC committee with DKG.** **Track
-1 (managed signing).** A partner runs MPC nodes; user authenticates via
+**D — FROST-Jubjub via partner-operated MPC committee with DKG.** **MVP
+model (managed signing).** A partner runs MPC nodes; user authenticates via
 OAuth2-shaped flow with a passkey registered to the MPC auth provider.
 DKG ensures no node ever reconstructs the user's private key. Signing is
 collaborative threshold Schnorr over Jubjub. Compatible with P6 (no key
 reconstructed) but **violates P8** (the MPC operator is a required
-service). Track 2 retires this in favour of A.
+service). The v1.0 deliverable retires this in favour of A.

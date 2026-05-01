@@ -143,8 +143,7 @@ choice", not "what is the answer".
   post-v1.0 initial release.
 
 For workstream components that admit a "make-it-run" mechanism distinct
-from the principled v1.0 target, the canvas records both — the **Track 1
-candidate** (the demo path) and the **Track 2 target** (the
-feature-complete v1.0 path). See the plans
-[README](../README.md#delivery-shape-one-body-of-code-two-tracks) for the
-two-track delivery framing.
+from the principled v1.0 target, the canvas records both — the **MVP
+pick** (October demo) and the **v1.0 deliverable target**. See the plans
+[README](../README.md#delivery-shape-v10-deliverables-and-the-october-mvp)
+for the framing.

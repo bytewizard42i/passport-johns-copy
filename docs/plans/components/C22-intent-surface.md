@@ -164,12 +164,12 @@ it upstream as a draft, and retires it as soon as the upstream format
 lands. Used only if upstream PRD adoption isn't possible by the time
 Passport needs to ship.
 
-## Track readings
+## Readings
 
-- **Track 1 (Demo):** C (hybrid by audience), tracking the upstream
+- **MVP (October demo):** C (hybrid by audience), tracking the upstream
   trade-intent format verbatim — wallet UI presents trade intents; dApp
   protocol passes the canonical upstream form. Lowest divergence risk
   for a demo.
-- **Track 2 (Spec / v1.0):** A (Passport-defined trade intent as primary
+- **v1.0 deliverable:** A (Passport-defined trade intent as primary
   user-facing object) — full UX ownership; the wallet's declarative
   summary is independent of upstream format churn.

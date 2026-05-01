@@ -1127,21 +1127,21 @@
       <header class="section-head">
         <div class="section-kind">Section 5</div>
         <h2>The delivery</h2>
-        <p>Two parallel deliveries, not two teams. The October demo is what runs on a screen by year-end. The standards-and-spec body is what survives external review and becomes feature-complete v1.0. They are symbiotic — same primitives evolve in lockstep, demo findings push back into specs, and spec drafts inform demo choices.</p>
+        <p>Feature-complete v1.0 is a body of deliverables — ratified MIPs, formal-methods sign-off on critical components, cryptographer reviews. The October demo is an MVP that consumes those deliverables early, built with partners. Where a deliverable isn't yet mature, the MVP picks the simplest workable mechanism and records a migration plan back to the principled spec. Symbiotic — same primitives evolve in lockstep, MVP findings push back into deliverables, and deliverable drafts inform MVP choices.</p>
       </header>
 
       <div class="delivery-grid">
         <a class="delivery-card" href="demo.html">
           <div class="delivery-kind">October 2026</div>
           <h3 class="delivery-title">The demo</h3>
-          <p class="delivery-summary">An end-to-end Passport account, on a screen, with a recovery sad-path. Six phases (May–October), drawn against the components that exist by then.</p>
+          <p class="delivery-summary">An end-to-end Passport account, on a screen, with a recovery sad-path. Six phases (May–October), built with partners against the components that exist by then. Pragmatic mechanism choices carry a migration plan to the principled spec.</p>
           <span class="delivery-open">Open<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
         </a>
 
         <a class="delivery-card" href="standards.html">
           <div class="delivery-kind">Continuous</div>
-          <h3 class="delivery-title">Standards &amp; v1.0</h3>
-          <p class="delivery-summary">A standards-and-spec body that survives external review: MIPs ratified or in advanced draft, formal-methods sign-off on critical components, cryptographer reviews on the registry. Becomes feature-complete v1.0 when the body is exhaustive.</p>
+          <h3 class="delivery-title">The v1.0 deliverables</h3>
+          <p class="delivery-summary">MIPs ratified or in advanced draft; formal-methods sign-off and cryptographer reviews on critical components. The body of work that defines feature-complete v1.0; the MVP consumes them as they firm up.</p>
           <span class="delivery-open">Open<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
         </a>
       </div>
@@ -1150,7 +1150,7 @@
         <div class="crossover-head">
           <div class="section-kind">How they connect</div>
           <h3 class="crossover-title">Four primitives, two complementary roles</h3>
-          <p>Each shared primitive plays a complementary role on each side — the demo's implementation IS what the standards body ratifies. One body of code; both sides feed feature-complete v1.0.</p>
+          <p>Each shared primitive plays a complementary role: the MVP's implementation IS the v1.0 deliverable. One body of code where the MVP and the v1.0 deliverable converge.</p>
         </div>
 
         <div class="cx-grid">
@@ -1161,11 +1161,11 @@
             </header>
             <div class="cx-roles">
               <div class="cx-role cx-role-demo">
-                <span class="cx-role-label">Demo</span>
+                <span class="cx-role-label">MVP</span>
                 <p class="cx-role-text">Deploys one Compact contract per account. Mirrors the custody-feasibility experiment; on-chain by Phase A.</p>
               </div>
               <div class="cx-role cx-role-std">
-                <span class="cx-role-label">Standards</span>
+                <span class="cx-role-label">v1.0 spec</span>
                 <p class="cx-role-text">Ratified as <a href="standards.html#MIP-3">MIP-3</a> (multi-key account contract). Co-design with Lace; formal-methods sign-off post-ratification.</p>
               </div>
             </div>
@@ -1178,11 +1178,11 @@
             </header>
             <div class="cx-roles">
               <div class="cx-role cx-role-demo">
-                <span class="cx-role-label">Demo</span>
+                <span class="cx-role-label">MVP</span>
                 <p class="cx-role-text">Threshold Schnorr-on-Jubjub via a partner-operated MPC committee. Verified end-to-end against <code>experiments/redjubjub-wallet/</code>.</p>
               </div>
               <div class="cx-role cx-role-std">
-                <span class="cx-role-label">Standards</span>
+                <span class="cx-role-label">v1.0 spec</span>
                 <p class="cx-role-text">Ratified as <a href="standards.html#MIP-1">MIP-1</a> (key derivation paths). Per-device on-device signing the standards-path target.</p>
               </div>
             </div>
@@ -1195,11 +1195,11 @@
             </header>
             <div class="cx-roles">
               <div class="cx-role cx-role-demo">
-                <span class="cx-role-label">Demo</span>
+                <span class="cx-role-label">MVP</span>
                 <p class="cx-role-text">Central registry document; cryptographer review pre-October so every hash use site is prefixed before the demo ships.</p>
               </div>
               <div class="cx-role cx-role-std">
-                <span class="cx-role-label">Standards</span>
+                <span class="cx-role-label">v1.0 spec</span>
                 <p class="cx-role-text"><a href="standards.html#STD-03">STD-03</a> prerequisite. Unblocks every MIP that hashes user state — credentials, signing, naming.</p>
               </div>
             </div>
@@ -1212,11 +1212,11 @@
             </header>
             <div class="cx-roles">
               <div class="cx-role cx-role-demo">
-                <span class="cx-role-label">Demo</span>
+                <span class="cx-role-label">MVP</span>
                 <p class="cx-role-text">Holds session and auth state to the MPC provider. Encryption envelope keyed off WebAuthn-derived material on the device.</p>
               </div>
               <div class="cx-role cx-role-std">
-                <span class="cx-role-label">Standards</span>
+                <span class="cx-role-label">v1.0 spec</span>
                 <p class="cx-role-text">Encryption envelope and storage substrate spec'd against multi-platform wrapping-key APIs (iOS Keychain, Android StrongBox, browser IndexedDB).</p>
               </div>
             </div>
