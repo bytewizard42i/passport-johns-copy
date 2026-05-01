@@ -181,6 +181,163 @@
   .promise-arrow { transition: transform .12s ease; }
   .promise-card:hover .promise-arrow { transform: translateX(2px); }
 
+  /* ---------- Principle history (Section 1, below promises) ---------- */
+
+  .principle-history {
+    margin-top: 48px;
+    padding-top: 36px;
+    border-top: 1px dashed var(--line);
+  }
+  .history-head { margin-bottom: 24px; }
+  .history-head .section-kind { margin-bottom: 8px; }
+  .history-head h3 {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .history-head p {
+    font-size: 0.96rem;
+    color: var(--text-mute);
+    line-height: 1.6;
+    max-width: 78ch;
+  }
+  .history-head em {
+    font-style: normal;
+    color: var(--text);
+    font-weight: 600;
+    background: var(--bg-soft);
+    padding: 0 5px;
+    border-radius: 3px;
+    font-size: 0.92em;
+  }
+
+  .mapping-table-wrap {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+  .mapping-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg);
+  }
+  .mapping-table thead th {
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-faint);
+    padding: 12px 16px;
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--line);
+  }
+  .mapping-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.92rem;
+    color: var(--text);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  .mapping-table tbody tr:last-child td { border-bottom: 0; }
+  .mapping-table .op-id {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--iog-infared);
+    margin-right: 6px;
+  }
+  .disp {
+    font-family: var(--font-mono);
+    font-size: 0.84rem;
+    color: var(--text-mute);
+  }
+  .map-pill {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--iog-infared);
+    border: 1px solid var(--iog-infared);
+    border-radius: 4px;
+    padding: 1px 7px;
+    text-decoration: none;
+    margin-right: 4px;
+    transition: background .12s ease;
+  }
+  .map-pill:hover { background: var(--bad-soft); }
+  .map-note {
+    font-size: 0.86rem;
+    color: var(--text-mute);
+    margin-left: 6px;
+  }
+  .mapping-additions {
+    font-size: 0.95rem;
+    color: var(--text-mute);
+    line-height: 1.7;
+    padding: 16px 20px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom: 0;
+  }
+  .mapping-additions strong { color: var(--text); font-weight: 600; }
+
+  .mapping-implicit {
+    list-style: none;
+    margin: 0;
+    padding: 0 20px 16px;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-top: 0;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    display: grid;
+    gap: 8px;
+  }
+  .mapping-implicit li {
+    display: grid;
+    grid-template-columns: 44px auto 1fr;
+    gap: 10px;
+    align-items: baseline;
+    font-size: 0.92rem;
+    color: var(--text-mute);
+    line-height: 1.55;
+    padding: 8px 0;
+    border-top: 1px dashed var(--line);
+  }
+  .mapping-implicit li:first-child { border-top: 0; padding-top: 4px; }
+  .mapping-implicit .map-pill { margin-right: 0; }
+  .imp-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.96rem;
+  }
+  .imp-source {
+    color: var(--text-mute);
+  }
+  .imp-source code {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    background: var(--bg);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--line);
+  }
+  @media (max-width: 640px) {
+    .mapping-implicit li {
+      grid-template-columns: 44px 1fr;
+    }
+    .mapping-implicit .imp-source { grid-column: 2 / -1; }
+  }
+
   /* ---------- Components table ---------- */
 
   section.components-table {
@@ -581,13 +738,19 @@
   }
 
   .crossover {
-    border: 1px dashed var(--line);
-    border-radius: 8px;
-    padding: 26px 28px;
-    background: var(--bg-soft);
+    margin-top: 8px;
   }
-  .crossover-head { margin-bottom: 18px; }
+  .crossover-head { margin-bottom: 22px; }
   .crossover-head .section-kind { margin-bottom: 8px; }
+  .crossover-title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+    color: var(--text);
+    margin: 0 0 10px;
+  }
   .crossover-head p {
     font-size: 0.95rem;
     color: var(--text-mute);
@@ -595,51 +758,120 @@
     max-width: 70ch;
     margin: 0;
   }
-  .crossover-svg {
-    display: block;
-    width: 100%;
-    max-width: 720px;
-    height: auto;
-    margin: 0 auto;
+
+  /* Crossover grid — 4 primitives, each split demo / standards */
+  .cx-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 16px;
   }
 
-  .cx-label {
+  .cx-card {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--bg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .cx-card:hover {
+    border-color: var(--card-stroke-soft);
+    transform: translateY(-1px);
+  }
+
+  .cx-card-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 16px 22px;
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--line);
+  }
+  .cx-card-id {
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 0.86rem;
     font-weight: 700;
-    fill: var(--text-faint);
-    letter-spacing: 1.5px;
+    color: var(--iog-infared);
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    border: 1px solid var(--iog-infared);
+    border-radius: 4px;
+    padding: 2px 8px;
+    transition: background .12s ease;
+  }
+  .cx-card-id:hover { background: var(--bad-soft); }
+  .cx-card-name {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text);
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .cx-roles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    flex: 1;
+  }
+  @media (max-width: 720px) {
+    .cx-roles { grid-template-columns: 1fr; }
+  }
+
+  .cx-role {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+  }
+  .cx-role-demo {
+    border-right: 1px solid var(--line);
+  }
+  @media (max-width: 720px) {
+    .cx-role-demo {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+  }
+  .cx-role-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.14em;
+    align-self: flex-start;
+    padding: 2px 8px;
+    border-radius: 3px;
   }
-  .cx-side {
-    fill: var(--bg);
-    stroke: var(--line);
-    stroke-width: 1.5;
+  .cx-role-demo .cx-role-label {
+    color: var(--iog-infared);
+    background: var(--bad-soft);
   }
-  .cx-demo { fill: var(--bg); }
-  .cx-std  { fill: var(--bg); }
-  .cx-shared {
-    fill: var(--bad-soft);
-    stroke: var(--iog-infared);
-    stroke-width: 1.5;
-    transition: fill .15s ease;
+  .cx-role-std .cx-role-label {
+    color: var(--info);
+    background: var(--info-soft);
   }
-  .cx-shared-label {
-    font-family: 'Barlow', system-ui, sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    fill: var(--text);
-    pointer-events: none;
+  .cx-role-text {
+    font-size: 0.92rem;
+    color: var(--text);
+    line-height: 1.55;
+    margin: 0;
   }
-  .cx-link { cursor: pointer; }
-  .cx-link:hover .cx-shared { fill: var(--iog-infared); }
-  .cx-link:hover .cx-shared-label { fill: #fff; }
-  html[data-theme="dark"] .cx-link:hover .cx-shared-label { fill: #0A0A0A; }
-  .cx-line {
-    stroke: var(--line-strong);
-    stroke-width: 1.5;
-    stroke-dasharray: 4 3;
-    opacity: 0.6;
+  .cx-role-text a {
+    color: var(--iog-infared);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+  }
+  .cx-role-text a:hover { color: var(--iog-dawn); }
+  .cx-role-text code {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    background: var(--bg-soft);
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--line);
   }
 
   /* ---------- Side panel (global — used by promises, components, decisions) ---------- */
@@ -905,6 +1137,15 @@
 </head>
 <body>
 
+<nav class="navbar" aria-label="Primary">
+  <a class="navbar-brand" href="index.html">Midnight Passport <span class="brand-tag">· ARC</span></a>
+  <div class="navbar-links">
+    <a href="index.html" class="active">Overview</a>
+    <a href="demo.html">Demo</a>
+    <a href="standards.html">Standards</a>
+  </div>
+</nav>
+
 <button class="theme-toggle" id="themeToggle" aria-label="Toggle colour scheme" title="Auto · Light · Dark">
   <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
@@ -936,6 +1177,83 @@
         <p>Ten user-facing invariants that v1.0 must hold. Each is stated as something a user (or ecosystem partner) can rely on, with falsifiable invariants underneath. Click any card to see its full statement, the testable invariants, and the components that serve it.</p>
       </header>
       <div id="promisesGrid" class="promises-grid"></div>
+
+      <div class="principle-history">
+        <header class="history-head">
+          <div class="section-kind">How we got here</div>
+          <h3>From the secure-onboarding six to the working ten</h3>
+          <p>
+            Pass 1 of the planning work started from the six principles in the secure-onboarding document — <em>Key-bound TEE; ZK witnesses</em>, <em>Single seed, three wallets</em>, <em>Chain abstraction via intent</em>, <em>One key per device</em>, <em>Privacy-by-design identity</em>, and <em>Seedless UX</em>. The ten promises above are not a different vision — they are the same six pressure-tested for falsifiability, with mechanism statements peeled off and previously-implicit assumptions made explicit so each can be individually tested. Every promise traces back to something the original document said or assumed; nothing here is invented.
+          </p>
+        </header>
+
+        <div class="mapping-table-wrap">
+          <table class="mapping-table">
+            <thead>
+              <tr>
+                <th style="width:34%;">Original principle</th>
+                <th style="width:18%;">Disposition</th>
+                <th>New mapping</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="op-id">#1</span> Key-bound TEE; ZK witnesses</td>
+                <td><span class="disp">Split, abstracted</span></td>
+                <td>
+                  <a href="#P6" class="map-pill">P6</a>
+                  <span class="map-note">TEE specificity removed; ZK witnesses move to mechanism layer.</span>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="op-id">#2</span> Single seed, three wallets</td>
+                <td><span class="disp">Dropped</span></td>
+                <td><span class="map-note">Implementation specification, not a v1.0 invariant.</span></td>
+              </tr>
+              <tr>
+                <td><span class="op-id">#3</span> Chain abstraction via intent</td>
+                <td><span class="disp">Preserved</span></td>
+                <td><a href="#P10" class="map-pill">P10</a></td>
+              </tr>
+              <tr>
+                <td><span class="op-id">#4</span> One key per device</td>
+                <td><span class="disp">Rewritten, split</span></td>
+                <td>
+                  <a href="#P3" class="map-pill">P3</a><a href="#P6" class="map-pill">P6</a><a href="#P7" class="map-pill">P7</a>
+                  <span class="map-note">Mechanism statement; surfaces multi-device peerage, no exfiltration, and scoped grants as separate principles.</span>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="op-id">#5</span> Privacy-by-design identity</td>
+                <td><span class="disp">Kept, renamed</span></td>
+                <td>
+                  <a href="#P9" class="map-pill">P9</a>
+                  <span class="map-note">Renamed for sharper testability.</span>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="op-id">#6</span> Seedless UX</td>
+                <td><span class="disp">Split</span></td>
+                <td>
+                  <a href="#P1" class="map-pill">P1</a><a href="#P5" class="map-pill">P5</a>
+                  <span class="map-note">No-mnemonic UX is P1; total-loss recovery without seed is P5.</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="mapping-additions">
+          <strong>Five made explicit</strong> — promises that were implicit in the original document and surfaced as their own principles by Pass 1's pressure-testing.
+        </p>
+        <ul class="mapping-implicit">
+          <li><a href="#P2" class="map-pill">P2</a><span class="imp-name">Named</span><span class="imp-source">— the original mentioned <code>alice.midnight</code> throughout as the user-facing handle, but never elevated naming to a principle.</span></li>
+          <li><a href="#P3" class="map-pill">P3</a><span class="imp-name">Peer-device</span><span class="imp-source">— implicit in #4; multi-device peerage was the premise of the device-add flow.</span></li>
+          <li><a href="#P4" class="map-pill">P4</a><span class="imp-name">Revoke-and-continue</span><span class="imp-source">— implicit in the multi-device story; the QR-code device-add flow shadowed a revoke-old-and-continue mode.</span></li>
+          <li><a href="#P7" class="map-pill">P7</a><span class="imp-name">Scoped grants</span><span class="imp-source">— function-call keys appeared as a sub-feature of #4 but were never named as their own primitive.</span></li>
+          <li><a href="#P8" class="map-pill">P8</a><span class="imp-name">Chain-only</span><span class="imp-source">— assumed throughout the document (no operator was required for any flow), but never stated as a constraint.</span></li>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -1065,34 +1383,79 @@
       <div class="crossover">
         <div class="crossover-head">
           <div class="section-kind">How they connect</div>
-          <p>Four shared primitives sit between the two deliveries — components where the demo's implementation IS the standards-path spec. They evolve together, not in parallel.</p>
+          <h3 class="crossover-title">Four primitives, two complementary roles</h3>
+          <p>Each shared primitive plays a complementary role on each side — the demo's implementation IS what the standards body ratifies. One body of code; both sides feed feature-complete v1.0.</p>
         </div>
 
-        <svg class="crossover-svg" viewBox="0 0 600 220" role="img" aria-label="Demo and Standards share four primitives">
-          <!-- Side labels -->
-          <text x="40" y="38" class="cx-label">Demo</text>
-          <text x="560" y="38" text-anchor="end" class="cx-label">Standards</text>
+        <div class="cx-grid">
+          <article class="cx-card">
+            <header class="cx-card-head">
+              <a href="#C1" class="cx-card-id">C1</a>
+              <h4 class="cx-card-name">Account-custody contract</h4>
+            </header>
+            <div class="cx-roles">
+              <div class="cx-role cx-role-demo">
+                <span class="cx-role-label">Demo</span>
+                <p class="cx-role-text">Deploys one Compact contract per account. Mirrors the custody-feasibility experiment; on-chain by Phase A.</p>
+              </div>
+              <div class="cx-role cx-role-std">
+                <span class="cx-role-label">Standards</span>
+                <p class="cx-role-text">Ratified as <a href="standards.html#MIP-3">MIP-3</a> (multi-key account contract). Co-design with Lace; formal-methods sign-off post-ratification.</p>
+              </div>
+            </div>
+          </article>
 
-          <!-- Side bars -->
-          <rect x="20" y="50" width="120" height="150" rx="8" class="cx-side cx-demo"/>
-          <rect x="460" y="50" width="120" height="150" rx="8" class="cx-side cx-std"/>
+          <article class="cx-card">
+            <header class="cx-card-head">
+              <a href="#C5" class="cx-card-id">C5</a>
+              <h4 class="cx-card-name">Signing primitive</h4>
+            </header>
+            <div class="cx-roles">
+              <div class="cx-role cx-role-demo">
+                <span class="cx-role-label">Demo</span>
+                <p class="cx-role-text">Threshold Schnorr-on-Jubjub via a partner-operated MPC committee. Verified end-to-end against <code>experiments/redjubjub-wallet/</code>.</p>
+              </div>
+              <div class="cx-role cx-role-std">
+                <span class="cx-role-label">Standards</span>
+                <p class="cx-role-text">Ratified as <a href="standards.html#MIP-1">MIP-1</a> (key derivation paths). Per-device on-device signing the standards-path target.</p>
+              </div>
+            </div>
+          </article>
 
-          <!-- Shared primitives in middle column -->
-          <a class="cx-link" href="index.html#C1"><rect x="240" y="58" width="120" height="32" rx="6" class="cx-shared"/><text x="300" y="80" text-anchor="middle" class="cx-shared-label">C1 · Account-custody</text></a>
-          <a class="cx-link" href="index.html#C5"><rect x="240" y="100" width="120" height="32" rx="6" class="cx-shared"/><text x="300" y="122" text-anchor="middle" class="cx-shared-label">C5 · Signing</text></a>
-          <a class="cx-link" href="index.html#C8"><rect x="240" y="142" width="120" height="32" rx="6" class="cx-shared"/><text x="300" y="164" text-anchor="middle" class="cx-shared-label">C8 · Domain-separation</text></a>
-          <a class="cx-link" href="index.html#C16"><rect x="240" y="184" width="120" height="32" rx="6" class="cx-shared"/><text x="300" y="206" text-anchor="middle" class="cx-shared-label">C16 · Wallet local storage</text></a>
+          <article class="cx-card">
+            <header class="cx-card-head">
+              <a href="#C8" class="cx-card-id">C8</a>
+              <h4 class="cx-card-name">Domain-separation registry</h4>
+            </header>
+            <div class="cx-roles">
+              <div class="cx-role cx-role-demo">
+                <span class="cx-role-label">Demo</span>
+                <p class="cx-role-text">Central registry document; cryptographer review pre-October so every hash use site is prefixed before the demo ships.</p>
+              </div>
+              <div class="cx-role cx-role-std">
+                <span class="cx-role-label">Standards</span>
+                <p class="cx-role-text"><a href="standards.html#STD-03">STD-03</a> prerequisite. Unblocks every MIP that hashes user state — credentials, signing, naming.</p>
+              </div>
+            </div>
+          </article>
 
-          <!-- Connector lines -->
-          <line x1="140" y1="74"  x2="240" y2="74"  class="cx-line"/>
-          <line x1="360" y1="74"  x2="460" y2="74"  class="cx-line"/>
-          <line x1="140" y1="116" x2="240" y2="116" class="cx-line"/>
-          <line x1="360" y1="116" x2="460" y2="116" class="cx-line"/>
-          <line x1="140" y1="158" x2="240" y2="158" class="cx-line"/>
-          <line x1="360" y1="158" x2="460" y2="158" class="cx-line"/>
-          <line x1="140" y1="200" x2="240" y2="200" class="cx-line"/>
-          <line x1="360" y1="200" x2="460" y2="200" class="cx-line"/>
-        </svg>
+          <article class="cx-card">
+            <header class="cx-card-head">
+              <a href="#C16" class="cx-card-id">C16</a>
+              <h4 class="cx-card-name">Wallet local storage</h4>
+            </header>
+            <div class="cx-roles">
+              <div class="cx-role cx-role-demo">
+                <span class="cx-role-label">Demo</span>
+                <p class="cx-role-text">Holds session and auth state to the MPC provider. Encryption envelope keyed off WebAuthn-derived material on the device.</p>
+              </div>
+              <div class="cx-role cx-role-std">
+                <span class="cx-role-label">Standards</span>
+                <p class="cx-role-text">Encryption envelope and storage substrate spec'd against multi-platform wrapping-key APIs (iOS Keychain, Android StrongBox, browser IndexedDB).</p>
+              </div>
+            </div>
+          </article>
+        </div>
       </div>
     </div>
   </section>

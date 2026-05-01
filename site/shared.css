@@ -151,6 +151,67 @@ body {
   transition: background .2s ease, color .2s ease;
 }
 
+/* Top navbar — shared across index, demo, standards */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 14px clamp(24px, 5vw, 80px);
+  padding-right: clamp(80px, 8vw, 120px); /* leave room for the fixed theme toggle */
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+.navbar-brand {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: color .12s ease;
+}
+.navbar-brand:hover { color: var(--iog-infared); }
+.navbar-brand .brand-tag {
+  color: var(--text-faint);
+  font-weight: 500;
+  margin-left: 6px;
+}
+.navbar-links {
+  display: flex;
+  gap: clamp(14px, 2.5vw, 28px);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.navbar-links a {
+  color: var(--text-mute);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  padding: 4px 0;
+  position: relative;
+  transition: color .12s ease;
+}
+.navbar-links a:hover { color: var(--iog-infared); }
+.navbar-links a.active { color: var(--iog-infared); }
+.navbar-links a.active::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: var(--iog-infared);
+}
+
 /* Theme toggle — Auto · Light · Dark */
 .theme-toggle {
   position: fixed;
