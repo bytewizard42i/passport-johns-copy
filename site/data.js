@@ -87,7 +87,7 @@ window.PASSPORT_DATA = {
       name: 'Scoped grants',
       statement: 'Access is grantable along three orthogonal axes — operation type, object, and quantitative bounds — with one primitive serving both intra-user and dApp grants.',
       invariants: [
-        { id: 'I-7.1', text: 'The authorisation primitive supports operation type as a scope axis: read, write, execute — separable per grant. Execute scope applies per-circuit, so selective-disclosure proofs are governed by the same axis.' },
+        { id: 'I-7.1', text: 'The authorisation primitive supports operation type as a scope axis: read, write, execute — separable per grant. Execute scope applies per-circuit, so selective-disclosure proofs (executions of a specific circuit) are governed by the same axis.' },
         { id: 'I-7.2', text: 'The authorisation primitive supports object-level scope: which assets, contracts, attestations the grant covers.' },
         { id: 'I-7.3', text: 'The authorisation primitive supports quantitative bounds: value caps, rate limits, and expiry.' },
         { id: 'I-7.4', text: 'The same authorisation primitive is used for intra-user (device-to-device) and inter-party (user-to-dApp) grants — no parallel mechanism for either side.' },
@@ -114,7 +114,7 @@ window.PASSPORT_DATA = {
       invariants: [
         { id: 'I-9.1', text: 'A proof reveals only the property being proven — no additional attribute, no identifier of the prover, no metadata about the credential.' },
         { id: 'I-9.2', text: 'Two proofs of the same property by the same user are not linkable across uses (no shared persistent identifier emitted by the proof).' },
-        { id: 'I-9.3', text: 'Proof verification does not require the verifier to contact the credential issuer in real time. (Tentative — awaiting cryptographer / decentralised-identity expert review.)' },
+        { id: 'I-9.3', text: 'Proof verification does not require the verifier to contact the credential issuer in real time. (Tentative — pending cryptographer / decentralised-identity expert review.)' },
         { id: 'I-9.4', text: 'Replay prevention (nullifiers) does not leak the credential identity or the attribute being proven.' },
         { id: 'I-9.5', text: 'Domain separation between credential commitment and nullifier construction is enforced — a nullifier cannot be linked back to its credential.' },
       ],
@@ -128,7 +128,7 @@ window.PASSPORT_DATA = {
         { id: 'I-10.2', text: 'The user\'s authorising step does not require the user to identify which chain an operation lands on, when chain identity is implicit in the named asset.' },
         { id: 'I-10.3', text: 'A trade intent constructed on the wallet side does not pin a specific settlement chain unless the user explicitly requests one.' },
         { id: 'I-10.4', text: 'Cross-chain operations preserve the same Passport identity for the user across all chains. There is no separate per-chain identity shadow.' },
-        { id: 'I-10.5', text: 'Passport\'s authorising surface (the trade-intent + signature) is independent of the cross-chain solver implementation. A different solver conforming to the same interface produces the same authorisation result.' },
+        { id: 'I-10.5', text: 'Passport\'s authorising surface (the trade-intent + signature) is independent of upstream solver / signature-scheme implementation details. A different solver implementation conforming to the same interface produces the same authorisation result.' },
       ],
     },
   ],
@@ -384,7 +384,7 @@ window.PASSPORT_DATA = {
       ],
     },
     {
-      id: 'C10', name: 'Scoped grants', category: 'authz',
+      id: 'C10', name: 'Scoped grant primitive', category: 'authz',
       serves: ['P7', 'P10'],
       outcome: 'The authorisation primitive — operation type × object × quantitative bounds. Used for both intra-user (device-to-device) and dApp grants.',
       hard_deps: ['C1', 'C25'],
@@ -542,7 +542,7 @@ window.PASSPORT_DATA = {
       ],
     },
     {
-      id: 'C17', name: 'View-key + indexer sync', category: 'wallet',
+      id: 'C17', name: 'View-key + indexer (sync)', category: 'wallet',
       serves: ['P3', 'P8'],
       outcome: 'The read half of the wallet — view keys handed to a substitutable indexer that reconstructs visible chain state for the UI.',
       hard_deps: ['C2', 'C10', 'C11', 'C16', 'C18'],
