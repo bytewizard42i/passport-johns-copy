@@ -228,44 +228,46 @@
   function buildMacroGraphElements() {
     const elements = [];
 
-    // CORE super-node.
+    // CORE compound parent — members nest inside via data.parent.
     elements.push({
       data: {
         id: 'CORE',
-        label: 'CORE\nidentity-and-account core',
+        label: 'CORE — identity-and-account core',
         kind: 'core',
       },
       classes: 'node-core',
     });
 
-    // Non-CORE component nodes.
+    // All component nodes. CORE members carry data.parent: 'CORE' so the
+    // compound parent visually contains them.
     data.components.forEach(c => {
-      if (coreSet.has(c.id)) return;
       const classes = [];
       if (workstreamSet.has(c.id)) classes.push('node-workstream');
       else classes.push('node-component');
+      const nodeData = {
+        id: c.id,
+        label: c.id + '\n' + c.name,
+        category: c.category,
+        kind: 'component',
+      };
+      if (coreSet.has(c.id)) nodeData.parent = 'CORE';
       elements.push({
-        data: {
-          id: c.id,
-          label: c.id + '\n' + c.name,
-          category: c.category,
-          kind: 'component',
-        },
+        data: nodeData,
         classes: classes.join(' '),
       });
     });
 
-    // Helper: collapse-CORE-aware edge insertion.
+    // Edge insertion. Directed precedence edges entirely within CORE are
+    // skipped — the SCC's mutual structure is conveyed by the dedicated
+    // co-design edges below, which render without arrows.
     const seen = new Set();
     const addEdge = (src, tgt, edgeClass) => {
-      const a = coreSet.has(src) ? 'CORE' : src;
-      const b = coreSet.has(tgt) ? 'CORE' : tgt;
-      if (a === b) return; // edges internal to CORE are hidden
-      const key = edgeClass.split(' ')[0] + ':' + a + '->' + b;
+      if (coreSet.has(src) && coreSet.has(tgt)) return;
+      const key = edgeClass.split(' ')[0] + ':' + src + '->' + tgt;
       if (seen.has(key)) return;
       seen.add(key);
       elements.push({
-        data: { id: 'e:' + key, source: a, target: b },
+        data: { id: 'e:' + key, source: src, target: tgt },
         classes: edgeClass,
       });
     };
@@ -278,6 +280,18 @@
     // Association edges — initially hidden via .edge-hidden.
     data.components.forEach(c => {
       (c.associations || []).forEach(dep => addEdge(c.id, dep, 'edge-assoc edge-hidden'));
+    });
+
+    // CORE co-design edges (bidirectional, drawn without arrows).
+    (data.core_codesign || []).forEach(cd => {
+      elements.push({
+        data: {
+          id: 'e:codesign:' + cd.a + '-' + cd.b,
+          source: cd.a,
+          target: cd.b,
+        },
+        classes: 'edge-codesign',
+      });
     });
 
     return elements;
@@ -362,26 +376,25 @@
 
   function buildCytoscapeStyle() {
     return [
-      // CORE super-node.
+      // CORE compound parent — auto-sized to wrap its child component nodes.
       {
         selector: '.node-core',
         style: {
           'background-color': cssVar('--iog-volt-yellow'),
-          'background-opacity': 0.85,
+          'background-opacity': 0.22,
           'border-color': cssVar('--card-stroke'),
-          'border-width': 3,
+          'border-width': 2,
           'shape': 'round-rectangle',
           'label': 'data(label)',
           'text-wrap': 'wrap',
-          'text-valign': 'center',
+          'text-valign': 'top',
           'text-halign': 'center',
+          'text-margin-y': -8,
           'font-family': 'Barlow, system-ui, sans-serif',
-          'font-size': 14,
-          'font-weight': 600,
-          'color': '#0A0A0A',
-          'width': 180,
-          'height': 80,
-          'padding': 14,
+          'font-size': 13,
+          'font-weight': 700,
+          'color': cssVar('--text'),
+          'padding': 24,
         },
       },
       // Standard component nodes.
@@ -477,6 +490,17 @@
           'opacity': 0.55,
         },
       },
+      // CORE co-design edges — bidirectional, no arrows, sit inside the
+      // CORE compound parent.
+      {
+        selector: '.edge-codesign',
+        style: {
+          'curve-style': 'bezier',
+          'width': 1.8,
+          'line-color': cssVar('--card-stroke'),
+          'opacity': 0.55,
+        },
+      },
       // Cascade edges in the decision graph (solid arrows).
       {
         selector: '.edge-cascade',
@@ -567,16 +591,45 @@
     };
   }
 
-  function makeCytoscape(containerId, elements, layoutOptions) {
+  function fcoseLayout(opts) {
+    const base = {
+      name: 'fcose',
+      quality: 'proof',
+      animate: false,
+      fit: true,
+      padding: 36,
+      nodeSeparation: 60,
+      idealEdgeLength: 90,
+      nodeRepulsion: 4500,
+      gravity: 0.3,
+      gravityRangeCompound: 1.5,
+      gravityCompound: 5.0,
+      nestingFactor: 0.1,
+      numIter: 3500,
+      randomize: true,
+      tile: true,
+      tilingPaddingVertical: 10,
+      tilingPaddingHorizontal: 10,
+    };
+    return Object.assign(base, opts || {});
+  }
+
+  function makeCytoscape(containerId, elements, layoutOptions, preferredLayout) {
     const container = document.getElementById(containerId);
     if (!container || !window.cytoscape) return null;
-    const useDagre = !!window.cytoscapeDagre;
+    let layout;
+    if (preferredLayout === 'fcose' && window.cytoscapeFcose) {
+      layout = fcoseLayout(layoutOptions);
+    } else if (window.cytoscapeDagre) {
+      layout = dagreLayout(layoutOptions);
+    } else {
+      layout = fallbackLayout();
+    }
     return window.cytoscape({
       container: container,
       elements: elements,
       style: buildCytoscapeStyle(),
-      layout: useDagre ? dagreLayout(layoutOptions) : fallbackLayout(),
-      wheelSensitivity: 0.2,
+      layout: layout,
       minZoom: 0.3,
       maxZoom: 2.5,
     });
@@ -688,6 +741,7 @@
 
   function openCorePanel() {
     const members = data.core_scc.map(id => componentById[id]).filter(Boolean);
+    const codesign = data.core_codesign || [];
     const html = `
       <div class="panel-head">
         <div class="panel-kind">Identity-and-account core · SCC</div>
@@ -696,7 +750,7 @@
 
       <section class="panel-section">
         <h4>What this is</h4>
-        <p>The strongly-connected component at the centre of the dependency graph. Six components held together by five mutual co-design relationships — each pair evolves at a shared interface. Collapsed in the macro view; click any member below to open its individual canvas.</p>
+        <p>The strongly-connected component at the centre of the dependency graph. Six components held together by ${codesign.length} mutual co-design relationships — each pair evolves at a shared interface. Drawn as a compound box in the macro view; click any member to open its individual canvas.</p>
       </section>
 
       <section class="panel-section">
@@ -716,11 +770,9 @@
       <section class="panel-section">
         <h4>Co-design pairs</h4>
         <ul class="panel-list">
-          <li><strong>C1 ↔ C2</strong> · account binds to name; name resolves to account.</li>
-          <li><strong>C1 ↔ C4</strong> · account contents determined by custody choice; custody writes into the account.</li>
-          <li><strong>C1 ↔ C9</strong> · account stores device keys; device auth produces keys for the account.</li>
-          <li><strong>C1 ↔ C10</strong> · account stores grants; grants live in account state.</li>
-          <li><strong>C9 ↔ C16</strong> · device auth derives the wrapping key; storage's encryption envelope is built on it.</li>
+          ${codesign.map(cd => `
+            <li><strong>${cd.a} ↔ ${cd.b}</strong> · ${escapeHtml(cd.note)}</li>
+          `).join('')}
         </ul>
       </section>
     `;
@@ -868,8 +920,9 @@
     const clearBtn = document.getElementById('clearFilters');
     if (clearBtn) clearBtn.addEventListener('click', clearComponentFilters);
 
-    // Build both graphs.
-    const cy = makeCytoscape('cy', buildMacroGraphElements());
+    // Build both graphs. Macro uses fcose because it has the CORE compound
+    // parent; cascade stays on dagre (pure DAG, no compounds).
+    const cy = makeCytoscape('cy', buildMacroGraphElements(), null, 'fcose');
     window._macroCy = cy;
     const cascadeCy = makeCytoscape('cascadeCy', buildCascadeGraphElements(), {
       rankSep: 80,

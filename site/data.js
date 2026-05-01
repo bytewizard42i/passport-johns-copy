@@ -151,6 +151,15 @@ window.PASSPORT_DATA = {
 
   workstreams: ['C3', 'C4', 'C22', 'C24', 'C25'],
   core_scc:    ['C1', 'C2', 'C4', 'C9', 'C10', 'C16'],
+  // Co-design pairs inside the CORE SCC. Drawn as bidirectional edges in
+  // the macro graph and listed in the CORE panel.
+  core_codesign: [
+    { a: 'C1', b: 'C2',  note: 'Account binds to name; name resolves to account.' },
+    { a: 'C1', b: 'C4',  note: 'Account contents determined by custody choice; custody writes into the account.' },
+    { a: 'C1', b: 'C9',  note: 'Account stores device keys; device auth produces keys for the account.' },
+    { a: 'C1', b: 'C10', note: 'Account stores grants; grants live in account state.' },
+    { a: 'C9', b: 'C16', note: 'Device auth derives the wrapping key; storage\'s encryption envelope is built on it.' },
+  ],
 
   // ---------------------------------------------------------------------------
   // Components (C1–C25). Per-component canvas: outcome, hard deps, associations,
