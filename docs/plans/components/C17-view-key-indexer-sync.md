@@ -5,8 +5,8 @@
 ## Outcome
 
 The read half of the wallet — view keys handed to a substitutable
-indexer that reconstructs visible chain state for the UI. Per
-FEATURES.md feature 4. Substitutable per P8.
+indexer that reconstructs visible chain state for the UI. Substitutable
+per P8.
 
 ## Dependencies
 
@@ -28,8 +28,8 @@ ergonomics for SDKs and dApps.
 **Multiple-indexer composition.** If the user wants to use two indexers
 (redundancy), does the wallet aggregate, or pick one?
 
-**Hosted vs client-only.** Per FEATURES.md feature 4: ship with a hosted
-indexer, a client-only path (light-client-style), or both?
+**Hosted vs client-only.** Ship with a hosted indexer, a client-only
+path (light-client-style), or both?
 
 ## Failure modes
 

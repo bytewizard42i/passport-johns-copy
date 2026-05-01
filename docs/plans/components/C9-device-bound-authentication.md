@@ -20,11 +20,10 @@ How a device proves it is the user's authorised device. Passkey
 
 **WebAuthn PRF extension vs assertion fallback.** PRF gives
 deterministic key derivation; assertion fallback works on more devices
-but with weaker properties. Design doc says both paths required
-(FEATURES.md feature 1).
+but with weaker properties. Design doc says both paths required.
 
 **Browser × OS support matrix.** Which platforms get PRF, which get
-fallback? Product-owner-signed matrix per FEATURES.md.
+fallback? Product-owner-signed matrix.
 
 **Native app vs browser.** If we ship a mobile native app, does it use
 platform WebAuthn or platform secure enclave directly?

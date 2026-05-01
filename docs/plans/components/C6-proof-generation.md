@@ -5,8 +5,8 @@
 ## Outcome
 
 Client-side ZK proof generation. The user is the prover, the node is the
-verifier. No hosted prover holds user data. Per FEATURES.md feature 6,
-runs in the browser or in a local proving sidecar.
+verifier. No hosted prover holds user data. Runs in the browser or in a
+local proving sidecar.
 
 ## Dependencies
 

@@ -19,8 +19,8 @@ This repository holds the plan, the research that backs it, the reference materi
 | If you are… | Read |
 |---|---|
 | A stakeholder wanting the plan | https://input-output-hk.github.io/arc-passport |
-| A developer joining the team | [`research/README.md`](research/README.md), then [`docs/mvp-architecture.md`](docs/mvp-architecture.md) |
-| A partner evaluating the proposal | [`docs/passport-plan.md`](docs/passport-plan.md) |
+| A developer joining the team | [`research/README.md`](research/README.md) |
+| A partner evaluating the proposal | [`docs/plans/README.md`](docs/plans/README.md) |
 | Looking for the design vision | [`docs/secure-onboarding-design.pdf`](docs/secure-onboarding-design.pdf) |
 
 ## Repository structure
@@ -29,13 +29,14 @@ This repository holds the plan, the research that backs it, the reference materi
 arc-passport/
 ├── site/                        Static web artefacts deployed to GitHub Pages
 │   ├── index.html               Landing page and unified entry point
-│   ├── demo.html                Demo workstream — what the team builds toward October 2026
-│   ├── standards.html           Standards workstream — promises ↔ MIPs map
+│   ├── demo.html                The October MVP — what the team builds toward October 2026
+│   ├── standards.html           The v1.0 deliverables — promises ↔ MIPs map
 │   └── archive/                 Earlier plan artefacts kept for historical reference
 ├── docs/
-│   ├── passport-plan.md         High-level plan summary
-│   ├── mvp-architecture.md      MVP architecture reasoning
+│   ├── plans/                   v1.0 promises, components, MIPs
+│   ├── PRINCIPLES.md            Inherited secure-onboarding principles
 │   ├── KNOWLEDGE_BASE.md        Working knowledge base
+│   ├── RESEARCH.md              Accumulated research notes
 │   ├── secure-onboarding-design.pdf   Vision document (source)
 │   └── reference/               Subtree — reference material from upstream
 ├── research/                    Background research informing the plan

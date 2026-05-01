@@ -7,7 +7,7 @@
 The CAIP-25-shaped, EIP-6963-discoverable protocol surface that lets
 third-party dApps request scoped grants — including the
 Sign-In-with-Passport (DecentralisedAuth) authentication half of the
-same surface. Per FEATURES.md feature 9 and MIP-5 / MIP-7.
+same surface. Maps to MIP-5 / MIP-7.
 
 ## Dependencies
 

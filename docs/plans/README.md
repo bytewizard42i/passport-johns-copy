@@ -59,16 +59,11 @@ and the **v1.0 deliverable target**.
 - **Looking at a specific surface.** Go straight to the relevant canvas in
   [`components/`](components/). The component README maps every component
   to the promises it serves.
-- **Onboarding to the project.** Start with the repo-level
-  [`docs/passport-plan.md`](../passport-plan.md) for the project overview
-  and audience framing, then return here for the v1.0 detail.
-
 ## Related reference (in this repo)
 
 - [`docs/PRINCIPLES.md`](../PRINCIPLES.md) — the six inherited
   secure-onboarding principles. Antecedent for the ten v1.0 promises;
   see the Lineage section of `PROMISES.md` here.
-- [`docs/FEATURES.md`](../FEATURES.md) — demo-mappable feature list.
 - [`MIPS.md`](MIPS.md) — the MIP pipeline Midnight Passport produces.
 - [`docs/RESEARCH.md`](../RESEARCH.md) — accumulated research; cited where
   it bears on a question.
