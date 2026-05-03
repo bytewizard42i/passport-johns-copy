@@ -11,6 +11,12 @@ at the cross-chain layer (which is owned upstream).
 
 ## Dependencies
 
+- **C4** — asset-custody choice constrains the signing surface. Per-device
+  keys directly vs. derivation-tree-based keys is open; if C4 picks
+  address-custody, derivation may re-emerge for asset-address generation.
+- **C8** — domain-separation registry. The Schnorr Fiat-Shamir challenge
+  is a `persistentHash` use site and requires a registered prefix; the
+  signing primitive cannot ratify until C8 has assigned one.
 - **C7** — witness handling pipeline.
 - **C6** — proof generation consumes signing inputs.
 - **C9** — device-bound auth produces the key that signs.

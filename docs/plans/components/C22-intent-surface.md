@@ -33,7 +33,10 @@ and the ledger Intent that authorises it.
 - **Upstream Intent Escrow Contract** (Compact) — orchestrates
   trade-intent lifecycle on-chain.
 - **C5** (Signing primitive) — Schnorr-on-Jubjub for the unshielded
-  authorisation; ZK proofs (via C6) for the shielded side.
+  authorisation.
+- **C6** (Proof generation) — ZK proofs over the bound `ZswapOffer`
+  authorise the shielded side of the Intent; produced by the same
+  client-side prover stack the rest of Passport uses.
 - **C7** (Witness handling) — `binding_commitment` cryptographically ties
   the unshielded Intent and the shielded ZswapOffer; witnesses pass
   through to proof generation.

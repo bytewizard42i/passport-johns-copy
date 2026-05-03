@@ -249,7 +249,7 @@ window.PASSPORT_DATA = {
       id: 'C4', name: 'Asset custody model', category: 'crypto',
       serves: ['P3', 'P4', 'P5', 'P6'], workstream: true,
       outcome: 'A ratified choice of how user assets are held, authorised, and recovered. Carries an open privacy trade-off: the leading contract-custody candidate makes shielded contract holdings publicly visible, which must be accepted, mitigated, or avoided by falling back to address-custody. Upstream of the entire cryptographic stack — derivation, signing, recovery, and storage all fall out of this choice.',
-      hard_deps: ['C1', 'C5'],
+      hard_deps: ['C1'],
       associations: [],
       alternatives: [
         { label: 'A — Contract-custody (Night + Shielded via the standard contract-vault pattern)', description: 'All non-Dust assets in the account contract; per-device keys authorise contract calls. Trade-off: shielded contract holdings publicly visible.' },
@@ -278,7 +278,7 @@ window.PASSPORT_DATA = {
       id: 'C5', name: 'Signing primitive', category: 'crypto',
       serves: ['P6'],
       outcome: 'The cryptographic operation by which a device authorises Passport account operations. Schnorr-on-Jubjub at the user-device layer, verified end-to-end across language boundaries.',
-      hard_deps: [],
+      hard_deps: ['C4', 'C8', 'C9'],
       associations: ['C6', 'C7', 'C9', 'C16'],
       alternatives: [
         { label: 'A — Schnorr-on-Jubjub per device', description: 'Verified by the existing experiments; the primary target.' },
@@ -300,7 +300,7 @@ window.PASSPORT_DATA = {
       id: 'C6', name: 'Proof generation', category: 'crypto',
       serves: ['P6', 'P8'],
       outcome: 'Client-side ZK proof generation. The user is the prover, the node is the verifier. No hosted prover holds user data.',
-      hard_deps: ['C5'],
+      hard_deps: ['C5', 'C7'],
       associations: ['C7', 'C16'],
       alternatives: [
         { label: 'A — Local Rust proof server', description: 'Fastest; design-doc default.' },
@@ -322,7 +322,7 @@ window.PASSPORT_DATA = {
       id: 'C7', name: 'Witness handling', category: 'crypto',
       serves: ['P6'],
       outcome: 'The pipeline by which key material flows from secure storage into proof generation without leaking outside the trusted boundary.',
-      hard_deps: ['C5', 'C6', 'C8', 'C16'],
+      hard_deps: ['C5', 'C8', 'C16'],
       associations: [],
       alternatives: [
         { label: 'A — Local IPC to proof server', description: 'Design-doc default.' },
@@ -365,7 +365,7 @@ window.PASSPORT_DATA = {
       id: 'C9', name: 'Device-bound authentication', category: 'auth',
       serves: ['P1', 'P3', 'P6'],
       outcome: 'How a device proves it is the user\'s authorised device. Passkey (WebAuthn) bound to the device\'s secure boundary.',
-      hard_deps: ['C1', 'C5', 'C16'],
+      hard_deps: ['C1', 'C16'],
       associations: [],
       alternatives: [
         { label: 'A — WebAuthn PRF + assertion fallback', description: 'Design-doc default; both paths required.' },
