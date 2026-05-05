@@ -631,8 +631,8 @@
 
     // Layout constants.
     const LEFT_MARGIN = 220, RIGHT_MARGIN = 30, COL_WIDTH = 140;
-    const HEADER_HEIGHT = 50, LANE_HEADER_HEIGHT = 24, SUB_ROW_HEIGHT = 30, LANE_PAD = 4;
-    const NODE_WIDTH = 122, NODE_HEIGHT = 24;
+    const HEADER_HEIGHT = 50, LANE_HEADER_HEIGHT = 24, SUB_ROW_HEIGHT = 44, LANE_PAD = 4;
+    const NODE_WIDTH = 122, NODE_HEIGHT = 38;
 
     const totalWidth = LEFT_MARGIN + (maxDepth + 1) * COL_WIDTH + RIGHT_MARGIN;
     const laneTops = [];
@@ -755,32 +755,35 @@
 
     // Component nodes.
     const PIVOTS = new Set(['C1', 'C8']);
+    // Short names for the second line. Aim for ≤16 chars to stay clear of
+    // the 122 px box at the current monospace size.
     const SHORT_NAME = {
       'Account-custody contract':         'Account contract',
       'Name service':                     'Name service',
       'DID surface':                      'DID surface',
       'Asset custody model':              'Asset custody',
       'Signing primitive':                'Signing',
-      'Proof generation':                 'Proof gen.',
+      'Proof generation':                 'Proof generation',
       'Witness handling':                 'Witness',
       'Domain-separation registry':       'Domain sep.',
       'Device-bound authentication':      'Device auth',
       'Scoped grant primitive':           'Grant primitive',
       'Grant lifecycle':                  'Grant lifecycle',
       'Chain-side enforcement':           'Enforcement',
-      'Lost-device flow':                 'Lost-device',
+      'Lost-device flow':                 'Lost device',
       'Total-loss recovery flow':         'Total-loss',
-      'Helper protocol':                  'Helper proto.',
-      'Wallet local storage':             'Local storage',
+      'Helper protocol':                  'Helper protocol',
+      'Wallet local storage':             'Wallet storage',
       'View-key + indexer (sync)':        'View-key sync',
       'Attestation tree':                 'Attestation',
       'Credential issuance':              'Issuance',
       'Selective-disclosure proof':       'Sel. disclosure',
       'Nullifier':                        'Nullifier',
-      'Intent surface':                   'Intent',
+      'Intent surface':                   'Intent surface',
       'dApp connection protocol':         'dApp protocol',
       'Fee model':                        'Fee model',
       'Cross-chain integration interface':'Cross-chain',
+      'AI Agent skills':                  'Agent skills',
     };
     function shortName(name) {
       return SHORT_NAME[name] || name;
@@ -801,16 +804,21 @@
         width: NODE_WIDTH, height: NODE_HEIGHT, rx: 3,
         class: 'node ' + stream.cls,
       }));
+      // Two-line label: ID on top (acts as a headline), short name below.
+      // Lets us drop awkward truncation while keeping every label inside its
+      // box at the current node width.
       const label = el('text', {
-        x: pos.cx, y: pos.cy + 4,
+        x: pos.cx, y: pos.cy - 3,
         'text-anchor': 'middle',
         class: 'node-text ' + stream.textCls,
       });
-      const idSpan = el('tspan', { class: 'node-id' });
+      const idSpan = el('tspan', { x: pos.cx, class: 'node-id' });
       idSpan.textContent = id;
       label.appendChild(idSpan);
       const comp = components.find(c => c.id === id);
-      label.appendChild(document.createTextNode(' · ' + shortName(comp ? comp.name : id)));
+      const nameSpan = el('tspan', { x: pos.cx, dy: '14' });
+      nameSpan.textContent = shortName(comp ? comp.name : id);
+      label.appendChild(nameSpan);
       g.appendChild(label);
       if (isPivot) {
         const badge = el('text', {
