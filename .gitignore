@@ -1,6 +1,7 @@
 # Internal-only (never committed)
 .planning/
 .serena/
+.arcsop/
 
 # Build artefacts
 /target/
