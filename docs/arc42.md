@@ -196,6 +196,7 @@ Quality scenarios derive from the invariants in [`docs/plans/PROMISES.md`](plans
 Component-level risks live in each canvas's Failure Modes section. Project-level risks:
 
 - **Workstream gating (5 of 26).** C3, C4, C22, C24, C25 carry live decisions. Downstream finalisation cannot precede the gating workstream's resolution.
+- **`ownPublicKey()` ecosystem hazard.** Direct use of Compact's `ownPublicKey()` for access control is bypassable — an external audit reproduced impersonation against `example-bboard` and OpenZeppelin's `Ownable.compact` on devnet. Upstream removal is in flight at the Midnight Foundation. Passport contracts use [C5](plans/components/C5-signing-primitive.md)'s in-circuit signature-verification pattern regardless; see C5 failure modes.
 - **Upstream coupling.** C25 is owned upstream; Passport-side integration is sequenced post-v1.0 initial release.
 - **Compact proof cost.** Current `midnight-did` examples reach k=19, slow on the proof server. Bears on C6, C20, and any component using selective-disclosure-shaped circuits.
 - **`did:midnight` registration.** Registered to IAMX; current spec is in our hands. Negotiation pending.
