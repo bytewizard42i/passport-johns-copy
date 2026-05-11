@@ -40,15 +40,18 @@ signs the trade intent in Jubjub, MCS handles the foreign-chain side.
 **In-circuit verifiable variant for caller authentication.** A Compact
 contract that gates state changes on `ownPublicKey() == <stored-key>`
 is bypassable — `ownPublicKey()` returns an unverified witness the
-caller controls. C5's primitive provides the safe pattern: the caller
-submits a Schnorr-on-Jubjub signature over the call payload, and the
-circuit verifies it against the stored device key. The hazardous
-`ownPublicKey()` is being removed from Compact upstream by the
-Midnight Foundation; Passport contracts use the in-circuit
-verification pattern regardless. The remaining question is the
-variant's shape — signature scope (entry point + arguments + nonce),
-replay protection, and whether batch verification is worth the
-prover-cost saving for grant-flow calls.
+caller controls. Per upstream clarification
+([LFDT-Minokawa/compact#283](https://github.com/LFDT-Minokawa/compact/issues/283)),
+`ownPublicKey()` was never intended for authentication; its intended
+use is providing a withdrawal address for shielded tokens. The
+primitive is not being removed — the upstream response is improved
+documentation. C5's primitive provides the safe pattern for caller
+authentication regardless: the caller submits a Schnorr-on-Jubjub
+signature over the call payload, and the circuit verifies it against
+the stored device key. The remaining question is the variant's shape
+— signature scope (entry point + arguments + nonce), replay protection,
+and whether batch verification is worth the prover-cost saving for
+grant-flow calls.
 
 ## Failure modes
 
@@ -68,8 +71,14 @@ returns the target's key by swapping the wallet provider's
 `coinPublicKey`. *Detection:* an external audit reproduced the attack
 against `example-bboard` and `Ownable.compact` on devnet.
 *Mitigation:* Passport contracts use C5's in-circuit
-signature-verification pattern (see open question above). Upstream
-removal of `ownPublicKey()` is in flight at the Midnight Foundation.
+signature-verification pattern (see open question above). Per
+upstream clarification
+([LFDT-Minokawa/compact#283](https://github.com/LFDT-Minokawa/compact/issues/283)),
+`ownPublicKey()` is not being removed — it was never intended for
+authentication; its intended use is providing a withdrawal address
+for shielded tokens. The misuse pattern will persist in third-party
+Compact code; the upstream response is improved documentation, not
+deprecation.
 
 ## Alternatives
 
