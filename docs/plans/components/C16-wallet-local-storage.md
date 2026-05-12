@@ -14,6 +14,9 @@ Includes the encryption envelope.
 - **C9** — device-bound auth produces the wrapping key.
 - **C5 · C7** — signing and witness flows read from this storage.
 - **C17** — sync state lives here.
+- **C1** — the account's public state in C1 is operable only while the
+  corresponding private state in C16 is available; the binding is not
+  verified by Kachina / Compact. See Failure modes.
 - **External** — platform-specific TEE / Secure Enclave / StrongBox APIs
   for wrapping-key custody.
 
@@ -44,6 +47,16 @@ what the wallet displayed.
 **Storage migration failure.** OS or browser update changes storage
 substrate; old wallet state inaccessible. *Detection:* version-skew test
 on shipped builds.
+
+**Zombie public state on private-state loss.** Kachina / Compact does
+not automatically verify the link between a contract's public state
+and the user's private state. If C16 is wiped or corrupted, the
+account's public state in C1 (and other contracts holding per-account
+state) remains on-chain but becomes inoperable — no party can produce
+the witnesses needed to interact with it. Users often assume private
+state is automatically linked to public state; it is not. *Detection:*
+simulate a C16 wipe against a deployed account; confirm whether (and
+how) the account can be operated from chain state alone.
 
 ## Alternatives
 

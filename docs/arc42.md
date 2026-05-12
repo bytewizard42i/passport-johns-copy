@@ -161,6 +161,7 @@ Each canvas carries five fields — Outcome, Dependencies, Open questions, Failu
 
 - **Domain separation discipline.** Every `persistentHash` use site carries a domain prefix. See [C8](plans/components/C8-domain-separation-registry.md).
 - **Witness handling.** Key material flows into proof generation without leaving the trusted boundary. See [C7](plans/components/C7-witness-handling.md).
+- **Private-state ↔ public-state linkage is not automatic.** Kachina / Compact does not verify that a contract's public state corresponds to any party holding the matching private state. Loss of the private side orphans the public side — see [C16](plans/components/C16-wallet-local-storage.md) failure modes. Recovery flows ([C14](plans/components/C14-total-loss-recovery-flow.md)) must address this explicitly; pure chain-state inspection is insufficient.
 - **Substitutable services.** Per P8, all ancillary services (indexers, helpers) must have at least two providers, or documented self-host.
 - **MVP-vs-v1.0 migration.** Several workstreams record both an MVP pick (October demo) and a v1.0 deliverable target. See canvases for C3, C4, C5, C22, C24.
 
@@ -197,6 +198,7 @@ Component-level risks live in each canvas's Failure Modes section. Project-level
 
 - **Workstream gating (5 of 26).** C3, C4, C22, C24, C25 carry live decisions. Downstream finalisation cannot precede the gating workstream's resolution.
 - **`ownPublicKey()` ecosystem hazard.** Direct use of Compact's `ownPublicKey()` for access control is bypassable — an external audit reproduced impersonation against `example-bboard` and OpenZeppelin's `Ownable.compact` on devnet. Upstream removal is in flight at the Midnight Foundation. Passport contracts use [C5](plans/components/C5-signing-primitive.md)'s in-circuit signature-verification pattern regardless; see C5 failure modes.
+- **Private-state loss orphans public state ("zombie state").** Kachina / Compact does not link private and public state automatically. If [C16](plans/components/C16-wallet-local-storage.md) private state is destroyed or inaccessible, the user's on-chain state in C1 (and other per-account contracts) remains visible but becomes inoperable — no party can produce the witnesses needed to interact with it. Recovery flows ([C14](plans/components/C14-total-loss-recovery-flow.md)) must address this explicitly; pure chain-state inspection is insufficient. Bears on C14, C16, C19.
 - **Upstream coupling.** C25 is owned upstream; Passport-side integration is sequenced post-v1.0 initial release.
 - **Compact proof cost.** Current `midnight-did` examples reach k=19, slow on the proof server. Bears on C6, C20, and any component using selective-disclosure-shaped circuits.
 - **`did:midnight` registration.** Registered to IAMX; current spec is in our hands. Negotiation pending.
