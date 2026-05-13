@@ -84,6 +84,11 @@ For each DID method, we should evaluate them based on the above-mentioned points
 
 Each method is investigated by AI as a different markdown files. Here is a table that summarizes the result of each DID method, and provides a link to the markdown with the full investigation for that specific version of the specification.
 
+> Historical note: the `did:midnight` entry in the table below reflects
+> an earlier survey and an earlier assumption set. It should not be read
+> as the current Passport architecture position now that an active
+> `midnight-did` spec and implementation effort exists.
+
 | Method | Recommendation | Notes |
 |--------|----------------|-------|
 | [did:jwk](../../machine-investigation/credentials/did-investigation/did-jwk.md) | **Recommended** | Self-contained; JWK format familiar to enterprise |
@@ -216,7 +221,7 @@ Each method is investigated by AI as a different markdown files. Here is a table
 | [did:m2m](../../machine-investigation/credentials/did-investigation/did-m2m.md) | No-go | Hyperledger Indy + ACCIO BaaS |
 | [did:meme](../../machine-investigation/credentials/did-investigation/did-meme.md) | No-go | Experimental; IPFS; no key rotation |
 | [did:meta](../../machine-investigation/credentials/did-investigation/did-meta.md) | No-go | Requires Metadium blockchain |
-| [did:midnight](../../machine-investigation/credentials/did-investigation/did-midnight.md) | No-go | Requires Midnight blockchain |
+| [did:midnight](../../machine-investigation/credentials/did-investigation/did-midnight.md) | No-go | Requires Midnight blockchain; historical evaluation of an earlier assumption set |
 | [did:moac](../../machine-investigation/credentials/did-investigation/did-moac.md) | No-go | Requires MOAC blockchain |
 | [did:monid](../../machine-investigation/credentials/did-investigation/did-monid.md) | No-go | Ethereum + IPFS + Torus triple dependency |
 | [did:morpheus](../../machine-investigation/credentials/did-investigation/did-morpheus.md) | No-go | Spec unavailable (410); Hydra blockchain |

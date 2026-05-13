@@ -1,40 +1,42 @@
 # C3 · DID surface
 
-> **Workstream.** Whether `alice.midnight` is itself the DID, whether DID
-> is a separate identifier layer, and what DID method (if any) Passport
-> defines.
+> **Workstream.** What Passport's canonical public DID profile is within
+> the Midnight DID family, how `alice.midnight` links to it, whether one
+> account may maintain several DIDs for different profiles, and whether
+> DID-facing behaviour is embedded in Passport or delegated to Identity
+> Wallet.
 
 **Serves:** P2 (tentative).
 
 ## Outcome
 
-A clear position on whether and how Passport accounts interoperate with
-W3C DID standards. Specifically: what DID method (if any) Passport
-defines, how that method relates to the name service (C2), what the DID
-Document exposes (verification methods, services, aliases), and how
-external systems consume Passport identifiers via DID-shaped APIs.
+A clear position on how Passport accounts interoperate with W3C DID
+standards. Specifically: what the canonical public Passport DID is, how
+that DID relates to the name service (C2), whether additional
+profile-specific DIDs exist per account, what the DID Document exposes
+(verification methods, services, aliases), how name ownership is proven
+when a DID Document links to `alice.midnight`, and whether DID-facing
+behaviour is embedded in Passport or delegated to Identity Wallet.
 
 **Cross-chain consideration.** With P10 (Chain abstraction) in scope, a
-DID that resolves to the same Passport identity across multiple chains
-becomes valuable. This shifts the trade-off: alternative B (DID == name)
-gets cheaper because one identifier handle works across all chains the
-user transacts on, with cross-chain resolution mediated by the upstream
-MCS layer rather than by per-chain DID documents. Alternative E
-(`did:key` per device) becomes harder because cross-chain identity at the
-per-device-key level breaks the "single account identifier" goal in
-I-10.1.
+stable public DID that resolves to the same Passport identity across
+multiple chains becomes valuable. This favours a companion account-level
+DID over per-device DIDs, while still allowing additional
+profile-specific DIDs where users want separation.
 
 This canvas frames the decision space, not the answer.
 
 ## Dependencies
 
-- **C2** (Name service) — the DID may *be* the name, *include* the name,
-  or be entirely separate.
+- **C2** (Name service) — the DID may link to the name, remain separate
+  from it, or coexist with multiple profile-specific DIDs controlled by
+  the same account.
 - **C9** (Device-bound auth) — DID Document verification methods are
-  likely the per-device public keys.
-- **C18 – C21** (credential cluster) — DIDs are typically paired with
-  verifiable credentials; the credentials cluster's identity primitive
-  depends on this decision.
+  likely derived from per-device public keys, even if not all of them
+  are exposed publicly.
+- **C18 – C21** (credential cluster) — DIDs are paired with verifiable
+  credentials; the credentials cluster's public identity primitive and
+  holder-binding strategy depend on this decision.
 - **C8** (Domain-separation registry) — DID-related hashes need domain
   separation if DIDs are derived on-chain.
 - **External — `did:midnight` registry status (nuanced).** The
@@ -60,6 +62,10 @@ This canvas frames the decision space, not the answer.
   have already been hit and worked around inside `midnight-did`; that
   hard-won knowledge is upstream of every component touching identity,
   not only C3.
+- **External — Identity Wallet (if delegated delivery is chosen).** If
+  Passport delegates DID-facing behaviour, the wallet becomes a protocol
+  and capability dependency for DID authentication, issuance,
+  verification, callbacks, and profile selection.
 - **External — NightFi demo (review pending).** A demo built jointly
   with the Midnight Foundation lives at
   [`Midnight-Passport-Demo/NightFi`](https://github.com/Midnight-Passport-Demo/NightFi),
@@ -73,8 +79,9 @@ This canvas frames the decision space, not the answer.
 
 ## Open questions
 
-**Does Passport define a DID method at all?** Or do we operate without a
-DID layer and only adopt one when an external integration demands it?
+**Canonical public DID.** Is the canonical Passport public DID a
+companion `midnight-did` subject, or a future profile layered directly
+over account custody? What does resolution look like in each case?
 
 **Method-name negotiation.** Softer constraint than "the name is taken".
 IAMX owns the W3C registry entry for `did:midnight`; our team owns the
@@ -84,44 +91,41 @@ the W3C-published reference? (2) If yes, do we adopt the current
 `midnight-did` spec as-is or fork it? (3) If no, we pick a fresh name —
 `did:passport`, `did:mn`, or `did:midnight-passport`.
 
-**Identifier shape.** What does the method-specific identifier look like?
-Name-based (`did:passport:alice`)? Public-key-based (`did:key`-style)?
-UUID? Hash of the account-custody contract address? Each shape has
-different stability, privacy, and resolution properties.
+**Multiple DIDs per account.** Can one Passport account maintain several
+DIDs for different profiles or user preferences? If yes, which one is
+the default public DID, and how are profile-specific DIDs selected?
 
-**DID Document content.** Verification methods (per-device public keys),
-services (Passport API endpoints), `alsoKnownAs` linking to the
-human-readable name, key controllers? What's mandatory and what's
-optional?
+**Name linkage and proof.** Can `alice.midnight` be exposed as a stable
+URI or URL and linked from the DID Document via `alsoKnownAs`? If yes,
+what proves that the DID subject actually controls that name, rather
+than merely asserting a link?
 
-**Resolution model.** Chain query, off-chain resolver service, both, or
-`did:web`-shaped over an HTTP endpoint?
-
-**DID Document privacy.** DID Documents are typically public. If
-Passport's DID Document lists per-device verification methods, the device
-topology of every account becomes globally enumerable. Tension with
-attribute-privacy expectations even if not strictly violating P9.
-
-**Update lifecycle.** How do device additions and revocations (C13)
-propagate to the DID Document? Same-block update? Eventual consistency
-with chain state?
+**DID Document content and privacy.** Which verification methods and
+services are public? Which device-management details remain private? If
+Passport links the name through `alsoKnownAs`, what else is mandatory
+versus optional in the DID Document?
 
 **Recovery interaction.** Does total-loss recovery (P5 / C14) preserve
-the DID, or replace it? If replaced, previously-issued credentials
-reference an unresolvable DID — significant interop hazard.
+the canonical public DID, or replace it? If replaced, what continuity
+mechanism exists for previously-issued credentials and name linkage?
 
-**VC integration target.** Which verifiable-credential standards are we
-targeting (W3C VC Data Model 1.1 vs 2.0; JWT-VC vs LD-VC; BBS+, ZK-SNARK
-selective disclosure)? The DID method has to be compatible with the
-chosen VC stack.
+**Delivery model.** Is DID-facing behaviour embedded inside Passport or
+delegated to Identity Wallet? If delegated, what protocol coordinates
+authentication, issuance, verification, callbacks, and DID/profile
+selection?
+
+**VC binding model.** Which flows use explicit DID holder binding, and
+which flows prefer hidden-holder binding for stronger privacy? The DID
+surface should interoperate with the VC stack without forcing every
+credential flow through one public identifier.
 
 **Proof cost in Compact.** Some did-core surfaces in the current
 `midnight-did` Compact examples reach **k=19**, which is slow on the
-proof server. Whether the workstream resolution makes that cost go
-away, lives with it, or relocates it — for example onto C20
-(selective-disclosure proof) — is open. Until the driving operation is
-identified, k=19 is a known cost ceiling for did-core-shaped circuits
-and a constraint on what the DID surface can promise client-side.
+proof server. Whether the workstream resolution lives with that cost,
+relocates it, or avoids it for some operations remains open. Until the
+driving operation is identified, k=19 is a known cost ceiling for some
+did-core-shaped circuits and a constraint on what the DID surface can
+promise client-side.
 
 ## Failure modes
 
@@ -130,33 +134,32 @@ name but DID points to old name (or vice versa). *Detection:* a
 registered DID resolves to stale state; the name registry and the DID
 resolver disagree on identity.
 
-**Method-name negotiation breaks down.** We want `did:midnight` for
-ecosystem coherence but cannot reach an arrangement with IAMX over the
-W3C registry. *Detection:* the W3C registry continues pointing to IAMX's
-spec while the team's current spec sits in `midnight-did` without
-authoritative recognition; external resolvers can't disambiguate the two
-intended interpretations. *Mitigation:* fall back to a Passport-specific
-method name (`did:passport`, etc.).
+**Alias assertion mistaken for proof.** A relying party treats
+`alsoKnownAs` as proof that the DID subject owns `alice.midnight`, even
+though it is only an assertion. *Detection:* DID Document contains a
+name URL but the system cannot explain why that link is authoritative.
 
-**DID-Document privacy leak.** Per-account DID Documents reveal device
-topology — every device public key becomes globally readable. *Detection:*
-on-chain analysis enumerates device key sets per account, exposing how
-many devices each user has.
+**Multi-DID profile confusion.** One account controls several DIDs, but
+verifiers or user flows select the wrong one for the intended purpose.
+*Detection:* profile-specific integrations fail because the presented DID
+doesn't match the expected trust or privacy profile.
 
-**VC interop assumption breaks.** A target VC ecosystem requires a
-specific DID method or signature suite Passport doesn't support.
-*Detection:* a candidate VC issuer can't issue against Passport accounts;
-a candidate verifier can't verify a Passport-issued VC.
+**DID-Document privacy leak.** Per-account DID Documents reveal too much
+device topology — every exposed device key becomes globally readable.
+*Detection:* on-chain analysis enumerates device key sets per account,
+exposing more operational detail than intended.
 
-**Standardisation lag.** Passport-defined DID method takes too long to
-publish through W3C / DIF / Cheqd registries; ecosystem can't consume it.
-*Detection:* external verifiers reject `did:<method>:...` resolutions
-because no published spec exists.
+**Delegated-wallet coupling.** If DID-facing behaviour is delegated, the
+wallet becomes a hard dependency and flow orchestration breaks when the
+wallet's capabilities or protocol contract drift. *Detection:* Passport
+cannot complete DID auth, issuance, or verification without a specific
+wallet build or callback contract.
 
-**Recovery breaks DID.** Recovery (C14) creates a new DID despite same
-account identity. *Detection:* a recovered user's previously-issued
-credentials reference an unresolvable DID; the user's identity continuity
-(I-5.3) is preserved at the name level but not at the DID level.
+**Recovery breaks DID continuity.** Recovery (C14) creates a new DID
+despite same account identity. *Detection:* a recovered user's
+previously-issued credentials reference an unresolvable or deprecated
+DID; the user's continuity is preserved at the account or name level,
+but not at the DID level.
 
 ## Alternatives
 
@@ -164,44 +167,38 @@ credentials reference an unresolvable DID; the user's identity continuity
 identifier. VCs use the name directly via a custom Passport-defined VC
 schema. Compatible with v1.0 today; punts W3C DID interop entirely.
 
-**B — DID == name.** Define a Passport-specific DID method whose
-identifier *is* the name. Method name is either `did:midnight` (subject to
-IAMX coordination on the W3C registry — feasible because our team holds
-the current spec) or a fresh name (`did:passport`, `did:mn`) if
-coordination can't be reached. Adopting the current `midnight-did` spec
-as the starting point shortens the path. DID Document is derived from
-chain state — verification methods are registered device public keys,
-services are Passport endpoints, `alsoKnownAs` includes the
-human-readable name. One identity, two presentations.
+**B — Companion `did:midnight`, embedded in Passport.** Passport adopts
+a companion public `did:midnight` identifier distinct from the name.
+Passport owns DID-facing behaviour directly — authentication, issuance,
+verification, and DID/profile selection live inside the Passport
+product boundary.
 
-**C — DID separate from name.** Passport accounts have both a name (C2)
-and a DID. The DID is a stable opaque identifier — UUID, public key, or
-hash; the name is a human-readable alias. DID Document includes the name
-as `alsoKnownAs`. More W3C-idiomatic; weaker tie between presentations.
+**C — Companion `did:midnight`, delegated to Identity Wallet.**
+Passport adopts a companion public `did:midnight` identifier distinct
+from the name, but delegates DID-facing behaviour to Identity Wallet.
+Passport keeps the account and orchestration layer; the wallet owns DID
+and VC lifecycle machinery.
 
-**D — Adapter only.** Passport's primary identifier is `alice.midnight`;
-an adapter layer presents accounts as DIDs to external systems but
-doesn't change the internal model. Method could be `did:web`
-(HTTP-resolvable) over a Passport-hosted endpoint, with no on-chain DID
-Document. Lowest commitment; weakest decentralisation story.
+**D — Multi-DID profile model, embedded in Passport.** One account has a
+canonical public `did:midnight` plus additional profile-specific DIDs
+for different privacy or integration needs. Passport owns DID lifecycle
+and protocol surfaces directly.
 
-**E — Inherit `did:key` per device.** No account-level DID. Each device's
-public key is a `did:key:...`. Verifiers resolve the device key as the
-DID; Passport's account anchor (C1) is referenced via a `service` entry.
-No name-registry dependency on the DID side; cleanest cryptographic
-story; but identity becomes per-device, not per-account.
+**E — Multi-DID profile model, delegated to Identity Wallet.** One
+account has a canonical public `did:midnight` plus additional
+profile-specific DIDs, while Identity Wallet owns DID and VC lifecycle
+behaviour and Passport coordinates with it.
 
 **F — Defer.** Don't decide for v1.0. Track DID as a Milestone-2 concern;
-ship v1.0 with no DID surface and revisit when credential interop demands
-it. Cost: external VC integrations during v1.0 must use the name
-directly, which they may not support.
+ship v1.0 with no DID surface and revisit when credential interop
+demands it. Cost: external VC integrations during v1.0 must use the
+name directly, which they may not support.
 
 ## Readings
 
-- **MVP (October demo):** A or F — no DID layer for the demo. Parks the
-  question; the demo uses `alice.midnight` directly.
-- **v1.0 deliverable:** B (DID == name), with method-name
-  coordination as the live sub-question. The path runs through
-  engagement with the active `midnight-did` effort (integration,
-  wrapping, or co-authorship) rather than starting from scratch — the
-  workstream cannot resolve without that engagement.
+- **MVP (October demo):** A or C — either no Passport-owned DID layer for
+  the demo, or a delegated DID surface if Identity Wallet already owns
+  the user flow in time.
+- **v1.0 deliverable:** B or C — companion public `did:midnight`
+  separate from the name, with the delivery model made explicit. D or E
+  become additive if profile-specific multiple DIDs are needed.
