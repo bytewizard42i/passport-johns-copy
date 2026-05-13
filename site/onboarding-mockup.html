@@ -86,7 +86,7 @@
   }
 
   @media (min-width: 1100px) {
-    .side-panel {
+    .stage-grid > .side-panel {
       position: sticky;
       top: 24px;
       max-height: calc(100vh - 48px);
@@ -216,6 +216,127 @@
     color: var(--text-faint);
     font-style: italic;
     padding: 4px 0 0;
+  }
+
+  /* ---------- Vendor panel (below the grid) ---------- */
+
+  .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+  }
+
+  .vendor-panel {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--bg-soft);
+    padding: 22px 22px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .vendor-head {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 14px;
+  }
+  .vendor-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .vendor-hint {
+    font-size: 0.82rem;
+    color: var(--text-mute);
+    line-height: 1.5;
+  }
+  .vendor-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .vendor-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px 16px;
+    background: var(--bg);
+  }
+  .vendor-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .vendor-name {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .vendor-link {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+    text-decoration: none;
+    border: 1px solid var(--line);
+    padding: 2px 8px;
+    border-radius: 4px;
+    transition: border-color .12s ease, color .12s ease;
+    white-space: nowrap;
+  }
+  .vendor-link:hover { border-color: var(--iog-infared); color: var(--iog-infared); }
+  .vendor-role {
+    font-size: 0.86rem;
+    color: var(--text);
+    line-height: 1.45;
+    margin: 0;
+  }
+  .vendor-caveat {
+    font-size: 0.82rem;
+    line-height: 1.45;
+    margin: 0;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: var(--warn-soft);
+    color: var(--warn);
+    border-left: 3px solid var(--warn);
+  }
+  .vendor-caveat.is-block {
+    background: var(--bad-soft);
+    color: var(--iog-infared);
+    border-left-color: var(--iog-infared);
+  }
+  .vendor-caveat-label {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 2px;
+    opacity: 0.85;
+  }
+  .vendor-empty {
+    font-size: 0.86rem;
+    color: var(--text-faint);
+    font-style: italic;
+    padding: 4px 0;
+    grid-column: 1 / -1;
   }
 
   /* ---------- Phone ---------- */
@@ -856,14 +977,7 @@
             <div class="sp-title">Components engaged</div>
             <div class="sp-hint">Which surfaces light up at this step. Click any item to open its canvas.</div>
           </header>
-          <div>
-            <div class="sp-section-label">Active this step</div>
-            <ul class="sp-list" id="activeComponents"></ul>
-          </div>
-          <div>
-            <div class="sp-section-label">Engaged earlier in the flow</div>
-            <ul class="sp-list" id="priorComponents"></ul>
-          </div>
+          <ul class="sp-list" id="activeComponents"></ul>
         </aside>
 
         <div class="phone-column">
@@ -892,20 +1006,23 @@
           </div>
         </div>
 
-        <aside class="side-panel" aria-label="Promises honoured">
-          <header class="sp-head">
-            <div class="sp-title">Promises honoured</div>
-            <div class="sp-hint">v1.0 invariants from <a href="../docs/plans/PROMISES.md" style="color: var(--iog-infared);">PROMISES.md</a> that this step satisfies. Click any item to open the promise card.</div>
-          </header>
-          <div>
-            <div class="sp-section-label">Active this step</div>
+        <div class="right-column">
+          <aside class="side-panel" aria-label="Promises honoured">
+            <header class="sp-head">
+              <div class="sp-title">Promises honoured</div>
+              <div class="sp-hint">v1.0 invariants from the <a href="index.html#promises" style="color: var(--iog-infared);">overview</a> that this step satisfies. Click any item to open the promise card.</div>
+            </header>
             <ul class="sp-list" id="activePromises"></ul>
-          </div>
-          <div>
-            <div class="sp-section-label">Honoured earlier in the flow</div>
-            <ul class="sp-list" id="priorPromises"></ul>
-          </div>
-        </aside>
+          </aside>
+
+          <aside class="vendor-panel" aria-label="Potential vendors">
+            <header class="vendor-head">
+              <div class="vendor-title">Potential vendors at this step</div>
+              <div class="vendor-hint">Third parties who could provide pieces of this step at MVP. Listed for visibility — each comes with caveats. Not endorsements.</div>
+            </header>
+            <ul class="vendor-list" id="activeVendors"></ul>
+          </aside>
+        </div>
 
       </div>
     </div>
@@ -959,6 +1076,30 @@
     P10: { name: 'Chain abstraction',    note: 'Single identity across every supported chain.' }
   };
 
+  const VENDORS = {
+    dynamic: {
+      name: 'Dynamic',
+      url: 'https://www.dynamic.xyz/',
+      role: 'MPC key custody, used when on-device cryptography is unavailable.',
+      caveat: 'MPC primitives for this purpose are very nascent — not a near-term option.',
+      caveatKind: 'block'
+    },
+    bcw: {
+      name: 'BCW · ZK-PaaS',
+      url: 'https://www.bcw.group/exploring-the-power-of-zero-knowledge-proofs-and-bcws-zk-paas/',
+      role: 'Cloud TEE proof-server for Midnight contract interaction.',
+      caveat: 'Cloud-hosted — sacrifices some privacy and introduces a centralised dependency on the critical path (counter to P8).',
+      caveatKind: 'warn'
+    },
+    midnames: {
+      name: 'Midnames',
+      url: 'https://midnames.com/',
+      role: 'Name registration service for `*.midnight` handles.',
+      caveat: 'Not audited; correctness unverified. Centralised dependency (counter to P8 / I-2.2).',
+      caveatKind: 'warn'
+    }
+  };
+
   // -------------------------------------------------------------------
   // Flow definition
   // -------------------------------------------------------------------
@@ -970,6 +1111,7 @@
       subtitle: 'First contact: dApp surface, no Passport yet engaged.',
       components: ['C23'],
       promises: [],
+      vendors: [],
       screen: renderNightFiEntry
     },
     {
@@ -979,6 +1121,7 @@
       subtitle: 'Single screen: "Create your private account with Face ID."',
       components: ['C9', 'C23'],
       promises: ['P1'],
+      vendors: [],
       screen: renderPassportWelcome
     },
     {
@@ -988,6 +1131,7 @@
       subtitle: 'OS passkey provider creates the credential. The Midnight signing key is generated on-device alongside it.',
       components: ['C9', 'C5', 'C1'],
       promises: ['P1', 'P6', 'P8'],
+      vendors: ['dynamic', 'bcw'],
       screen: renderBiometric
     },
     {
@@ -997,6 +1141,7 @@
       subtitle: 'The system has reserved a placeholder name. The user can claim a custom one now or later.',
       components: ['C2'],
       promises: ['P2'],
+      vendors: ['midnames', 'bcw'],
       screen: renderName
     },
     {
@@ -1006,6 +1151,7 @@
       subtitle: 'Required. P5 is an invariant — every operational account must have a recovery path.',
       components: ['C14', 'C15'],
       promises: ['P5'],
+      vendors: ['bcw'],
       screen: renderRecovery
     },
     {
@@ -1015,6 +1161,7 @@
       subtitle: 'Optional, encouraged. Makes Flow B available; reduces the probability that the recovery path is ever needed.',
       components: ['C13'],
       promises: ['P3'],
+      vendors: ['bcw'],
       screen: renderSecondDevice
     },
     {
@@ -1024,6 +1171,7 @@
       subtitle: 'Explicit scoped grant — operation × object × bounds. The dApp can only act within what the user approves.',
       components: ['C10', 'C11', 'C12', 'C20'],
       promises: ['P7', 'P9'],
+      vendors: ['bcw'],
       screen: renderGrant
     },
     {
@@ -1033,6 +1181,7 @@
       subtitle: 'User returns to the dApp with a named account, a recovery path, and a scoped grant. Single identity, cross-chain capable.',
       components: ['C23'],
       promises: ['P10'],
+      vendors: [],
       screen: renderDone
     }
   ];
@@ -1283,37 +1432,47 @@
 
     // Components — active this step
     const activeComps = document.getElementById('activeComponents');
-    const priorComps = document.getElementById('priorComponents');
     const activeNow = step.components;
-    const priorSet = new Set();
-    for (let i = 0; i < stepIndex; i++) {
-      STEPS[i].components.forEach(c => priorSet.add(c));
-    }
-    activeNow.forEach(c => priorSet.delete(c));
     activeComps.innerHTML = activeNow.length
       ? activeNow.map(c => panelItemHTML(COMPONENTS, c, true, false)).join('')
       : '<div class="sp-empty">No Passport components engaged yet.</div>';
-    priorComps.innerHTML = priorSet.size
-      ? Array.from(priorSet).sort((a, b) => parseInt(a.slice(1), 10) - parseInt(b.slice(1), 10))
-          .map(c => panelItemHTML(COMPONENTS, c, false, true)).join('')
-      : '<div class="sp-empty">Nothing yet.</div>';
 
     // Promises — active this step
     const activePromsEl = document.getElementById('activePromises');
-    const priorPromsEl = document.getElementById('priorPromises');
     const activeProms = step.promises;
-    const priorProms = new Set();
-    for (let i = 0; i < stepIndex; i++) {
-      STEPS[i].promises.forEach(p => priorProms.add(p));
-    }
-    activeProms.forEach(p => priorProms.delete(p));
     activePromsEl.innerHTML = activeProms.length
       ? activeProms.map(p => panelItemHTML(PROMISES, p, true, false)).join('')
       : '<div class="sp-empty">No promise being directly honoured at this step.</div>';
-    priorPromsEl.innerHTML = priorProms.size
-      ? Array.from(priorProms).sort((a, b) => parseInt(a.slice(1), 10) - parseInt(b.slice(1), 10))
-          .map(p => panelItemHTML(PROMISES, p, false, true)).join('')
-      : '<div class="sp-empty">Nothing yet.</div>';
+
+    // Vendors — active this step
+    const activeVendorsEl = document.getElementById('activeVendors');
+    const stepVendors = step.vendors || [];
+    activeVendorsEl.innerHTML = stepVendors.length
+      ? stepVendors.map(v => vendorCardHTML(v)).join('')
+      : '<li class="vendor-empty">No vendor proposals for this step — Passport-internal or out-of-scope.</li>';
+  }
+
+  function vendorCardHTML(id) {
+    const v = VENDORS[id];
+    if (!v) return '';
+    const caveatCls = v.caveatKind === 'block' ? 'is-block' : '';
+    const caveatLabel = v.caveatKind === 'block' ? 'Blocker' : 'Caveat';
+    const link = v.url
+      ? `<a class="vendor-link" href="${v.url}" target="_blank" rel="noopener">Visit ↗</a>`
+      : '';
+    return `
+      <li class="vendor-card">
+        <header class="vendor-card-head">
+          <h4 class="vendor-name">${v.name}</h4>
+          ${link}
+        </header>
+        <p class="vendor-role">${v.role}</p>
+        <p class="vendor-caveat ${caveatCls}">
+          <span class="vendor-caveat-label">${caveatLabel}</span>
+          ${v.caveat}
+        </p>
+      </li>
+    `;
   }
 
   document.getElementById('prevBtn').addEventListener('click', () => {
