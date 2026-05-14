@@ -1061,7 +1061,7 @@
     C14: { name: 'Total-loss recovery',       note: 'Recover account with zero devices.' },
     C15: { name: 'Helper protocol',           note: 'Role-substitutable recovery helpers.' },
     C20: { name: 'Selective-disclosure proof', note: 'Prove a property, reveal nothing else.' },
-    C23: { name: 'dApp connection protocol',  note: 'Wallet ↔ dApp handshake & grants.' }
+    C23: { name: 'dApp connection protocol',  note: 'Wallet ↔ dApp handshake & grants. Open Wallet Standard (OWS) is the chosen direction (in progress).' }
   };
 
   const PROMISES = {
@@ -1081,8 +1081,8 @@
       name: 'Dynamic',
       url: 'https://www.dynamic.xyz/',
       role: 'MPC key custody, used when on-device cryptography is unavailable.',
-      caveat: 'MPC primitives for this purpose are very nascent — not a near-term option.',
-      caveatKind: 'block'
+      caveat: 'MPC primitives for this purpose remain nascent; engagement starting (Passport MPC spec to be shared shortly). Not ready for the June demo, plausible later.',
+      caveatKind: 'warn'
     },
     bcw: {
       name: 'BCW · ZK-PaaS',
@@ -1138,7 +1138,7 @@
       id: 'name',
       counter: 'Step 4 of 8',
       title: 'Name your account',
-      subtitle: 'The system has reserved a placeholder name. The user can claim a custom one now or later.',
+      subtitle: 'Optional. C2 is off the critical path (decision 2026/05/13) — accounts work nameless; a name is a human-readable handle the user can claim now or later.',
       components: ['C2'],
       promises: ['P2'],
       vendors: ['midnames', 'bcw'],
@@ -1148,7 +1148,7 @@
       id: 'recovery',
       counter: 'Step 5 of 8',
       title: 'Set up recovery',
-      subtitle: 'Required. P5 is an invariant — every operational account must have a recovery path.',
+      subtitle: 'Required by the chain-side implementation (P5 invariant); the onboarding-UX framing is encouraged-not-blocking, pending user research to decide how hard to nudge.',
       components: ['C14', 'C15'],
       promises: ['P5'],
       vendors: ['bcw'],
@@ -1257,17 +1257,17 @@
         <span class="pp-logo"><span class="pp-dot"></span> <span class="pp-name">Midnight Passport</span></span>
       </div>
       <div style="height: 20px;"></div>
-      <div class="screen-eyebrow">Step 2 · Your handle</div>
-      <div class="screen-heading">Name your account.</div>
-      <p class="screen-copy smaller">We've reserved a name for you so the account can go live right away. Claim a custom name now, or later from settings.</p>
+      <div class="screen-eyebrow">Step 2 · Your handle <span class="opt-tag">Optional</span></div>
+      <div class="screen-heading">Claim a name?</div>
+      <p class="screen-copy smaller">Your account works straight away with no name. Names are human-readable handles you can claim now, later, or never — they don't gate any operation.</p>
       <div class="name-suggest">
-        <div style="font-size: 0.74rem; color: rgba(244,244,242,0.5); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;">Reserved for you</div>
-        <div class="name-value">alice-pebble.midnight</div>
-        <div class="name-hint">You can change this at any time.</div>
+        <div style="font-size: 0.74rem; color: rgba(244,244,242,0.5); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px;">Your account</div>
+        <div class="name-value" style="font-size: 0.84rem; color: rgba(244,244,242,0.75);">mn1q…7a4f</div>
+        <div class="name-hint">No name yet. You can claim one any time from settings.</div>
       </div>
       <div class="screen-spacer"></div>
-      <button class="btn-primary">Keep this name</button>
-      <button class="btn-secondary">Claim a custom name…</button>
+      <button class="btn-primary">Claim a name…</button>
+      <button class="btn-secondary">Skip for now</button>
     `;
   }
 
@@ -1277,9 +1277,9 @@
         <span class="pp-logo"><span class="pp-dot"></span> <span class="pp-name">Midnight Passport</span></span>
       </div>
       <div style="height: 16px;"></div>
-      <div class="screen-eyebrow">Step 3 · Recovery <span class="req-tag">Required</span></div>
+      <div class="screen-eyebrow">Step 3 · Recovery <span class="opt-tag">Encouraged</span></div>
       <div class="screen-heading smaller">If you lose every device, this is how you get back in.</div>
-      <p class="screen-copy smaller">Pick at least one. We never see this credential; helpers only hold encrypted shares.</p>
+      <p class="screen-copy smaller">Pick one now, or do it later from settings — your account always has a recovery path underneath, but it needs a credential before it can be used. Helpers only hold encrypted shares; we never see anything.</p>
       <ul class="opt-list">
         <li class="opt"><span class="opt-icon g">G</span><div class="opt-text"><span class="opt-name">Sign in with Google</span><span class="opt-hint">OAuth-anchored, encrypted shares</span></div></li>
         <li class="opt"><span class="opt-icon a">A</span><div class="opt-text"><span class="opt-name">Sign in with Apple</span><span class="opt-hint">OAuth-anchored, encrypted shares</span></div></li>
@@ -1287,6 +1287,7 @@
       </ul>
       <div class="screen-spacer"></div>
       <button class="btn-primary">Continue</button>
+      <button class="btn-ghost">Set up later</button>
     `;
   }
 
