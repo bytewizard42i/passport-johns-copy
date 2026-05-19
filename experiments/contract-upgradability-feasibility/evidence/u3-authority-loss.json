@@ -1,0 +1,36 @@
+{
+  "test": "U3",
+  "name": "authority-loss",
+  "verdict": "PASS",
+  "errorCode": "stale-authority-rejected",
+  "note": "stale signing key rejected — recovery story: none, key loss is terminal",
+  "evidence": {
+    "contractAddress": "1982cfbc8bf2f03c5f2183222bca97f2df9cdbc33b9e2bbe3047396fde7f4189",
+    "attempt": {
+      "ok": false,
+      "error": "Transaction submission error"
+    },
+    "restored": true
+  },
+  "ranAt": "2026-05-18T20:32:41.419Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.15.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:0.22.5"
+}

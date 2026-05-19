@@ -1,0 +1,387 @@
+{
+  "test": "U10",
+  "name": "indexer-visibility",
+  "verdict": "PARTIAL",
+  "note": "descriptive indexer dump — see evidence for schema and contract-action data",
+  "evidence": {
+    "contractAddress": "1982cfbc8bf2f03c5f2183222bca97f2df9cdbc33b9e2bbe3047396fde7f4189",
+    "schemaProbe": {
+      "data": {
+        "__type": {
+          "name": "ContractAction",
+          "kind": "INTERFACE",
+          "fields": [
+            {
+              "name": "address",
+              "type": {
+                "name": null,
+                "kind": "NON_NULL"
+              }
+            },
+            {
+              "name": "state",
+              "type": {
+                "name": null,
+                "kind": "NON_NULL"
+              }
+            },
+            {
+              "name": "zswapState",
+              "type": {
+                "name": null,
+                "kind": "NON_NULL"
+              }
+            },
+            {
+              "name": "transaction",
+              "type": {
+                "name": null,
+                "kind": "NON_NULL"
+              }
+            },
+            {
+              "name": "unshieldedBalances",
+              "type": {
+                "name": null,
+                "kind": "NON_NULL"
+              }
+            }
+          ],
+          "possibleTypes": [
+            {
+              "name": "ContractDeploy"
+            },
+            {
+              "name": "ContractCall"
+            },
+            {
+              "name": "ContractUpdate"
+            }
+          ]
+        }
+      }
+    },
+    "contractActions": {
+      "data": {
+        "contractAction": {
+          "__typename": "ContractUpdate"
+        }
+      }
+    },
+    "rootProbe": {
+      "data": {
+        "__schema": {
+          "queryType": {
+            "fields": [
+              {
+                "name": "block",
+                "args": [
+                  {
+                    "name": "offset"
+                  }
+                ]
+              },
+              {
+                "name": "zswapMerkleTreeCollapsedUpdate",
+                "args": [
+                  {
+                    "name": "startIndex"
+                  },
+                  {
+                    "name": "endIndex"
+                  }
+                ]
+              },
+              {
+                "name": "transactions",
+                "args": [
+                  {
+                    "name": "offset"
+                  }
+                ]
+              },
+              {
+                "name": "contractAction",
+                "args": [
+                  {
+                    "name": "address"
+                  },
+                  {
+                    "name": "offset"
+                  }
+                ]
+              },
+              {
+                "name": "dustGenerationStatus",
+                "args": [
+                  {
+                    "name": "cardanoRewardAddresses"
+                  }
+                ]
+              },
+              {
+                "name": "dustGenerations",
+                "args": [
+                  {
+                    "name": "cardanoRewardAddresses"
+                  }
+                ]
+              },
+              {
+                "name": "dustCommitmentMerkleTreeUpdate",
+                "args": [
+                  {
+                    "name": "startIndex"
+                  },
+                  {
+                    "name": "endIndex"
+                  }
+                ]
+              },
+              {
+                "name": "dustGenerationMerkleTreeUpdate",
+                "args": [
+                  {
+                    "name": "startIndex"
+                  },
+                  {
+                    "name": "endIndex"
+                  }
+                ]
+              },
+              {
+                "name": "dParameterHistory",
+                "args": []
+              },
+              {
+                "name": "termsAndConditionsHistory",
+                "args": []
+              },
+              {
+                "name": "spoIdentities",
+                "args": [
+                  {
+                    "name": "limit"
+                  },
+                  {
+                    "name": "offset"
+                  }
+                ]
+              },
+              {
+                "name": "spoIdentityByPoolId",
+                "args": [
+                  {
+                    "name": "poolIdHex"
+                  }
+                ]
+              },
+              {
+                "name": "spoCount",
+                "args": []
+              },
+              {
+                "name": "poolMetadata",
+                "args": [
+                  {
+                    "name": "poolIdHex"
+                  }
+                ]
+              },
+              {
+                "name": "poolMetadataList",
+                "args": [
+                  {
+                    "name": "limit"
+                  },
+                  {
+                    "name": "offset"
+                  },
+                  {
+                    "name": "withNameOnly"
+                  }
+                ]
+              },
+              {
+                "name": "spoByPoolId",
+                "args": [
+                  {
+                    "name": "poolIdHex"
+                  }
+                ]
+              },
+              {
+                "name": "spoList",
+                "args": [
+                  {
+                    "name": "limit"
+                  },
+                  {
+                    "name": "offset"
+                  },
+                  {
+                    "name": "search"
+                  }
+                ]
+              },
+              {
+                "name": "spoCompositeByPoolId",
+                "args": [
+                  {
+                    "name": "poolIdHex"
+                  }
+                ]
+              },
+              {
+                "name": "stakePoolOperators",
+                "args": [
+                  {
+                    "name": "limit"
+                  }
+                ]
+              },
+              {
+                "name": "spoPerformanceLatest",
+                "args": [
+                  {
+                    "name": "limit"
+                  },
+                  {
+                    "name": "offset"
+                  }
+                ]
+              },
+              {
+                "name": "spoPerformanceBySpoSk",
+                "args": [
+                  {
+                    "name": "spoSkHex"
+                  },
+                  {
+                    "name": "limit"
+                  },
+                  {
+                    "name": "offset"
+                  }
+                ]
+              },
+              {
+                "name": "epochPerformance",
+                "args": [
+                  {
+                    "name": "epoch"
+                  },
+                  {
+                    "name": "limit"
+                  },
+                  {
+                    "name": "offset"
+                  }
+                ]
+              },
+              {
+                "name": "currentEpochInfo",
+                "args": []
+              },
+              {
+                "name": "epochUtilization",
+                "args": [
+                  {
+                    "name": "epoch"
+                  }
+                ]
+              },
+              {
+                "name": "committee",
+                "args": [
+                  {
+                    "name": "epoch"
+                  }
+                ]
+              },
+              {
+                "name": "registeredTotalsSeries",
+                "args": [
+                  {
+                    "name": "fromEpoch"
+                  },
+                  {
+                    "name": "toEpoch"
+                  }
+                ]
+              },
+              {
+                "name": "registeredSpoSeries",
+                "args": [
+                  {
+                    "name": "fromEpoch"
+                  },
+                  {
+                    "name": "toEpoch"
+                  }
+                ]
+              },
+              {
+                "name": "registeredPresence",
+                "args": [
+                  {
+                    "name": "fromEpoch"
+                  },
+                  {
+                    "name": "toEpoch"
+                  }
+                ]
+              },
+              {
+                "name": "registeredFirstValidEpochs",
+                "args": [
+                  {
+                    "name": "uptoEpoch"
+                  }
+                ]
+              },
+              {
+                "name": "stakeDistribution",
+                "args": [
+                  {
+                    "name": "limit"
+                  },
+                  {
+                    "name": "offset"
+                  },
+                  {
+                    "name": "search"
+                  },
+                  {
+                    "name": "orderByStakeDesc"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "ranAt": "2026-05-18T20:37:34.408Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.15.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:0.22.5"
+}

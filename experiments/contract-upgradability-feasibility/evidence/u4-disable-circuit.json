@@ -1,0 +1,66 @@
+{
+  "test": "U4",
+  "name": "disable-circuit",
+  "verdict": "PASS",
+  "txHash": "9a5f00f323ce6eb20a0d69b67ae183f10efe98127dfc20e896b05d478a5da399",
+  "note": "circuit isolation works: increment rejected, bump_other still callable",
+  "evidence": {
+    "contractAddress": "1982cfbc8bf2f03c5f2183222bca97f2df9cdbc33b9e2bbe3047396fde7f4189",
+    "removeResult": {
+      "tx": {
+        "__wbg_ptr": 5128464
+      },
+      "status": "SucceedEntirely",
+      "txId": "00aa0bc647be1de846262eb811a893f2a98eb6e0c7be3ec32585571ab7b9cb2651",
+      "txHash": "9a5f00f323ce6eb20a0d69b67ae183f10efe98127dfc20e896b05d478a5da399",
+      "identifiers": [
+        "00a8cf11206a7d2fd3437d170f8331f17c49fe3f8ec729b66e0010d5988be2d014",
+        "00aa0bc647be1de846262eb811a893f2a98eb6e0c7be3ec32585571ab7b9cb2651"
+      ],
+      "blockHeight": 38,
+      "blockHash": "83fe387f641a89c8597c7e4b1d59d61cd0da67b56bb127e8d3f77beeb196b105",
+      "unshielded": {
+        "created": [],
+        "spent": []
+      },
+      "blockTimestamp": 1779136398001,
+      "blockAuthor": "d43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d",
+      "indexerId": 30,
+      "protocolVersion": 22000,
+      "fees": {
+        "paidFees": "7145251747086",
+        "estimatedFees": "7145251747086"
+      }
+    },
+    "removeError": null,
+    "incrementCall": {
+      "ok": false,
+      "error": "Unexpected error executing scoped transaction '<unnamed>': Error: Operation 'increment' is undefined for contract state ContractState (Array(1) [\n    <[-]: b8>,\n]{\n    bump_other: <verifier key>,\n    query_counter: <verifier key>,\n}ContractState )"
+    },
+    "bumpCall": {
+      "ok": true,
+      "tx": "0090f09c265e1e502eea9865b19cc8ef7b3292a32961127d3d51ede1e1b5de7fbc"
+    }
+  },
+  "ranAt": "2026-05-18T20:33:50.340Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.15.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:0.22.5"
+}

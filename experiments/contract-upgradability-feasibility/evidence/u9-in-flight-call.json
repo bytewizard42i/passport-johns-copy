@@ -1,0 +1,44 @@
+{
+  "test": "U9",
+  "name": "in-flight-call",
+  "verdict": "PARTIAL",
+  "note": "call.ok=true remove.ok=true — see evidence for block ordering",
+  "evidence": {
+    "contractAddress": "1982cfbc8bf2f03c5f2183222bca97f2df9cdbc33b9e2bbe3047396fde7f4189",
+    "callResult": {
+      "ok": true,
+      "tx": "001694e635e4cf2a17df9189cb280ef4c35f0f2b13dca1e63faf00851c47abbdbc",
+      "blockHeight": 65
+    },
+    "removeResult": {
+      "ok": true,
+      "tx": "aa0d853484db58b5615ecb77ca7996aad36d0adf79e426a1d5a16819c696a641",
+      "blockHeight": 65
+    },
+    "restored": {
+      "ok": true,
+      "tx": "7cc16274e64752414142e66261818a3c76dcfea1017dfa8bffb8d8783f395fea"
+    }
+  },
+  "ranAt": "2026-05-18T20:37:03.020Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.15.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:0.22.5"
+}

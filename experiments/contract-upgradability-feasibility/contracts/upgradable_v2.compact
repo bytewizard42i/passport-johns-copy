@@ -1,0 +1,63 @@
+pragma language_version 0.22;
+
+import CompactStandardLibrary;
+
+// ---------------------------------------------------------------------------
+// Contract Upgradability Feasibility — v2 contract (BUILD-ONLY).
+//
+// Never deployed. Compiled solely to source verifier keys and reason about
+// ledger shape for U6/U7/U8:
+//
+//   - `increment` keeps its name and signature but changes its body (+2,
+//     plus writes `last_op = 1`). Its verifier key is what U6 inserts in
+//     place of v1's `increment` VK.
+//   - `decrement` is a brand-new circuit with a fresh slot name. U7
+//     attempts to insert this VK into a contract that was deployed with
+//     no such slot.
+//   - `last_op` is a brand-new ledger field. U8 reasons about whether the
+//     deployed v1 ledger can ever expose this field via maintenance.
+// ---------------------------------------------------------------------------
+
+// ── Public ledger state ─────────────────────────────────────────────────────
+
+export ledger counter: Uint<64>;
+export ledger last_op: Uint<8>;
+// 0 = none, 1 = increment, 2 = decrement, 10 = bump_other.
+
+constructor() {
+  counter = 0 as Uint<64>;
+  last_op = 0 as Uint<8>;
+}
+
+// ── Write circuits ──────────────────────────────────────────────────────────
+
+// Same name and signature as v1's `increment`; different body. This is what
+// U6 exercises: swap the verifier key, observe whether the deployed contract
+// at the same address now executes the new logic against the same ledger.
+export circuit increment(): [] {
+  counter = disclose((counter + (2 as Uint<64>)) as Uint<64>);
+  last_op = disclose(1 as Uint<8>);
+}
+
+// New circuit slot. U7 attempts to register its verifier key against the
+// already-deployed v1 contract; expected behaviour is unknown.
+export circuit decrement(): [] {
+  counter = disclose((counter - (1 as Uint<64>)) as Uint<64>);
+  last_op = disclose(2 as Uint<8>);
+}
+
+// Unchanged from v1.
+export circuit bump_other(): [] {
+  counter = disclose((counter + (10 as Uint<64>)) as Uint<64>);
+  last_op = disclose(10 as Uint<8>);
+}
+
+// ── Read-only queries ───────────────────────────────────────────────────────
+
+export circuit query_counter(): Uint<64> {
+  return counter;
+}
+
+export circuit query_last_op(): Uint<8> {
+  return last_op;
+}
