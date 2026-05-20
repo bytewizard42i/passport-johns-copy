@@ -1,0 +1,48 @@
+pragma language_version 0.22;
+
+import CompactStandardLibrary;
+
+// ---------------------------------------------------------------------------
+// Contract Upgradability Feasibility — v1 contract.
+//
+// Minimal counter. Two write circuits and one read circuit. The two write
+// circuits exist so U4 can prove that removing the verifier key for one
+// circuit leaves the other circuit operational.
+//
+// Circuit-to-test map:
+//   increment   → U2/U3 (authority maintenance against a working circuit),
+//                  U4 (disable target), U5 (re-enable with same VK),
+//                  U6 (re-enable with v2's new VK), U9 (in-flight call)
+//   bump_other  → U4 (other-circuit-still-works control), U10 indexer probe
+//   query_*     → read-only post-conditions
+// ---------------------------------------------------------------------------
+
+// ── Public ledger state ─────────────────────────────────────────────────────
+
+export ledger counter: Uint<64>;
+// Increments on every call to `increment` (by +1 in v1, by +2 in v2) and on
+// every call to `bump_other` (by +10).
+
+constructor() {
+  counter = 0 as Uint<64>;
+}
+
+// ── Write circuits ──────────────────────────────────────────────────────────
+
+// v1 semantics: counter += 1. v2 will redefine the body to counter += 2,
+// keeping the same circuit name (and therefore the same maintenance slot).
+export circuit increment(): [] {
+  counter = disclose((counter + (1 as Uint<64>)) as Uint<64>);
+}
+
+// Independent circuit. Its verifier key sits in its own slot, so when U4
+// removes the increment VK, this circuit must keep working.
+export circuit bump_other(): [] {
+  counter = disclose((counter + (10 as Uint<64>)) as Uint<64>);
+}
+
+// ── Read-only query (no proof generated; cheap to call from TS) ─────────────
+
+export circuit query_counter(): Uint<64> {
+  return counter;
+}

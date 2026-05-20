@@ -1,0 +1,61 @@
+{
+  "test": "U5",
+  "name": "reenable-same-key",
+  "verdict": "PASS",
+  "txHash": "ba5dffe9bb9b53248ba37af72ad2c2c5841a8ef6a0c25accd2fcde0b81e60040",
+  "note": "v1 increment VK re-inserted; increment callable again (v1 semantics, +1)",
+  "evidence": {
+    "contractAddress": "1982cfbc8bf2f03c5f2183222bca97f2df9cdbc33b9e2bbe3047396fde7f4189",
+    "insertResult": {
+      "tx": {
+        "__wbg_ptr": 4740752
+      },
+      "status": "SucceedEntirely",
+      "txId": "0082385a378187d9144385a9a669cba032a5edd341694b1440477a72bf819c908b",
+      "txHash": "ba5dffe9bb9b53248ba37af72ad2c2c5841a8ef6a0c25accd2fcde0b81e60040",
+      "identifiers": [
+        "00b3085cfa979dcd722013d7c93b5ae9d5f2ad8c5eef457f85f99f928b0f69392b",
+        "0082385a378187d9144385a9a669cba032a5edd341694b1440477a72bf819c908b"
+      ],
+      "blockHeight": 49,
+      "blockHash": "16594d58055a9f5c8d8e73323550ad4242cd0e25b1c36df403fb5302127088ba",
+      "unshielded": {
+        "created": [],
+        "spent": []
+      },
+      "blockTimestamp": 1779136464002,
+      "blockAuthor": "d43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d",
+      "indexerId": 32,
+      "protocolVersion": 22000,
+      "fees": {
+        "paidFees": "80610010730834",
+        "estimatedFees": "80610010730834"
+      }
+    },
+    "incrementCall": {
+      "ok": true,
+      "tx": "000d64046dc1d0bec83356e92a571a83f7c278fcae94583437930b9d1198ef02d0"
+    }
+  },
+  "ranAt": "2026-05-18T20:35:26.693Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.15.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:0.22.5"
+}

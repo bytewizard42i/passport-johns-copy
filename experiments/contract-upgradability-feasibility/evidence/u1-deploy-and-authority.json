@@ -1,0 +1,109 @@
+{
+  "test": "U1",
+  "name": "deploy-and-authority",
+  "verdict": "PASS",
+  "txHash": "847025a5c301a22b678bd388de694145c8fae2ebfc875546cb88d4a8b87b6ba3",
+  "note": "deployed at 1982cfbc8bf2f03c5f2183222bca97f2df9cdbc33b9e2bbe3047396fde7f4189",
+  "evidence": {
+    "contractAddress": "1982cfbc8bf2f03c5f2183222bca97f2df9cdbc33b9e2bbe3047396fde7f4189",
+    "atDeployAuthority": {
+      "type": "addr",
+      "network": "undeployed",
+      "data": {
+        "type": "Buffer",
+        "data": [
+          188,
+          97,
+          13,
+          208,
+          124,
+          82,
+          245,
+          144,
+          18,
+          168,
+          140,
+          47,
+          159,
+          28,
+          95,
+          52,
+          203,
+          172,
+          199,
+          91,
+          134,
+          130,
+          2,
+          151,
+          93,
+          111,
+          25,
+          190,
+          175,
+          55,
+          40,
+          75
+        ]
+      }
+    },
+    "deployTx": {
+      "tx": {
+        "__wbg_ptr": 5204688
+      },
+      "status": "SucceedEntirely",
+      "txId": "007537810bb18dd13d337afb6bd55bdede471e8c2ec87387a305c3dc864228a28d",
+      "txHash": "847025a5c301a22b678bd388de694145c8fae2ebfc875546cb88d4a8b87b6ba3",
+      "identifiers": [
+        "004ec770ec5024373f0bca561fb2ca9e3c19d9c75432d9625c699e136d69694357",
+        "007537810bb18dd13d337afb6bd55bdede471e8c2ec87387a305c3dc864228a28d"
+      ],
+      "blockHeight": 16,
+      "blockHash": "5e759faac7b563e357968a87cae284afae39fe26968b8f84d329528b5e29cb41",
+      "unshielded": {
+        "created": [],
+        "spent": []
+      },
+      "blockTimestamp": 1779136266001,
+      "blockAuthor": "d43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d",
+      "indexerId": 28,
+      "protocolVersion": 22000,
+      "fees": {
+        "paidFees": "647232003816973",
+        "estimatedFees": "647232003816973"
+      },
+      "contractAddress": "1982cfbc8bf2f03c5f2183222bca97f2df9cdbc33b9e2bbe3047396fde7f4189",
+      "initialContractState": {
+        "__wbg_ptr": 1209344
+      }
+    },
+    "indexerSnapshot": {
+      "data": {
+        "contractAction": {
+          "__typename": "ContractDeploy"
+        }
+      }
+    }
+  },
+  "ranAt": "2026-05-18T20:31:20.533Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.15.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:0.22.5"
+}
