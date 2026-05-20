@@ -2,6 +2,10 @@
 
 **Serves:** P2 · P8 · P10.
 
+**Maps to MIP:** [MIP-8 · STD-06 — Name service registry](../MIPS.md#mip-8--std-06--name-service-registry) (MVP-window).
+Primary authorship sits with the Midnight Foundation and a name service
+provider; ARC co-authors and reviews.
+
 ## Outcome
 
 Name ↔ account binding plus name resolution. Every account has a stable,

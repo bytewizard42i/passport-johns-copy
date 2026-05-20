@@ -45,8 +45,9 @@ does the connection protocol expose chain agnosticism, or does the dApp
 specify chains explicitly?
 
 **MIP co-author.** Per MIPS.md, every MIP needs a named external
-co-author. Who co-authors MIP-5 (connection protocol) — Lace, Midnight
-Foundation, or both? OWS upstream contributors are a candidate.
+co-author. Who co-authors MIP-5 (connection protocol) — the Midnight
+Foundation, a wallet provider, or both? OWS upstream contributors are
+a candidate.
 
 ## Failure modes
 

@@ -40,7 +40,7 @@ invariants in [`docs/plans/PROMISES.md`](plans/PROMISES.md).
 1. **Privacy.** P9 (selective disclosure) and P6 (key non-exfiltration) together.
 2. **Censorship resistance / operational autonomy.** P8 — no third-party operator on the critical path.
 3. **Continuity of identity.** P4 + P5 — account survives device loss, including total loss.
-4. **Ecosystem adoption.** Standards adoptable by the Midnight Foundation, Lace, and third-party wallets — unilateral design is shelfware.
+4. **Ecosystem adoption.** Standards adoptable by the Midnight Foundation and partner wallets — unilateral design is shelfware.
 
 ### Stakeholders
 
@@ -64,7 +64,7 @@ Distilled from [`.claude/CLAUDE.md`](../.claude/CLAUDE.md) and project history.
 - **Cadence:** weekly demonstrable progress preferred. If a week's deliverable slips, ship the next thing that works.
 
 ### Ecosystem and adoption
-- Standards must be adoptable by the Midnight Foundation, Lace, and third-party wallets.
+- Standards must be adoptable by the Midnight Foundation and partner wallets.
 - Every drafted standard targets a MIP, and where relevant a CIP.
 
 ### Repository topology
@@ -91,7 +91,7 @@ Midnight Passport sits between users (and the wallets / dApps they operate) and 
 |---|---|
 | **Midnight blockchain** | Settlement substrate. Required (P8). |
 | **Midnight Foundation** | Co-builds demos (e.g. [NightFi](https://github.com/Midnight-Passport-Demo/NightFi)) and stewards the MIP process. |
-| **Lace, third-party wallets** | Adopters of the dApp connection protocol (C23) and the underlying account standard. |
+| **Partner wallets** | Adopters of the dApp connection protocol (C23) and the underlying account standard. |
 | **Upstream cross-chain architecture** | Solver network, threshold-Schnorr vaults, intent escrow contract. Owned upstream; Passport integrates via C25. |
 | **`midnight-did` effort** | Midnight DID spec + Compact reference implementation, led by the IOG Midnight team. C3's path forward runs through engagement with this effort. |
 | **W3C / DIF / IAMX** | DID method registry holders; coordination pending for `did:midnight`. |

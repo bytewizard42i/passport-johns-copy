@@ -16,7 +16,7 @@ This repository is the planning and knowledge-gathering workspace for Midnight P
 
 - **Timeline:** there is no fixed MVP deadline. We are aiming at a public demo in October 2026, but the plan's job is to map the work — not to enforce a critical path. Identify what can run in parallel across different teams (or be sequenced by the same team) so progress is bounded by capacity, not by one ordered chain of dependencies.
 - **Weekly cadence:** demonstrable progress every week remains the preferred rhythm but is no longer a hard contract. If a week's intended deliverable slips, show the next thing that works rather than a broken thing.
-- **Ecosystem dependency:** protocols we draft must be adoptable by the Midnight Foundation, Lace, and third-party wallets. Unilateral design produces shelfware.
+- **Ecosystem dependency:** protocols we draft must be adoptable by the Midnight Foundation and partner wallets. Unilateral design produces shelfware.
 - **Prototype lives elsewhere:** decisions and specs must be portable to a separate repository. Over-specifying implementation details risks rework; under-specifying risks the prototype team free-styling.
 - **Research vs. specification balance:** every standard we draft is backed by evidence — an experiment, an upstream extraction, or a cryptographer review. Speculative specs do not compel adoption.
 

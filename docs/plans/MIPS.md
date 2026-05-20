@@ -14,7 +14,7 @@ Every MIP ships with a **named external co-author** — unilateral drafts
 become shelfware. The adoption narrative tracks who that co-author is
 for each MIP.
 
-Last updated: 2026/05/01.
+Last updated: 2026/05/20.
 
 ---
 
@@ -24,6 +24,7 @@ Last updated: 2026/05/01.
 |-----|-------------|-------|------|
 | **MIP-1** | STD-01 | Key derivation paths | MVP-window |
 | **MIP-2** | STD-02 | Address format | MVP-window |
+| **MIP-8** | STD-06 | Name service registry | MVP-window |
 | **MIP-3** | STD-04 | Multi-key account | Post-MVP |
 | **MIP-4** | STD-05 | Recovery paths | Post-MVP |
 | **MIP-5** | ECO-01 | dApp ↔ Wallet Connection Protocol | Post-MVP |
@@ -56,6 +57,24 @@ the wallet roles.
 specified across the wallet roles.
 
 **Maps to component.** [C1 — Account-custody contract](components/C1-account-custody-contract.md).
+
+---
+
+### MIP-8 · STD-06 — Name service registry
+
+**Scope.** On-chain registry binding human-readable names (`alice.midnight`)
+to Passport account anchors, with a resolver surface for chain-native
+addresses and a hook for cross-chain resolution (P10 / C25). Includes
+namehash construction (domain-separated via STD-03), ENSIP-15-aligned
+normalisation, and an anti-squatting policy. The registry / resolver
+split-vs-single question, the anti-squat mechanism, and the cross-chain
+resolution shape remain open in the C2 canvas and resolve inside this MIP.
+
+ARC's role on this MIP is **co-author / reviewer** — primary authorship
+sits with the Midnight Foundation and a name service provider engaged
+for the registry implementation.
+
+**Maps to component.** [C2 — Name service](components/C2-name-service.md).
 
 ---
 
@@ -116,5 +135,6 @@ connection, MIP-7 covers authentication.
   Proposals repository.
 - Each MIP names its external co-author at draft time. If no co-author can
   be named, the MIP is not yet ready to start.
-- MVP-window MIPs are the contract for adoption: if the Foundation, Lace,
-  and partner wallets cannot consume them, the MVP has not landed.
+- MVP-window MIPs are the contract for adoption: if the Foundation and
+  partner wallets cannot consume them, the MVP has not landed.
+
