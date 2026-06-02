@@ -183,6 +183,18 @@
     border-radius: 4px;
     padding: 1px 7px;
   }
+  .mip-upstream-badge {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--info);
+    border: 1px solid var(--info);
+    background: var(--info-soft);
+    border-radius: 4px;
+    padding: 1px 7px;
+  }
   .mip-title {
     font-family: var(--font-display);
     font-size: 1.15rem;
@@ -540,12 +552,24 @@
   const mipsHost = document.getElementById('mipsList');
   if (mipsHost) {
     mipsHost.innerHTML = (data.mips || []).map(m => {
-      const c = componentById[m.component];
+      const comps = m.components || (m.component ? [m.component] : []);
+      const compHtml = comps.map(cid => {
+        const cc = componentById[cid];
+        return cc
+          ? `<a href="index.html#${cid}" data-component="${cid}">${cid} · ${escapeHtml(cc.name)}</a>`
+          : escapeHtml(cid);
+      }).join(' · ') || '—';
+      const badge = m.kind === 'prerequisite' ? '<span class="mip-prereq-badge">Prerequisite</span>'
+        : m.kind === 'upstream' ? '<span class="mip-upstream-badge">Adopted upstream</span>'
+        : '';
+      const secondMeta = m.kind === 'upstream'
+        ? `<dt>Upstream</dt><dd><a href="${escapeHtml(m.upstream || '#')}" target="_blank" rel="noopener">MIP-0003 — review #129</a></dd>`
+        : `<dt>Co-author target</dt><dd>${escapeHtml(m.co_author || '—')}</dd>`;
       return `
         <div class="mip-card" id="${m.id}">
           <div class="mip-head">
             <span class="mip-id">${m.id}</span>
-            ${m.kind === 'prerequisite' ? '<span class="mip-prereq-badge">Prerequisite</span>' : ''}
+            ${badge}
             <h3 class="mip-title">${escapeHtml(m.title)}</h3>
           </div>
           <p class="mip-detail">${escapeHtml(m.detail || '')}</p>
@@ -555,12 +579,11 @@
               <dd>${escapeHtml(m.status || '—')}</dd>
             </div>
             <div>
-              <dt>Co-author target</dt>
-              <dd>${escapeHtml(m.co_author || '—')}</dd>
+              ${secondMeta}
             </div>
             <div>
               <dt>Component</dt>
-              <dd>${c ? `<a href="index.html#${m.component}" data-component="${m.component}">${m.component} · ${escapeHtml(c.name)}</a>` : escapeHtml(m.component || '—')}</dd>
+              <dd>${compHtml}</dd>
             </div>
             <div>
               <dt>Promises</dt>
