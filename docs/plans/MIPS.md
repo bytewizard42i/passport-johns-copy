@@ -22,8 +22,6 @@ Last updated: 2026/05/20.
 
 | MIP | Pipeline ID | Title | When |
 |-----|-------------|-------|------|
-| **MIP-1** | STD-01 | Key derivation paths | MVP-window |
-| **MIP-2** | STD-02 | Address format | MVP-window |
 | **MIP-8** | STD-06 | Name service registry | MVP-window |
 | **MIP-3** | STD-04 | Multi-key account | Post-MVP |
 | **MIP-4** | STD-05 | Recovery paths | Post-MVP |
@@ -41,22 +39,19 @@ A cross-cutting prerequisite ships alongside the MIPs:
 
 ## MVP-window MIPs
 
-### MIP-1 · STD-01 — Key derivation paths
+### Key derivation & address format — adopted upstream, not Passport-authored
 
-**Scope.** CIP-1852-aligned key derivation paths for Midnight, using coin
-type **2400**. Defines the derivation tree from a single root through to
-the wallet roles.
-
-**Maps to component.** [C5 — Signing primitive](components/C5-signing-primitive.md).
-
----
-
-### MIP-2 · STD-02 — Address format
-
-**Scope.** Bech32m-encoded addresses with the `mn_` human-readable prefix,
-specified across the wallet roles.
-
-**Maps to component.** [C1 — Account-custody contract](components/C1-account-custody-contract.md).
+The HD derivation tree (`m / 44' / 2400' / account' / role / index`, the role
+table, and coin type **2400**) and the `mn_addr` Bech32m address format are
+already specified in Midnight's WalletEngine Specification (ADR-0017 / 0019 /
+0020, Proposal 0013), and **MIP-0003 (ECDSA support)** extends them. Passport
+**adopts** these rather than drafting parallel standards — ARC's contribution is
+reviewing and strengthening MIP-0003 directly
+([discussion #129](https://github.com/midnightntwrk/midnight-improvement-proposals/discussions/129)).
+The one derivation concern *not* covered upstream — deriving the account root
+from a WebAuthn passkey (PRF → seed) — lives in
+[C9 — Device-bound authentication](components/C9-device-bound-authentication.md)
+and can graduate to its own MIP if it needs to become a standard.
 
 ---
 
