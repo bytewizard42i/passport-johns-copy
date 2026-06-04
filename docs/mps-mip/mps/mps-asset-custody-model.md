@@ -16,8 +16,8 @@
 
 ---
 MPS: <Number> # assigned by editors
-Title: Midnight Passport Asset Custody Model
-Authors: Hector Bulgarini hbulgarini, Nicolas Di Palma (nicolasDP)
+Title: Multi-key Account Custody for Midnight-Native Assets
+Authors: Hector Bulgarini hbulgarini, Nicolas Di Prima (NicolasDP)
 Status: Proposed
 Category: Libraries and Tooling | Standards
 Created: 03-Jun-2026
@@ -28,38 +28,40 @@ Replaces: none
 
 ## Abstract
 
-Midnight Passport must present a single, coherent account that custodies and
+Midnight has no ratified model for an on-chain account that custodies and
 authorises all of a user's Midnight-native assets (Night, shielded (Zswap), and
-Dust) while satisfying multi-device access, lost-device recovery, total-loss
-recovery, and key non-exfiltration at once. There is no ratified model for
-*where* those assets live or *how* their custody is authorised and recovered,
-and the asset classes do not behave uniformly: user↔contract Night works,
-contract custody of shielded notes works but leaks holdings into public ledger
-state, inter-contract Night is tooling-blocked, and contract-paid Dust has no v1
-surface. Without one ratified model, assets fragment across asset classes,
-derivation schemes, and operators, and any asset the account does not govern
-forfeits its recovery and revocation guarantees. This MPS frames the problem and
-the constraints any solution must satisfy, and recommends the MIPs needed to
-specify a single, recoverable, privacy-preserving custody model. It does not
-select a solution.
+Dust) under multi-key, multi-device control while satisfying lost-device
+recovery, total-loss recovery, and key non-exfiltration at once. There is no
+ratified answer to *where* those assets live or *how* their custody is
+authorised and recovered, and the asset classes do not behave uniformly:
+user↔contract Night works, contract custody of shielded notes works but leaks
+holdings into public ledger state, inter-contract Night is tooling-blocked, and
+contract-paid Dust has no v1 surface. Without one ratified model, assets
+fragment across asset classes, derivation schemes, and operators, and any asset
+the account does not govern forfeits its recovery and revocation guarantees.
+This problem surfaced in the design of Midnight Passport, but it confronts any
+multi-key account or smart-contract wallet on Midnight. This MPS frames the
+problem and the constraints any solution must satisfy, and recommends the MIPs
+needed to specify a single, recoverable, privacy-preserving custody model. It
+does not select a solution.
 
 ## Vision
 
-A Midnight Passport onboarding produces **one account, and only one**. Aliasing, DID,
-funds, credentials, and access grants all derive from that single account, and
-custody, authorisation, and recovery of every Midnight-native asset hang off it,
-so that "recovered account" implies "recovered assets", with no fragmentation
-and no residual seed dependency. Any model preserves Passport's security
-guarantees, in particular that keys never leave the party that holds them, and
-remains adoptable by the Midnight Foundation and partner wallets.
+A single account governs the custody, authorisation, and recovery of every
+Midnight-native asset it holds, so that "recovered account" implies "recovered
+assets", with no fragmentation across asset classes and no residual seed
+dependency. The model holds under multi-key, multi-device control and preserves
+the guarantee that keys never leave the party that holds them. It is specified
+for adoption by the Midnight Foundation and partner wallets rather than tied to
+any single product.
 
 ## Problem
 
-**Conflicting requirements.** Passport promises a seedless, fully recoverable,
-MPC-backed account *and* a set of functional surfaces (aliasing, DID,
-credentials, intent-based cross-chain), several of which, left to defaults,
-resolve to distinct accounts or key roots. Coordinating them into one coherent,
-recoverable account is what is hard; no single layer does it today.
+**Conflicting requirements.** A custody model must deliver a seedless, fully
+recoverable, MPC-backed account *and* multi-device access at once. Left to
+defaults, independent device keys and asset paths resolve to distinct accounts
+or key roots; coordinating them into one coherent, recoverable account is what
+is hard, and no single layer does it today.
 
 **Custody location is unresolved, and asset classes diverge.** There is no
 ratified answer to where assets are held or how their custody is authorised:
@@ -114,9 +116,6 @@ access is a recovery failure.
 - **Total-loss recovery:** recovering the account restores the *same* balances.
 - **Receiving / spending shielded value** into and out of the account across
   blocks.
-- **dApp-scoped spend** from custodied assets, bounded and enforced chain-side.
-- **Cross-chain intent** stays anchored to the single account though settlement
-  routes upstream.
 - **Fee payment** that does not push the user into a separate custody surface.
 
 ## Goals
@@ -140,7 +139,7 @@ Onboarding yields a single account that coherently governs all Midnight-native
 assets. Developers target one custody surface instead of reconciling per-asset
 behaviours; partner wallets get an implementable specification with known
 feasibility boundaries; users get funds recoverable and revocable by the same
-mechanisms that protect their identity, with privacy trade-offs made explicit.
+mechanisms that govern the account, with privacy trade-offs made explicit.
 The downstream cryptographic-stack decisions (derivation, signing, recovery,
 storage) gain a stable upstream choice to calibrate against.
 
