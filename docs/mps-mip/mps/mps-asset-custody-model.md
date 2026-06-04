@@ -29,8 +29,8 @@ Replaces: none
 ## Abstract
 
 Midnight has no ratified model for an on-chain account that custodies and
-authorises all of a user's Midnight-native assets (Night, shielded (Zswap), and
-Dust) under multi-key, multi-device control while satisfying lost-device
+authorises all of a user's Midnight-native assets (Night, shielded (Zswap) 
+under multi-key, multi-device control while satisfying lost-device
 recovery, total-loss recovery, and key non-exfiltration at once. There is no
 ratified answer to *where* those assets live or *how* their custody is
 authorised and recovered, and the asset classes do not behave uniformly:
