@@ -22,11 +22,19 @@ under `/zk-params` in the proof server's cache layout. The end-to-end check
 container stopped**: every proof in the stack (contract circuits, zswap
 balancing, dust fees, and signing) is computed in the browser.
 
-Remaining hardening, not blocking the demo: move proving off the main
-thread into a Web Worker (the SDK's `WasmProver` already does this and is
-the model; upstream's `zkir-mt` demo shows the multithreaded variant),
-per-circuit progress and timing capture, and contributing real-circuit rows
-to the benchmark corpus.
+**Worker hardening (2026/06/10): done.** Proving runs in a dedicated worker
+(`app/src/lib/proofWorker.ts`) so the UI stays live; key material resolves
+on the main thread and is proxied per request, the same split the SDK's
+`WasmProver` uses. Two pitfalls worth recording: copy preimage and proof
+bytes into fresh `Uint8Array`s before `postMessage` (wasm-bindgen can hand
+back views over wasm memory, and structured clone copies the entire backing
+buffer), and import the zkir wasm dynamically inside the worker so a failed
+or slow load is observable instead of a silent dead worker. Validated with
+the proof-server container stopped.
+
+Remaining hardening, not blocking the demo: per-circuit progress and timing
+capture, multithreaded proving (upstream's `zkir-mt` demo), and contributing
+real-circuit rows to the benchmark corpus.
 
 ## Goal
 

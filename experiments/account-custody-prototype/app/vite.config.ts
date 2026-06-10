@@ -101,6 +101,11 @@ export default defineConfig({
     // ESM-interop pre-bundle.
     include: ['object-inspect'],
   },
+  // The proof worker (src/lib/proofWorker.ts) imports the zkir-v2 wasm.
+  worker: {
+    format: 'es',
+    plugins: () => [wasm(), topLevelAwait()],
+  },
   build: {
     target: 'esnext',
   },
