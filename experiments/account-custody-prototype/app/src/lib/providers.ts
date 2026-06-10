@@ -29,7 +29,7 @@ import { hexToBytes } from '../../../src/wallet/hex.js';
 import * as FaucetModule from '../../../contracts/managed/faucet/contract/index.js';
 
 import { proveStarted, proveEnded } from './txTracker.js';
-import { wasmProofProvider } from './wasmProver.js';
+import { wasmProofProvider, wasmWalletProvingService } from './wasmProver.js';
 
 // Phase 0 spike: `?prover=browser` proves contract circuits in this browser
 // via the zkir-v2 wasm prover instead of the proof server (wallet balancing
@@ -119,6 +119,9 @@ export async function createWallet(seedHex: string) {
         dustSecretKey,
         ledgerPkg.LedgerParameters.initialParameters().dust,
       ),
+    // With ?prover=browser the balancing proofs (zswap, dust) are computed
+    // in this tab too — no proof server anywhere in the stack.
+    ...(BROWSER_PROVER ? { provingService: () => wasmWalletProvingService() } : {}),
   });
 
   await wallet.start(shieldedSecretKeys, dustSecretKey);

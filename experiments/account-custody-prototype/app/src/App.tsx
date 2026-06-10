@@ -88,7 +88,9 @@ export default function App() {
         setMid(m);
         log('localnet connected — fee wallet synced.');
         if (BROWSER_PROVER) {
-          log('browser proving enabled — contract circuits prove in this tab (zkir-v2 wasm).');
+          log(
+            'browser proving enabled — ALL proofs (contract circuits, zswap, dust) are computed in this tab; no proof server.',
+          );
         }
       })
       .catch((e) => setBootError(String(e?.message ?? e)));

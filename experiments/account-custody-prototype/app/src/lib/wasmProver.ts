@@ -9,7 +9,9 @@
 // server itself downloads and verifies from the public bucket.
 //
 // Selected with `?prover=browser` (see providers.ts). The wallet's balancing
-// proofs still go to the proof server; that is Phase 2.
+// proofs (zswap and dust) are covered too: WalletFacade.init accepts a
+// custom provingService, and the system-circuit key material lives in
+// /zk-params alongside the SRS (same files the proof server downloads).
 
 import * as zkir from '@midnight-ntwrk/zkir-v2';
 import { CostModel } from '@midnight-ntwrk/ledger-v8';
@@ -21,23 +23,50 @@ interface ZkConfigProviderLike {
   get(keyLocation: string): Promise<unknown>;
 }
 
+async function fetchBytes(path: string, what: string): Promise<Uint8Array> {
+  const resp = await fetch(path);
+  if (!resp.ok) {
+    throw new Error(
+      `missing ${what} (${path}) — run scripts/fetch-zk-params.mjs to stage app/public/zk-params`,
+    );
+  }
+  return new Uint8Array(await resp.arrayBuffer());
+}
+
+const getParams = async (k: number) => {
+  console.debug(`[wasm-prover] getParams: k=${k}`);
+  return fetchBytes(`/zk-params/bls_midnight_2p${k}`, `SRS slice for k=${k}`);
+};
+
+// System (balancing) circuits, mirroring the proof server's key layout.
+const SYSTEM_KEYS: Record<string, string> = {
+  'midnight/zswap/spend': 'zswap/9/spend',
+  'midnight/zswap/output': 'zswap/9/output',
+  'midnight/zswap/sign': 'zswap/9/sign',
+  'midnight/dust/spend': 'dust/9/spend',
+};
+
+async function lookupSystemKey(keyLocation: string) {
+  const path = SYSTEM_KEYS[keyLocation];
+  if (!path) return undefined;
+  const [proverKey, verifierKey, ir] = await Promise.all([
+    fetchBytes(`/zk-params/${path}.prover`, `${keyLocation} prover key`),
+    fetchBytes(`/zk-params/${path}.verifier`, `${keyLocation} verifier key`),
+    fetchBytes(`/zk-params/${path}.bzkir`, `${keyLocation} IR`),
+  ]);
+  return { proverKey, verifierKey, ir };
+}
+
 export function wasmProofProvider(zkConfigProvider: ZkConfigProviderLike): any {
   const kmProvider = {
     lookupKey: async (keyLocation: string) => {
       console.debug(`[wasm-prover] lookupKey: ${keyLocation}`);
+      const system = await lookupSystemKey(keyLocation);
+      if (system) return system;
       const zkConfig = await zkConfigProvider.get(keyLocation);
       return zkConfigToProvingKeyMaterial(zkConfig as any);
     },
-    getParams: async (k: number) => {
-      console.debug(`[wasm-prover] getParams: k=${k}`);
-      const resp = await fetch(`/zk-params/bls_midnight_2p${k}`);
-      if (!resp.ok) {
-        throw new Error(
-          `missing SRS slice for k=${k} — run scripts/fetch-zk-params.mjs to stage app/public/zk-params`,
-        );
-      }
-      return new Uint8Array(await resp.arrayBuffer());
-    },
+    getParams,
   };
 
   const provingProvider = zkir.provingProvider(kmProvider);
@@ -51,5 +80,24 @@ export function wasmProofProvider(zkConfigProvider: ZkConfigProviderLike): any {
         proveEnded();
       }
     },
+  };
+}
+
+/**
+ * Wallet-side proving service (balancing: zswap spends/outputs/signs and
+ * dust fee spends). Same shape the wallet SDK's makeWasmProvingService
+ * builds; injected through WalletFacade.init({ provingService }).
+ */
+export function wasmWalletProvingService(): { prove(tx: any): Promise<any> } {
+  const kmProvider = {
+    lookupKey: async (keyLocation: string) => {
+      console.debug(`[wasm-prover/wallet] lookupKey: ${keyLocation}`);
+      return lookupSystemKey(keyLocation);
+    },
+    getParams,
+  };
+  const provingProvider = zkir.provingProvider(kmProvider);
+  return {
+    prove: (tx: any) => tx.prove(provingProvider, CostModel.initialCostModel()),
   };
 }

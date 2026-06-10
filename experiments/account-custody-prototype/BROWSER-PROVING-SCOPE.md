@@ -9,10 +9,24 @@ paired with `ledger-v8`; see `wasm-proving-demos/` in the midnight-ledger
 repository), so no Rust port was needed. With `?prover=browser` the demo
 deploys the account contract and lands `deposit_night` on localnet with
 proofs computed in the tab (`app/src/lib/wasmProver.ts`; SRS slices staged by
-`app/scripts/fetch-zk-params.mjs`). Remaining for Phase 1: move proving off
-the main thread into a Web Worker, per-circuit progress, and timing capture.
-Phase 2 (wallet balancing proofs) is unchanged; upstream's `zkir-mt` demo
-shows the multithreaded option.
+`app/scripts/fetch-zk-params.mjs`).
+
+**Phases 2 and 3 outcome (2026/06/10): validated the same day; the planned
+Service Worker interception was unnecessary.** `WalletFacade.init` accepts a
+custom `provingService`, and the wallet SDK itself ships a wasm proving
+path (`makeWasmProvingService` in `wallet-sdk-capabilities/proving`, built
+on the same zkir-v2 package). The demo injects a three-line ProvingService
+backed by the in-tab prover, with the zswap and dust key triples staged
+under `/zk-params` in the proof server's cache layout. The end-to-end check
+(dev-mode onboard plus proved Night deposit) passes **with the proof-server
+container stopped**: every proof in the stack (contract circuits, zswap
+balancing, dust fees, and signing) is computed in the browser.
+
+Remaining hardening, not blocking the demo: move proving off the main
+thread into a Web Worker (the SDK's `WasmProver` already does this and is
+the model; upstream's `zkir-mt` demo shows the multithreaded variant),
+per-circuit progress and timing capture, and contributing real-circuit rows
+to the benchmark corpus.
 
 ## Goal
 
