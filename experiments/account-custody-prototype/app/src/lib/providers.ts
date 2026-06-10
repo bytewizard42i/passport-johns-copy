@@ -31,20 +31,17 @@ import * as FaucetModule from '../../../contracts/managed/faucet/contract/index.
 import { proveStarted, proveEnded } from './txTracker.js';
 import { wasmProofProvider, wasmWalletProvingService } from './wasmProver.js';
 
-// `?prover=browser` proves everything in this browser via the zkir-v2 wasm
-// prover instead of the proof server (see BROWSER-PROVING-SCOPE.md). On any
-// non-localhost origin (phone via tunnel, LAN) the browser prover is the
-// default — the proof server at 127.0.0.1:6300 is unreachable from there.
-// Force the server path with `?prover=server` (localhost only).
+// The browser prover is the DEFAULT: everything — contract circuits, zswap,
+// dust — is proved in this tab by the zkir-v2 wasm prover (see
+// BROWSER-PROVING-SCOPE.md). No proof server is needed anywhere in the
+// stack. `?prover=server` opts back into the Docker proof server at
+// 127.0.0.1:6300 (works on localhost only — the server is unreachable from
+// tunnel/LAN origins).
 const proverParam =
   typeof window !== 'undefined'
     ? new URLSearchParams(window.location.search).get('prover')
     : null;
-const isLocalhost =
-  typeof window !== 'undefined' &&
-  ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
-export const BROWSER_PROVER =
-  proverParam === 'browser' || (proverParam !== 'server' && !isLocalhost);
+export const BROWSER_PROVER = proverParam !== 'server';
 
 // Localnet genesis wallet — the dev node funds this seed at genesis.
 // Demo-only; never use outside a throwaway local network.
