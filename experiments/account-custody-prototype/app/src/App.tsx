@@ -310,14 +310,17 @@ function journeyProgress(ledger: Ledger | null, account: PassportAccount | null)
 }
 
 function BrandMark(props: { large?: boolean }) {
+  // Crescent marque (sketch 005). The mask carves a true crescent so the
+  // glyph works on any background; the id must be unique per instance.
+  const maskId = React.useId();
   return (
     <div className={`brand ${props.large ? 'brand-large' : ''}`}>
       <svg className="brand-glyph" viewBox="0 0 32 32" aria-hidden="true">
-        <rect x="1.5" y="1.5" width="29" height="29" rx="8" />
-        <path
-          className="brand-moon"
-          d="M20.8 7.4a9.4 9.4 0 1 0 3.6 13.8 7.6 7.6 0 0 1-3.6-13.8z"
-        />
+        <mask id={maskId}>
+          <rect width="32" height="32" fill="white" />
+          <circle cx="21.2" cy="11.8" r="10.6" fill="black" />
+        </mask>
+        <circle cx="16" cy="16" r="14.5" fill="#d92c25" mask={`url(#${maskId})`} />
       </svg>
       <div className="brand-words">
         <span className="brand-name">Midnight Passport</span>
