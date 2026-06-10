@@ -72,6 +72,10 @@ export default defineConfig({
   },
   server: {
     port: 5173,
+    // Tunnel hostnames for phone demos (see BROWSER-PROVING-SCOPE.md):
+    // WebAuthn needs HTTPS + a real hostname, so the phone reaches the dev
+    // server through e.g. `cloudflared tunnel --url http://localhost:5173`.
+    allowedHosts: ['.trycloudflare.com', '.ngrok-free.app', '.ts.net'],
     fs: { allow: [path.resolve(__dirname, '..')] },
     proxy: {
       '/indexer': {
