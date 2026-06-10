@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { PassportAccount } from '../../../src/wallet/account.js';
 import { deviceCommitment } from '../../../src/wallet/contract.js';
@@ -8,7 +8,20 @@ import type { Midnight } from '../lib/midnight.js';
 import { compiledAccountContract } from '../lib/providers.js';
 import { createPasskey, deriveDeviceSecret, deriveDevModeSecret } from '../lib/passkey.js';
 import type { Session } from '../lib/session.js';
-import { ActionButton } from '../ui.js';
+import { ActionButton, Chip } from '../ui.js';
+
+/** Resolves to true iff a contract exists at `address` on the current chain.
+    Guards against connecting to a session from a reset localnet — that
+    connect would otherwise wait forever for indexer state that never comes. */
+async function contractExists(mid: Midnight, address: string): Promise<boolean> {
+  try {
+    const state = await mid.accountProviders.publicDataProvider.queryContractState(address);
+    return state != null;
+  } catch {
+    // Indexer hiccup — do not block the unlock attempt on it.
+    return true;
+  }
+}
 
 export function OnboardView(props: {
   mid: Midnight;
@@ -23,6 +36,20 @@ export function OnboardView(props: {
   const [devMode, setDevMode] = useState(false);
   const [passphrase, setPassphrase] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [sessionStale, setSessionStale] = useState(false);
+
+  // Proactively check that the remembered account still exists — a reset
+  // localnet keeps the browser session but loses the contract.
+  useEffect(() => {
+    if (!session) return;
+    let stop = false;
+    contractExists(mid, session.accountAddress).then((exists) => {
+      if (!stop && !exists) setSessionStale(true);
+    });
+    return () => {
+      stop = true;
+    };
+  }, [mid, session]);
 
   const deviceSecretForOnboarding = async (): Promise<{
     secret: Uint8Array;
@@ -58,6 +85,16 @@ export function OnboardView(props: {
         </div>
         <div className="onboard-cards">
           <div className="panel onboard-card">
+            {sessionStale && (
+              <div className="caveat">
+                <Chip tone="warn">not on this chain</Chip>
+                <p>
+                  No contract exists at this address on the current localnet — the chain was
+                  probably reset since this account was created. Forget this account below and
+                  create a new one.
+                </p>
+              </div>
+            )}
             {session.devMode && (
               <label className="field">
                 <span className="field-label">passphrase</span>
@@ -75,6 +112,11 @@ export function OnboardView(props: {
               onError={setError}
               onRun={async () => {
                 setError(null);
+                if (!(await contractExists(mid, session.accountAddress))) {
+                  throw new Error(
+                    'account contract not found on this chain — the localnet was reset; forget this account and onboard again',
+                  );
+                }
                 const secret = session.devMode
                   ? await deriveDevModeSecret(passphrase)
                   : await deriveDeviceSecret(session.passkey);
@@ -207,6 +249,9 @@ export function OnboardView(props: {
               onError={setError}
               onRun={async () => {
                 setError(null);
+                if (!(await contractExists(mid, address.trim()))) {
+                  throw new Error('no contract found at this address on the current chain');
+                }
                 const secret = devMode
                   ? await deriveDevModeSecret(passphrase)
                   : await deriveDeviceSecret();
