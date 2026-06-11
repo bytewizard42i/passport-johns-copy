@@ -6,9 +6,12 @@ iteration, gives the canvases evidence, and is explicitly revisitable. Where
 a decision deliberately diverges from the expected v1.0 answer, the
 divergence and the migration seam are named.
 
-Evaluated against `midnight-node:0.22.5`, `compact` 0.30.0,
+Originally evaluated against `midnight-node:0.22.5`, `compact` 0.30.0,
 `midnight-js` 4.0.4 (the stack proven by
-`experiments/contract-custody-feasibility/`).
+`experiments/contract-custody-feasibility/`); since revalidated in full
+(unit, lifecycle, and end-to-end suites) on `midnight-node:1.0.0`,
+`indexer-standalone:4.3.3`, `proof-server:8.1.0`, `compact` 0.31.0
+(language 0.23, runtime 0.16.0), and `midnight-js` 4.1.1.
 
 ## C1 — Account-custody contract
 
