@@ -1,0 +1,49 @@
+{
+  "test": "F4",
+  "name": "ttl-expiry",
+  "verdict": "PASS",
+  "errorCode": "ledger-182",
+  "note": "TTL-expired round-trip rejected at stage 'submit' with ledger-182.",
+  "evidence": {
+    "fundingTx": "00e6d48712d6e82f8648c8ba874b17aef2fc58c0d2fe2dce96ce33feedf38ba885",
+    "userSeed": "5f655a8a6780fe2d233427cfe5e5d7b8321a7feb420ee3836070cedd9628c98e",
+    "userTtlMs": 30000,
+    "sponsorDelayMs": 90000,
+    "failedAtStage": "submit",
+    "error": {
+      "name": "(FiberFailure) SubmissionError",
+      "message": "Transaction submission error",
+      "stack": "SubmissionError: Transaction submission error\n    at file:///Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/dust-sponsorship-feasibility/node_modules/@midnight-ntwrk/wallet-sdk-capabilities/dist/submission/submissionService.js:31:279\n    at /Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/dust-sponsorship-feasibility/node_modules/effect/src/internal/core.ts:1078:35\n    at <anonymous> (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/dust-sponsorship-feasibility/node_modules/effect/src/internal/fiberRuntime.ts:1161:41)\n    at body (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/dust-sponsorship-feasibility/node_modules/effect/src/Utils.ts:786:14)\n    at FiberRuntime.Sync (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/dust-sponsorship-feasibility/node_modules/effect/src/internal/fiberRuntime.ts:1161:19)\n    at <anonymous> (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/dust-sponsorship-feasibility/node_modules/effect/src/internal/fiberRuntime.ts:1398:53)\n    at Object.f (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/dust-sponsorship-feasibility/node_modules/effect/src/internal/tracer.ts:101:19)",
+      "cause": null
+    },
+    "nodeRejectionLines": [
+      "2026-06-11 14:40:22        RPC-CORE: submitAndWatchExtrinsic(extrinsic: Extrinsic): ExtrinsicStatus:: 1010: Invalid Transaction: Custom error: 182",
+      "2026-06-11 14:40:22        RPC-CORE: submitAndWatchExtrinsic(extrinsic: Extrinsic): ExtrinsicStatus:: 1010: Invalid Transaction: Custom error: 182"
+    ],
+    "userAfter": {
+      "night": "1000000",
+      "dust": "0"
+    }
+  },
+  "ranAt": "2026-06-11T13:40:22.660Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.16.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:1.0.0"
+}

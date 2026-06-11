@@ -1,0 +1,45 @@
+{
+  "test": "F5",
+  "name": "insufficient-sponsor-dust",
+  "verdict": "PASS",
+  "errorCode": "insufficient-dust",
+  "note": "Broke sponsor failed locally at balanceFinalizedTransaction: Insufficient Funds: could not balance dust",
+  "evidence": {
+    "fundingTx": "006c9665ae2d9bcebb5882856d0c2142141227827684b5f037dbb0443b772b3584",
+    "userSeed": "5c0204651f2880c4f3db3db89f158a1bfb77f3d4a580da582415658ee8a9214c",
+    "brokeSponsorSeed": "f0e578ac8514fe38b3faa22454c9e494177e68fa1864ad72cb1d4c2ec7945a13",
+    "brokeSponsorDust": "0",
+    "brokeBefore": {
+      "night": "0",
+      "dust": "0"
+    },
+    "failedAtStage": "sponsor-balance",
+    "error": {
+      "name": "(FiberFailure) Wallet.InsufficientFunds",
+      "message": "Insufficient Funds: could not balance dust",
+      "stack": "Wallet.InsufficientFunds: Insufficient Funds: could not balance dust\n    at catch (file:///Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/dust-sponsorship-feasibility/node_modules/@midnight-ntwrk/wallet-sdk-dust-wallet/dist/v1/Transacting.js:279:32)\n    at <anonymous> (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/dust-sponsorship-feasibility/node_modules/effect/src/internal/core-effect.ts:108:32)\n    at body (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/dust-sponsorship-feasibility/node_modules/effect/src/Utils.ts:786:14)\n    at <anonymous> (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/dust-sponsorship-feasibility/node_modules/effect/src/internal/core-effect.ts:108:13)\n    at <anonymous> (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/dust-sponsorship-feasibility/node_modules/effect/src/internal/fiberRuntime.ts:1353:34)\n    at body (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/dust-sponsorship-feasibility/node_modules/effect/src/Utils.ts:786:14)\n    at FiberRuntime.Commit (/Users/nicolasdiprima/work/iog/midnight/passport/arc-passport/experiments/dust-sponsorship-feasibility/node_modules/effect/src/internal/fiberRuntime.ts:1353:12)",
+      "cause": null
+    }
+  },
+  "ranAt": "2026-06-11T13:30:45.902Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.16.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:1.0.0"
+}

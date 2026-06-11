@@ -1,0 +1,13 @@
+pragma language_version 0.23;
+
+import CompactStandardLibrary;
+
+// Minimal state-changing circuit for F2 and F6: produces a transaction whose
+// only economic component is the fee. No coins, no witnesses, no parameters.
+// The experiment is about who pays the Dust, not about contract design.
+
+export ledger round: Counter;
+
+export circuit bump_counter(): [] {
+  round.increment(1);
+}

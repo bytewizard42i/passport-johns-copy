@@ -1,0 +1,6 @@
+node_modules/
+dist/
+midnight-level-db/
+contracts/managed/
+deployment.json
+infra/.env

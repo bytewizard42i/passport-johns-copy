@@ -1,0 +1,48 @@
+{
+  "name": "dust-sponsorship-feasibility",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "Empirical feasibility experiment — does wallet-level DUST fee sponsorship via tokenKindsToBalance splitting land on Midnight v1?",
+  "scripts": {
+    "compile": "compact compile contracts/counter.compact contracts/managed/counter",
+    "build": "tsc",
+    "deploy": "tsx src/deploy.ts",
+    "test:f1": "tsx src/tests/f1-happy-path.ts",
+    "test:f2": "tsx src/tests/f2-zero-start-onboarding.ts",
+    "test:f3": "tsx src/tests/f3-rebalance-corruption.ts",
+    "test:f4": "tsx src/tests/f4-ttl-expiry.ts",
+    "test:f5": "tsx src/tests/f5-insufficient-sponsor-dust.ts",
+    "test:f6": "tsx src/tests/f6-sponsored-deployment.ts",
+    "compose-findings": "tsx src/compose-findings.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/ws": "^8.18.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@midnight-ntwrk/compact-runtime": "^0.16.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0",
+    "@scure/bip39": "^2.0.1",
+    "bip39": "^3.1.0",
+    "rxjs": "^7.8.2",
+    "ws": "^8.19.0"
+  }
+}
