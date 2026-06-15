@@ -1,0 +1,56 @@
+{
+  "test": "F2",
+  "name": "zero-start-onboarding",
+  "verdict": "PASS",
+  "txHash": "000125b4e78542c5b1a6c5c3c6f6ff89a107bd127aa0df63d561bf5236418917ae",
+  "note": "User with zero NIGHT and zero DUST landed a sponsored circuit call.",
+  "evidence": {
+    "userSeed": "29af0af700724bc207dc4578f472a57d210a2329336010f486a90b9f0815a2e6",
+    "contractAddress": "f8ed3d78f7164a0d010ae2a15e616798f4bdd303139805d3eb52031dae77054c",
+    "userBefore": {
+      "night": "0",
+      "dust": "0"
+    },
+    "userAfter": {
+      "night": "0",
+      "dust": "0"
+    },
+    "sponsorBefore": {
+      "night": "249999999100000",
+      "dust": "1249999989926498413795088"
+    },
+    "sponsorAfter": {
+      "night": "249999999100000",
+      "dust": "1249999986027988072465053"
+    },
+    "wireHandoffs": [
+      {
+        "serializable": true,
+        "bytes": 3380,
+        "roundtrip": false,
+        "deserializeError": "arg.charCodeAt is not a function"
+      }
+    ]
+  },
+  "ranAt": "2026-06-11T13:24:08.251Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.16.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:1.0.0"
+}

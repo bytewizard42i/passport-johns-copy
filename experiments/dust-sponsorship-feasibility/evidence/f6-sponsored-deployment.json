@@ -1,0 +1,57 @@
+{
+  "test": "F6",
+  "name": "sponsored-deployment",
+  "verdict": "PASS",
+  "txHash": "0086c65c9b67a1c61fcf6887496fb15a64b5cbb54256204f7e81589cc2f3e5d455",
+  "note": "Zero-token user deployed a contract; sponsor paid the dust fee.",
+  "evidence": {
+    "userSeed": "9425c1451be7b83a93040788595a03753f2c37dbc65d56fd58f4f122dd3a0edc",
+    "contractAddress": "a25e334de4043d29dcc2e512a9a012b48f848f0a7907e28054e7a29f7206ac46",
+    "indexerSeesContract": true,
+    "userBefore": {
+      "night": "0",
+      "dust": "0"
+    },
+    "userAfter": {
+      "night": "0",
+      "dust": "0"
+    },
+    "sponsorBefore": {
+      "night": "249999996200000",
+      "dust": "1249849126960602120930643"
+    },
+    "sponsorAfter": {
+      "night": "249999996200000",
+      "dust": "1249840446359450615453459"
+    },
+    "wireHandoffs": [
+      {
+        "serializable": true,
+        "bytes": 1806,
+        "roundtrip": false,
+        "deserializeError": "arg.charCodeAt is not a function"
+      }
+    ]
+  },
+  "ranAt": "2026-06-11T13:32:08.471Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.16.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:1.0.0"
+}

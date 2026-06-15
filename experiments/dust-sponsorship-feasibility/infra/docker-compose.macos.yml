@@ -1,0 +1,45 @@
+# macOS override — bridge networking with port mappings.
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.macos.yml up -d
+#
+# Host ports are offset by 10000 (19944/18088/16300) so this stack can run
+# beside the account-custody-prototype localnet (9944/8088/6300) — sharing
+# that stack means sharing its aged chain, and findDeployedContract grinds
+# through the whole history (observed: 240% CPU in wasm, unbounded memory
+# growth). The experiment wants a fresh, isolated chain anyway.
+
+services:
+  node:
+    network_mode: ""
+    networks: [midnight]
+    ports:
+      - "19944:9944"
+      - "30334:30333"
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9944/health']
+
+  indexer:
+    network_mode: ""
+    networks: [midnight]
+    ports:
+      - "18088:8088"
+    environment:
+      APP__INFRA__NODE__URL: 'ws://node:9944'
+      # indexer ≥4.3 runs a second (SPO) node connection with its own URL;
+      # without this it dials localhost inside the bridge network and the
+      # whole indexer exits once its reconnect budget runs out (~5 min).
+      APP__INFRA__SPO_NODE__URL: 'ws://node:9944'
+    depends_on:
+      node:
+        condition: service_healthy
+
+  proof-server:
+    network_mode: ""
+    networks: [midnight]
+    ports:
+      - "16300:6300"
+
+networks:
+  midnight:
+    driver: bridge

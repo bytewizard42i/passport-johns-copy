@@ -1,0 +1,53 @@
+{
+  "test": "F3",
+  "name": "rebalance-corruption",
+  "verdict": "PARTIAL",
+  "txHash": "00836fe62e81f125a089b11da29a9bdc3ed0b7d9875b494e2e4fb952eae7b707af",
+  "note": "Sponsor 'all' re-balance degraded gracefully to dust-only; tx accepted, user change intact (post-hoc check).",
+  "evidence": {
+    "fundingTx": "004a0fd611d577cb9434f3967f1fed32883865f387ca8c14b5e8ceea624b947491",
+    "userSeed": "3d21a02f0b4c3fcbd97970b9bda3e7bb88bd9cc13b112201011b9476b3490934",
+    "userBefore": {
+      "night": "1000000",
+      "dust": "0"
+    },
+    "userAfter": {
+      "night": "0",
+      "dust": "0"
+    },
+    "sponsorAfter": {
+      "night": "249999998100000",
+      "dust": "1249970221235299122256237"
+    },
+    "tutorialWarningConfirmed": false,
+    "postHocCheck": {
+      "method": "CHECK_SEED=<userSeed> tsx src/check-balance.ts (re-sync the F3 user wallet after settlement)",
+      "settledUserBalances": {
+        "night": "900000",
+        "dust": "0"
+      },
+      "conclusion": "The sponsor's tokenKindsToBalance:'all' re-balance left the user's already-balanced unshielded section untouched; outcome identical to F1. Tutorial double-spend warning refuted on facade 4.0.1 / node 1.0.0."
+    }
+  },
+  "ranAt": "2026-06-11T13:25:48.793Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.16.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:1.0.0"
+}

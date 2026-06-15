@@ -1,0 +1,57 @@
+{
+  "test": "F1",
+  "name": "happy-path",
+  "verdict": "PASS",
+  "txHash": "0030d3c27e518f5ca7e44e987928bf9633c4b1d4640139def1fc3ec6ef9d6117af",
+  "note": "Two-balanced tx accepted: user paid tokens, sponsor paid dust.",
+  "evidence": {
+    "fundingTx": "00e282764aa6b19372ae9f3801e40aeb503f3aefb251b81bde4d3457b5289ed8bc",
+    "userSeed": "8d17868d0f44339ffcd7c10ad92b5696362d9ac1d741ae3b15b4c02c5b5f1f62",
+    "fundAmount": "1000000",
+    "transferAmount": "100000",
+    "userBefore": {
+      "night": "1000000",
+      "dust": "0"
+    },
+    "userAfter": {
+      "night": "900000",
+      "dust": "0"
+    },
+    "sponsorBefore": {
+      "night": "249999999000000",
+      "dust": "1249999999999826393000000"
+    },
+    "sponsorAfter": {
+      "night": "249999999100000",
+      "dust": "1249984706050000000000000"
+    },
+    "wireHandoff": {
+      "serializable": true,
+      "bytes": 630,
+      "roundtrip": false,
+      "deserializeError": "arg.charCodeAt is not a function"
+    },
+    "ttl": "2026-06-11T13:32:33.662Z"
+  },
+  "ranAt": "2026-06-11T13:22:49.740Z",
+  "sdkVersions": {
+    "@midnight-ntwrk/compact-runtime": "^0.16.0",
+    "@midnight-ntwrk/ledger-v8": "^8.0.3",
+    "@midnight-ntwrk/midnight-js-contracts": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-http-client-proof-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-indexer-public-data-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-network-id": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-node-zk-config-provider": "^4.0.4",
+    "@midnight-ntwrk/midnight-js-types": "^4.0.4",
+    "@midnight-ntwrk/wallet-api": "^5.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^3.1.1",
+    "@midnight-ntwrk/wallet-sdk-dust-wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-facade": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^3.0.2",
+    "@midnight-ntwrk/wallet-sdk-shielded": "^3.0.0",
+    "@midnight-ntwrk/wallet-sdk-unshielded-wallet": "^3.0.0",
+    "@midnight-ntwrk/zswap": "^4.0.0"
+  },
+  "nodeVersion": "midnightntwrk/midnight-node:1.0.0"
+}
