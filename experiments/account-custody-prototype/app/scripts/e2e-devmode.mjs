@@ -106,8 +106,11 @@ try {
   await clickButtonContaining('Deposit into pool');
   await waitForText('Deposit amount', 60_000);
   await clickButton('Continue - choose source');
-  await waitForText('Passport localnet wallet', 60_000);
-  await clickButtonContaining('Continue with Passport localnet wallet');
+  await waitForText('Dynamic 1am connector', 60_000);
+  await waitForText('getUnshieldedAddress()', 60_000);
+  await waitForText('getShieldedAddresses()', 60_000);
+  await waitForText('getDustAddress()', 60_000);
+  await clickButtonContaining('Continue with 1am connector');
   console.log('… proving deposit_night through the demo prover');
   await waitForText('Deposited into your Passport account contract', 300_000);
   await clickButton('Continue - claim Night ID');

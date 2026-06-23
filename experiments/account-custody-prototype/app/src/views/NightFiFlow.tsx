@@ -7,6 +7,10 @@ import {
   normalizeAlias,
   saveAlias,
 } from '../lib/session.js';
+import {
+  loadDynamicMidnightState,
+  type DynamicMidnightState,
+} from '../lib/dynamicMidnight.js';
 
 type Scene = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 type PoolKey = 'retail' | 'accredited';
@@ -75,6 +79,9 @@ const fmtUsd = (value: number | string) => {
 const fmtUsdDec = (n: number) =>
   `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
+const shortMiddle = (value: string, head = 16, tail = 10) =>
+  value.length > head + tail + 3 ? `${value.slice(0, head)}...${value.slice(-tail)}` : value;
+
 export function NightFiFlowView({
   ctx,
   onOpenCustody,
@@ -99,6 +106,8 @@ export function NightFiFlowView({
   const [txId, setTxId] = useState('');
   const [busy, setBusy] = useState('');
   const [error, setError] = useState('');
+  const [dynamicState, setDynamicState] = useState<DynamicMidnightState | null>(null);
+  const [dynamicError, setDynamicError] = useState('');
   const [positions, setPositions] = useState<Position[]>(() => {
     try {
       return JSON.parse(localStorage.getItem('passport-nightfi-positions') ?? '[]') as Position[];
@@ -114,6 +123,21 @@ export function NightFiFlowView({
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [scene]);
+
+  useEffect(() => {
+    let cancelled = false;
+    setDynamicError('');
+    loadDynamicMidnightState(ctx)
+      .then((state) => {
+        if (!cancelled) setDynamicState(state);
+      })
+      .catch((e: any) => {
+        if (!cancelled) setDynamicError(String(e?.message ?? e));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [ctx.mid, ctx.ledger, ctx.session.accountAddress]);
 
   useEffect(() => {
     if (positions.length === 0) return;
@@ -157,7 +181,7 @@ export function NightFiFlowView({
     setTxId('');
     setTxConfirms(0);
     setTxStatus('confirming');
-    setTxStatusText('Depositing from Passport localnet wallet...');
+    setTxStatusText('Depositing through the 1am connector demo path...');
     beginTask('Depositing Night into the NightFi vault', 'deposit_night');
     try {
       const depositValue = BigInt(Math.max(1, Math.floor(Number(amount))));
@@ -298,6 +322,8 @@ export function NightFiFlowView({
       {showSource && (
         <SourceModal
           amount={amount}
+          dynamicState={dynamicState}
+          dynamicError={dynamicError}
           onClose={() => {
             setShowSource(false);
             setScene(0);
@@ -588,34 +614,155 @@ function DepositModal(props: {
 
 function SourceModal(props: {
   amount: string;
+  dynamicState: DynamicMidnightState | null;
+  dynamicError: string;
   onClose: () => void;
   onContinue: () => void;
 }) {
   return (
     <div className="nf-mb" onClick={props.onClose}>
-      <div className="nf-modal" onClick={(e) => e.stopPropagation()}>
+      <div className="nf-modal nf-source-modal" onClick={(e) => e.stopPropagation()}>
         <ModalHead title="Step 02 · Source funds" onClose={props.onClose} />
         <div className="nf-modal-body">
           <p className="nf-small-copy">
-            Bridging <b>{fmtUsd(props.amount)}</b> USDC to your Night vault through Passport localnet.
+            Bridging <b>{fmtUsd(props.amount)}</b> USDC through the Dynamic Midnight connector
+            path. The demo mirrors the supported 1am flow and keeps social-auth Midnight wallets
+            disabled until embedded wallet state ships.
           </p>
-          <div className="nf-witem selected">
-            <div className="nf-wicon">P</div>
+          <div className="nf-witem selected nf-dynamic-wallet">
+            <div className="nf-wicon">1A</div>
             <div className="nf-winfo">
               <div className="nf-wname">
-                Passport localnet wallet <span className="nf-recommended">Recommended</span>
+                Dynamic 1am connector <span className="nf-recommended">Supported today</span>
               </div>
-              <div className="nf-waddr">Passkey account · account-custody contract</div>
+              <div className="nf-waddr">@dynamic-labs/midnight · MidnightWalletConnectors</div>
             </div>
             <div className="nf-wbal">
               <div className="nf-wbal-lbl">Connect</div>
             </div>
           </div>
+          <DynamicConnectorPanel state={props.dynamicState} error={props.dynamicError} />
+          <div className="nf-witem nf-witem-disabled">
+            <div className="nf-wicon muted">S</div>
+            <div className="nf-winfo">
+              <div className="nf-wname">
+                Social-auth embedded wallet <span className="nf-recommended muted">Rolling out</span>
+              </div>
+              <div className="nf-waddr">
+                No usable Midnight wallet state yet; 1am is the working demo path.
+              </div>
+            </div>
+          </div>
           <button className="nf-btn" onClick={props.onContinue}>
-            Continue with Passport localnet wallet {'->'}
+            Continue with 1am connector {'->'}
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+function DynamicConnectorPanel({
+  state,
+  error,
+}: {
+  state: DynamicMidnightState | null;
+  error: string;
+}) {
+  if (error) {
+    return (
+      <div className="nf-dynamic-panel">
+        <div className="nf-dynamic-head">
+          <span>Connector state</span>
+          <span className="bad">needs wallet sync</span>
+        </div>
+        <div className="nf-dynamic-error">{error}</div>
+      </div>
+    );
+  }
+
+  if (!state) {
+    return (
+      <div className="nf-dynamic-panel">
+        <div className="nf-dynamic-head">
+          <span>Connector state</span>
+          <span>syncing...</span>
+        </div>
+        <div className="nf-dynamic-loading">Resolving Midnight address surfaces...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="nf-dynamic-panel">
+      <div className="nf-dynamic-head">
+        <span>Connector state</span>
+        <span>3 address surfaces</span>
+      </div>
+      <div className="nf-import-line">{state.importLine}</div>
+      <div className="nf-surface-list">
+        <SurfaceRow
+          method="getUnshieldedAddress()"
+          label="Unshielded deposit address"
+          value={state.addresses.unshieldedAddress}
+        />
+        <SurfaceRow
+          method="getShieldedAddresses()"
+          label="Shielded address plus coin/encryption public keys"
+          value={state.addresses.shieldedAddress}
+        />
+        <SurfaceRow
+          method="getDustAddress()"
+          label="DUST fee address"
+          value={state.addresses.dustAddress}
+        />
+      </div>
+      <div className="nf-balance-grid">
+        <BalanceCell
+          label="Unshielded"
+          symbol={state.balances.unshielded.symbol}
+          value={state.balances.unshielded.amount}
+          detail={`decimals ${state.balances.unshielded.decimals}`}
+        />
+        <BalanceCell
+          label="Shielded"
+          symbol={state.balances.shielded.symbol}
+          value={state.balances.shielded.amount}
+          detail={`token ${state.balances.shielded.tokenKey}`}
+        />
+        <BalanceCell
+          label="Dust"
+          symbol={state.balances.dust.symbol}
+          value={state.balances.dust.amount}
+          detail={`decimals ${state.balances.dust.decimals}`}
+        />
+      </div>
+    </div>
+  );
+}
+
+function SurfaceRow(props: { method: string; label: string; value: string }) {
+  return (
+    <div className="nf-surface-row">
+      <div>
+        <div className="nf-surface-method">{props.method}</div>
+        <div className="nf-surface-label">{props.label}</div>
+      </div>
+      <div className="nf-surface-value" title={props.value}>
+        {shortMiddle(props.value)}
+      </div>
+    </div>
+  );
+}
+
+function BalanceCell(props: { label: string; symbol: string; value: string; detail: string }) {
+  return (
+    <div className="nf-bal-cell">
+      <div className="nf-bal-label">{props.label}</div>
+      <div className="nf-bal-value">
+        {props.value} <span>{props.symbol}</span>
+      </div>
+      <div className="nf-bal-detail">{props.detail}</div>
     </div>
   );
 }

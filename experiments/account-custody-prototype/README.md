@@ -95,6 +95,21 @@ from the browser) and proves one `deposit_night` through the configured
 demo prover. The reliable local-call default is the Docker proof server;
 add `?prover=browser` to the URL to exercise the experimental in-tab prover.
 
+## Dynamic Midnight demo path
+
+This branch models the currently supported Dynamic path as a 1am connector
+flow. The package-level setup is:
+
+```ts
+import { MidnightWalletConnectors } from "@dynamic-labs/midnight";
+```
+
+The source step surfaces the three address APIs that a Midnight dApp needs:
+`getUnshieldedAddress()`, `getShieldedAddresses()`, and `getDustAddress()`.
+It also shows balances as three separate objects: unshielded NIGHT, shielded
+NIGHT, and DUST. Social-auth embedded Midnight wallets are intentionally shown
+as pending rollout; today the supported end-to-end path is the 1am connector.
+
 ## Caveats (prototype, not production)
 
 - Recovery shares are plaintext public ledger state — TODO(PVSS), see

@@ -3443,7 +3443,7 @@ body[data-explain='1'] .x {
 .nf-mb {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 180;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3462,6 +3462,10 @@ body[data-explain='1'] .x {
   background: var(--bg-elev);
   box-shadow: var(--shadow-md);
   animation: nf-modal-in 0.25s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+.nf-source-modal {
+  max-width: 720px;
 }
 
 @keyframes nf-modal-in {
@@ -3687,12 +3691,20 @@ body[data-explain='1'] .x {
 }
 
 .nf-wicon {
+  display: grid;
+  flex: 0 0 auto;
   width: 40px;
   height: 40px;
+  place-items: center;
   border-radius: 10px;
   background: var(--accent);
   color: var(--accent-text);
   font-weight: 800;
+}
+
+.nf-wicon.muted {
+  background: var(--bg-2);
+  color: var(--text-3);
 }
 
 .nf-winfo {
@@ -3726,6 +3738,139 @@ body[data-explain='1'] .x {
 .nf-wbal {
   color: var(--text-3);
   font-size: 11px;
+}
+
+.nf-dynamic-wallet {
+  margin-top: 16px;
+}
+
+.nf-witem-disabled {
+  margin-top: 12px;
+  opacity: 0.72;
+}
+
+.nf-recommended.muted {
+  background: var(--bg-2);
+  color: var(--text-3);
+}
+
+.nf-dynamic-panel {
+  margin-top: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line-1);
+  border-radius: 12px;
+  background: var(--bg-1);
+}
+
+.nf-dynamic-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--line-1);
+  padding: 12px 14px;
+  color: var(--text-3);
+  font: 700 10px/1.2 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.nf-dynamic-head .bad {
+  color: var(--danger);
+}
+
+.nf-import-line,
+.nf-dynamic-loading,
+.nf-dynamic-error,
+.nf-dynamic-note {
+  margin: 12px 14px;
+  border: 1px solid var(--line-1);
+  border-radius: 8px;
+  background: var(--bg-0);
+  color: var(--text-2);
+  font: 600 11px/1.45 var(--font-mono);
+  overflow-wrap: anywhere;
+  padding: 10px 12px;
+}
+
+.nf-dynamic-error {
+  color: var(--danger);
+}
+
+.nf-surface-list {
+  border-top: 1px solid var(--line-1);
+}
+
+.nf-surface-row {
+  display: grid;
+  grid-template-columns: minmax(190px, 0.95fr) minmax(0, 1.25fr);
+  gap: 14px;
+  align-items: center;
+  border-bottom: 1px solid var(--line-1);
+  padding: 12px 14px;
+}
+
+.nf-surface-method {
+  color: var(--text-0);
+  font: 700 11px/1.3 var(--font-mono);
+}
+
+.nf-surface-label {
+  margin-top: 3px;
+  color: var(--text-3);
+  font-size: 11px;
+}
+
+.nf-surface-value {
+  min-width: 0;
+  border: 1px solid var(--line-1);
+  border-radius: 7px;
+  background: var(--bg-elev);
+  color: var(--text-1);
+  font: 600 11px/1.3 var(--font-mono);
+  overflow: hidden;
+  padding: 8px 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nf-balance-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  padding: 14px;
+}
+
+.nf-bal-cell {
+  border: 1px solid var(--line-1);
+  border-radius: 10px;
+  background: var(--bg-elev);
+  padding: 12px;
+}
+
+.nf-bal-label {
+  color: var(--text-3);
+  font: 700 10px/1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.nf-bal-value {
+  margin-top: 7px;
+  color: var(--text-0);
+  font: 700 17px/1.1 var(--font-mono);
+}
+
+.nf-bal-value span,
+.nf-bal-detail {
+  color: var(--text-3);
+  font-size: 10px;
+}
+
+.nf-bal-detail {
+  margin-top: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .nf-tx-flow {
@@ -4157,6 +4302,10 @@ body[data-explain='1'] .x {
   gap: 8px;
   width: min(620px, calc(100vw - 36px));
   pointer-events: none;
+}
+
+.nightfi-page:has(.nf-mb) .nf-demo-docks {
+  display: none;
 }
 
 .nf-demo-docks > * {

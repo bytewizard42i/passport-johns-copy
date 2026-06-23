@@ -124,11 +124,14 @@ try {
   await shot('m03-amount');
 
   await clickButton('Continue - choose source');
-  await waitForText('Passport localnet wallet', 60_000);
+  await waitForText('Dynamic 1am connector', 60_000);
+  await waitForText('getUnshieldedAddress()', 60_000);
+  await waitForText('getShieldedAddresses()', 60_000);
+  await waitForText('getDustAddress()', 60_000);
   await sleep(700);
   await shot('m04-source');
 
-  await clickButtonContaining('Continue with Passport localnet wallet');
+  await clickButtonContaining('Continue with 1am connector');
   await sleep(6_000); // mid-prove: dock live with the on-device chip
   await shot('m05-bridge-proving');
   await waitForText('Deposited into your Passport account contract', 300_000);

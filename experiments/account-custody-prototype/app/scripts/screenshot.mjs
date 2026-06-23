@@ -146,12 +146,15 @@ try {
 
   // ——— source funds ———
   await clickButton('Continue - choose source');
-  await waitForText('Passport localnet wallet', 60_000);
+  await waitForText('Dynamic 1am connector', 60_000);
+  await waitForText('getUnshieldedAddress()', 60_000);
+  await waitForText('getShieldedAddresses()', 60_000);
+  await waitForText('getDustAddress()', 60_000);
   await sleep(700);
   await shot('05-source');
 
   // ——— real custody deposit ———
-  await clickButtonContaining('Continue with Passport localnet wallet');
+  await clickButtonContaining('Continue with 1am connector');
   console.log('… proving deposit_night');
   await sleep(8_000);
   await shot('06-bridge-proving');
