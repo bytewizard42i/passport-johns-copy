@@ -1,7 +1,7 @@
-// Headless end-to-end check of the browser stack using dev mode (no
-// passkey): onboard (deploy from the browser) and deposit Night (a real
-// circuit call proved through the /proof proxy). WebAuthn flows still need
-// a human.
+// Headless end-to-end check of the local NightFi demo stack using dev mode (no
+// passkey): onboard, choose a pool, deposit Night through the Passport account
+// contract, claim a local Night ID, deploy a staged position, and reach the
+// dashboard. WebAuthn flows still need a human.
 //
 // Usage: node scripts/e2e-devmode.mjs [url]
 
@@ -20,19 +20,73 @@ page.on('console', (msg) => {
 
 const waitForText = async (text, timeout) => {
   await page.waitForFunction(
-    (t) => document.body.innerText.includes(t),
+    (t) => document.body.innerText.toLowerCase().includes(t.toLowerCase()),
     { timeout, polling: 1000 },
     text,
   );
   console.log(`✓ saw: ${text}`);
 };
 
+const waitForButton = async (matcher, value, timeout = 60_000) => {
+  await page.waitForFunction(
+    ({ kind, value: v }) => {
+      const visible = (el) => {
+        const style = window.getComputedStyle(el);
+        return el.getClientRects().length > 0 && style.visibility !== 'hidden' && style.display !== 'none';
+      };
+      return [...document.querySelectorAll('button')].some((b) => {
+        const text = b.textContent.trim();
+        const matches = kind === 'exact' ? text === v : text.includes(v);
+        return matches && visible(b) && !b.disabled;
+      });
+    },
+    { timeout, polling: 500 },
+    { kind: matcher, value },
+  );
+};
+
 const clickButton = async (label) => {
+  await waitForButton('exact', label);
   await page.evaluate((l) => {
-    const btn = [...document.querySelectorAll('button')].find((b) => b.textContent.trim() === l);
+    const visible = (el) => {
+      const style = window.getComputedStyle(el);
+      return el.getClientRects().length > 0 && style.visibility !== 'hidden' && style.display !== 'none';
+    };
+    const btn = [...document.querySelectorAll('button')].find(
+      (b) => visible(b) && !b.disabled && b.textContent.trim() === l,
+    );
     if (!btn) throw new Error(`no button: ${l}`);
     btn.click();
   }, label);
+};
+
+const clickButtonContaining = async (text, timeout) => {
+  await waitForButton('contains', text, timeout);
+  await page.evaluate((t) => {
+    const visible = (el) => {
+      const style = window.getComputedStyle(el);
+      return el.getClientRects().length > 0 && style.visibility !== 'hidden' && style.display !== 'none';
+    };
+    const btn = [...document.querySelectorAll('button')].find(
+      (b) => visible(b) && !b.disabled && b.textContent.trim().includes(t),
+    );
+    if (!btn) throw new Error(`no button containing: ${t}`);
+    btn.click();
+  }, text);
+};
+
+const setFirstTextInput = async (value) => {
+  const input = await page.$('.onboard-card .field input:not([type="password"])');
+  if (!input) throw new Error('no onboarding name input');
+  await page.$eval(
+    '.onboard-card .field input:not([type="password"])',
+    (el, nextValue) => {
+      const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+      setter?.call(el, nextValue);
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+    },
+    value,
+  );
 };
 
 try {
@@ -40,21 +94,33 @@ try {
   await waitForText('CREATE YOUR PASSPORT', 120_000);
 
   // Dev-mode onboarding.
+  await setFirstTextInput('bubbles');
   await page.click('input[type="checkbox"]');
   await page.type('input[type="password"]', 'e2e-test-passphrase');
   await clickButton('Create account (dev mode)');
   console.log('… deploying account from the browser (this takes a while)');
-  await waitForText('PASSPORT ACCOUNT', 300_000);
+  await waitForText('Earn yield, privately.', 300_000);
+  await waitForText('Passport account', 60_000);
 
-  // One real circuit call: deposit 1000 Night.
-  await clickButton('Deposit Night');
-  console.log('… proving deposit_night in the browser stack');
-  await page.waitForFunction(
-    () => /night|01000/.test(document.body.innerText) &&
-      [...document.querySelectorAll('td')].some((td) => td.textContent.trim() === '1000'),
-    { timeout: 300_000, polling: 2000 },
-  );
-  console.log('✓ deposit_night landed — night balance 1000 visible in the ledger table');
+  // One real circuit call: deposit 1000 Night through the account-custody contract.
+  await clickButtonContaining('Deposit into pool');
+  await waitForText('Deposit amount', 60_000);
+  await clickButton('Continue - choose source');
+  await waitForText('Passport localnet wallet', 60_000);
+  await clickButtonContaining('Continue with Passport localnet wallet');
+  console.log('… proving deposit_night through the demo prover');
+  await waitForText('Deposited into your Passport account contract', 300_000);
+  await clickButton('Continue - claim Night ID');
+
+  await waitForText('Claim your Night ID.', 60_000);
+  await clickButton('Confirm Night ID');
+  await waitForText('Deploy into pool.', 60_000);
+  await clickButton('Sign deposit');
+  await waitForText('Position opened', 60_000);
+  await clickButtonContaining('View dashboard');
+  await waitForText('Retail Yield Pool', 60_000);
+  await waitForText('Active', 60_000);
+  console.log('✓ NightFi flow completed — dashboard shows an active Retail Yield Pool position');
 
   console.log('E2E PASS');
 } catch (e) {

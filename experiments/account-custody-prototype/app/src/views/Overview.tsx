@@ -16,7 +16,10 @@ export function OverviewView({ ctx }: { ctx: AppContext }) {
   const epoch = ledger ? ledger.device_epoch : 0n;
   const activeGrants = grants.filter(([, g]) => g.active && g.epoch === epoch).length;
   const shares = ledger ? Number(ledger.recovery_shares.size()) : 0;
-  const holder = (session.devMode ? 'bearer' : (session.passkey?.label ?? 'bearer')).toUpperCase();
+  const holder = (
+    session.alias ??
+    (session.devMode ? 'bearer' : (session.passkey?.label ?? 'bearer'))
+  ).toUpperCase();
   const reissued = epoch > 0n;
   const nightTotal = ledger
     ? [...ledger.night_balances].reduce((acc, [, v]) => acc + v, 0n)

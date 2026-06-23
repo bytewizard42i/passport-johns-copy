@@ -58,6 +58,9 @@ npm run test:recovery            # share reconstruction → recover → old devi
 ## Demo app
 
 ```sh
+npm run demo                     # localnet + faucet + Vite, proof-server mode
+
+# or manually:
 npm run deploy                   # deploys the faucet, saves faucet-deployment.json
 cd app && npm install && npm run dev
 ```
@@ -88,8 +91,9 @@ deposits — the fee model is C24's problem, not this prototype's.
 Headless checks (drive the installed Chrome; passkeys excluded):
 `node scripts/smoke.mjs` boots the app and reports console errors;
 `node scripts/e2e-devmode.mjs` onboards in dev mode (deploys an account
-from the browser) and proves one `deposit_night` through the full
-browser stack.
+from the browser) and proves one `deposit_night` through the configured
+demo prover. The reliable local-call default is the Docker proof server;
+add `?prover=browser` to the URL to exercise the experimental in-tab prover.
 
 ## Caveats (prototype, not production)
 

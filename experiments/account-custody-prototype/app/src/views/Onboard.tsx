@@ -7,6 +7,7 @@ import { randomBytes32 } from '../../../src/wallet/hex.js';
 import type { Midnight } from '../lib/midnight.js';
 import { compiledAccountContract } from '../lib/providers.js';
 import { createPasskey, deriveDeviceSecret, deriveDevModeSecret } from '../lib/passkey.js';
+import { normalizeAlias, saveAlias } from '../lib/session.js';
 import type { Session } from '../lib/session.js';
 import { ActionButton, Chip } from '../ui.js';
 
@@ -74,6 +75,7 @@ export function OnboardView(props: {
     return (
       <div className="onboard-grid onboard-grid-narrow">
         <div className="onboard-copy">
+          <PassportShowcase label={session.alias ?? 'passport'} compact />
           <p className="eyebrow">Welcome back</p>
           <h1 className="hero-title">Unlock your passport.</h1>
           <p className="lede">
@@ -144,6 +146,7 @@ export function OnboardView(props: {
   return (
     <div className="onboard-grid">
       <div className="onboard-copy">
+        <PassportShowcase label={label || 'bubbles'} />
         {/* Verbatim heading — the e2e harness waits for its uppercased text. */}
         <p className="eyebrow">Create your passport</p>
         <h1 className="hero-title">One passkey becomes an on-chain account.</h1>
@@ -210,8 +213,10 @@ export function OnboardView(props: {
                 { deviceSecret: secret, recoverySecret },
               );
               log(`account deployed @ ${account.address}`);
+              const alias = normalizeAlias(label || 'passport-user');
+              saveAlias(alias, account.address);
               props.onConnected(
-                { accountAddress: account.address, ...partial },
+                { accountAddress: account.address, alias, ...partial },
                 account,
                 deviceCommitment(secret).toString(),
               );
@@ -271,6 +276,37 @@ export function OnboardView(props: {
             />
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function PassportShowcase(props: { label: string; compact?: boolean }) {
+  const display = (props.label || 'bubbles').trim().slice(0, 24);
+  return (
+    <div className={`passport-showcase ${props.compact ? 'passport-showcase-compact' : ''}`}>
+      <div className="passport-showcase-grid" />
+      <div className="passport-rings" />
+      <div className="passport-demo-card" aria-hidden="true">
+        <div className="passport-demo-top">
+          <span>MIDNIGHT</span>
+          <span>ACCOUNT</span>
+        </div>
+        <div className="passport-demo-mark">
+          <span />
+        </div>
+        <div className="passport-demo-bottom">
+          <small>ALIAS</small>
+          <strong>{display}.passport</strong>
+        </div>
+      </div>
+      <div className="passport-flow-dots" aria-hidden="true">
+        {['Passkey', 'Contract', 'Alias', 'Fund', 'Deploy'].map((item, index) => (
+          <span className={index <= 1 ? 'passport-flow-dot passport-flow-dot-active' : 'passport-flow-dot'} key={item}>
+            <i />
+            {item}
+          </span>
+        ))}
       </div>
     </div>
   );

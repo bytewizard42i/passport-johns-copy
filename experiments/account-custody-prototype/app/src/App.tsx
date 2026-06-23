@@ -11,6 +11,7 @@ import { useTxTask, dismissTask, type TxTask } from './lib/txTracker.js';
 import { Busy, Mono, Chip } from './ui.js';
 
 import { OnboardView } from './views/Onboard.js';
+import { NightFiFlowView } from './views/NightFiFlow.js';
 import { OverviewView } from './views/Overview.js';
 import { WalletPanel } from './views/WalletPanel.js';
 import { DevicesPanel } from './views/DevicesPanel.js';
@@ -38,11 +39,22 @@ export interface AppContext {
   goToView: (view: ViewId) => void;
 }
 
-export type ViewId = 'overview' | 'assets' | 'grants' | 'devices' | 'recovery';
+export type ViewId = 'flow' | 'overview' | 'assets' | 'grants' | 'devices' | 'recovery';
 
 // App navigation — five surfaces, no demo-flow numbering. The functional
 // labels double as the screenshot harness's navigation targets.
 const NAV: { id: ViewId; label: string; icon: React.ReactNode }[] = [
+  {
+    id: 'flow',
+    label: 'Token Flow',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+        <path d="M4 6h8a4 4 0 0 1 4 4v8" />
+        <path d="M4 6l3.5-3.5M4 6l3.5 3.5" />
+        <circle cx="16" cy="18" r="2.5" />
+      </svg>
+    ),
+  },
   {
     id: 'overview',
     label: 'Overview',
@@ -106,7 +118,7 @@ export default function App() {
   const [ledger, setLedger] = useState<Ledger | null>(null);
   const [logLines, setLogLines] = useState<string[]>([]);
   const [deviceCommitment, setDeviceCommitment] = useState<string | null>(null);
-  const [nav, setNav] = useState<ViewId>('overview');
+  const [nav, setNav] = useState<ViewId>('flow');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [explain, setExplain] = useState(() => localStorage.getItem('passport-explain') !== '0');
 
@@ -137,6 +149,8 @@ export default function App() {
           log(
             'browser proving enabled — ALL proofs (contract circuits, zswap, dust) are computed in this tab; no proof server.',
           );
+        } else {
+          log('local proof server enabled — reliable mode for the end-to-end demo.');
         }
       })
       .catch((e) => setBootError(String(e?.message ?? e)));
@@ -153,7 +167,7 @@ export default function App() {
     setAccount(null);
     setLedger(null);
     setDeviceCommitment(null);
-    setNav('overview');
+    setNav('flow');
   }, []);
 
   // Lock: drop the in-memory account handle (and with it the device secret's
@@ -164,7 +178,7 @@ export default function App() {
     setAccount(null);
     setLedger(null);
     setDeviceCommitment(null);
-    setNav('overview');
+    setNav('flow');
   }, [log]);
 
   const refreshLedger = useCallback(async () => {
@@ -266,7 +280,7 @@ export default function App() {
             setSession(s);
             setAccount(a);
             setDeviceCommitment(commitment ?? null);
-            setNav('overview');
+            setNav('flow');
           }}
           onReset={resetSession}
         />
@@ -294,6 +308,23 @@ export default function App() {
     setDeviceCommitment,
     goToView,
   };
+
+  if (nav === 'flow') {
+    return (
+      <div className="nightfi-page">
+        <NightFiFlowView
+          ctx={ctx}
+          onOpenCustody={() => setNav('assets')}
+          onDisconnect={resetSession}
+        />
+        <div className="nf-demo-docks">
+          <ProvingDock />
+          <ActivityDock lines={logLines} defaultOpen={false} />
+        </div>
+        <ExplainTip />
+      </div>
+    );
+  }
 
   const counts = navCounts(ledger);
 
@@ -486,7 +517,7 @@ function HeaderStrip(props: {
         data-x={
           BROWSER_PROVER
             ? 'Zero-knowledge proofs are computed on this device by a wasm prover. Transactions leave your hands already proven; no proof server sees your witnesses (P6).'
-            : 'Proofs are computed by the local Docker proof server. Add ?prover=server to a URL to force this mode; the default is on-device proving.'
+            : 'Proofs are computed by the local Docker proof server. Add ?prover=browser to opt into experimental on-device proving.'
         }
       >
         <ProverChip />
@@ -660,10 +691,16 @@ function fmtElapsed(ms: number): string {
   return s < 60 ? `${s}s` : `${Math.floor(s / 60)}m ${s % 60}s`;
 }
 
-function ActivityDock({ lines }: { lines: string[] }) {
+function ActivityDock({
+  lines,
+  defaultOpen,
+}: {
+  lines: string[];
+  defaultOpen?: boolean;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   // Collapsed by default on phones — vertical space is the scarce resource.
-  const [open, setOpen] = useState(() => window.innerWidth >= 700);
+  const [open, setOpen] = useState(() => defaultOpen ?? window.innerWidth >= 700);
   useEffect(() => {
     ref.current?.scrollTo({ top: ref.current.scrollHeight });
   }, [lines, open]);

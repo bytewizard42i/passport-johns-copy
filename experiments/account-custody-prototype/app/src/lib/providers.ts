@@ -31,17 +31,14 @@ import * as FaucetModule from '../../../contracts/managed/faucet/contract/index.
 import { proveStarted, proveEnded } from './txTracker.js';
 import { wasmProofProvider, wasmWalletProvingService } from './wasmProver.js';
 
-// The browser prover is the DEFAULT: everything — contract circuits, zswap,
-// dust — is proved in this tab by the zkir-v2 wasm prover (see
-// BROWSER-PROVING-SCOPE.md). No proof server is needed anywhere in the
-// stack. `?prover=server` opts back into the Docker proof server at
-// 127.0.0.1:6300 (works on localhost only — the server is unreachable from
-// tunnel/LAN origins).
+// The local demo defaults to the Docker proof server because it is the most
+// reliable path for live calls. `?prover=browser` opts into the experimental
+// in-tab zkir-v2 prover described in BROWSER-PROVING-SCOPE.md.
 const proverParam =
   typeof window !== 'undefined'
     ? new URLSearchParams(window.location.search).get('prover')
     : null;
-export const BROWSER_PROVER = proverParam !== 'server';
+export const BROWSER_PROVER = proverParam === 'browser';
 
 // Localnet genesis wallet — the dev node funds this seed at genesis.
 // Demo-only; never use outside a throwaway local network.

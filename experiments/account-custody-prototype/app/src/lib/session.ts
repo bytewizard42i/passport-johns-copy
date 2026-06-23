@@ -7,11 +7,19 @@ import type { PasskeyRef } from './passkey.js';
 
 export interface Session {
   accountAddress: string;
+  alias?: string;
   passkey?: PasskeyRef;
   devMode?: boolean;
 }
 
 const KEY = 'passport-demo-session';
+const ALIAS_KEY = 'passport-demo-aliases';
+
+export interface AliasRecord {
+  alias: string;
+  accountAddress: string;
+  claimedAt: string;
+}
 
 export function loadSession(): Session | null {
   try {
@@ -28,4 +36,41 @@ export function saveSession(s: Session): void {
 
 export function clearSession(): void {
   localStorage.removeItem(KEY);
+}
+
+export function loadAliases(): AliasRecord[] {
+  try {
+    const raw = localStorage.getItem(ALIAS_KEY);
+    return raw ? (JSON.parse(raw) as AliasRecord[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function loadAliasForAccount(accountAddress: string): AliasRecord | null {
+  return loadAliases().find((r) => r.accountAddress === accountAddress) ?? null;
+}
+
+export function saveAlias(alias: string, accountAddress: string): AliasRecord {
+  const normalized = normalizeAlias(alias);
+  const records = loadAliases().filter(
+    (r) => r.alias !== normalized && r.accountAddress !== accountAddress,
+  );
+  const record = {
+    alias: normalized,
+    accountAddress,
+    claimedAt: new Date().toISOString(),
+  };
+  localStorage.setItem(ALIAS_KEY, JSON.stringify([...records, record]));
+  return record;
+}
+
+export function normalizeAlias(alias: string): string {
+  const cleaned = alias
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+  return cleaned || 'passport-user';
 }
