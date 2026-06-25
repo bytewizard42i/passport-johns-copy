@@ -145,19 +145,17 @@ try {
 
   // ——— source funds ———
   await clickButton('Continue - choose source');
-  await waitForText('Dynamic 1am connector', 60_000);
-  await waitForText('getUnshieldedAddress()', 60_000);
-  await waitForText('getShieldedAddresses()', 60_000);
-  await waitForText('getDustAddress()', 60_000);
+  await waitForText('Localnet fee wallet', 60_000);
+  await waitForText('deposit_night', 60_000);
   await sleep(700);
   await shot('05-source');
 
   // ——— real custody deposit ———
-  await clickButtonContaining('Continue with 1am connector');
+  await clickButtonContaining('Deposit Night into custody');
   console.log('… proving deposit_night');
   await sleep(8_000);
   await shot('06-bridge-proving');
-  await waitForText('Deposited into your MN Passport custody account', 300_000);
+  await waitForText('Night deposited into your MN Passport custody account', 300_000);
   console.log('✓ deposit landed');
   await sleep(1200);
   await shot('07-bridge-confirmed');

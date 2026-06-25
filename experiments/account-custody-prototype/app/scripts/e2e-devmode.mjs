@@ -131,13 +131,11 @@ try {
   await clickButtonContaining('Deposit into pool');
   await waitForText('Deposit amount', 60_000);
   await clickButton('Continue - choose source');
-  await waitForText('Dynamic 1am connector', 60_000);
-  await waitForText('getUnshieldedAddress()', 60_000);
-  await waitForText('getShieldedAddresses()', 60_000);
-  await waitForText('getDustAddress()', 60_000);
-  await clickButtonContaining('Continue with 1am connector');
-  console.log('… proving deposit_night through the demo prover');
-  await waitForText('Deposited into your MN Passport custody account', 300_000);
+  await waitForText('Localnet fee wallet', 60_000);
+  await waitForText('deposit_night', 60_000);
+  await clickButtonContaining('Deposit Night into custody');
+  console.log('… proving deposit_night through the localnet custody path');
+  await waitForText('Night deposited into your MN Passport custody account', 300_000);
   await clickButton('Continue - verify Night ID');
 
   await waitForText('Verify your Night ID.', 60_000);

@@ -8,10 +8,6 @@ import {
   saveAlias,
 } from '../lib/session.js';
 import { registerIdentity } from '../lib/midnight.js';
-import {
-  loadDynamicMidnightState,
-  type DynamicMidnightState,
-} from '../lib/dynamicMidnight.js';
 
 type Scene = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 type PoolKey = 'retail' | 'accredited';
@@ -56,7 +52,7 @@ const STEPS = [
   'Choose pool',
   'Set amount',
   'Source funds',
-  'Bridge transaction',
+  'Custody deposit',
   'Verify Night ID',
   'Deploy capital',
   'Manage positions',
@@ -80,6 +76,12 @@ const fmtUsd = (value: number | string) => {
 const fmtUsdDec = (n: number) =>
   `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
+const fmtNight = (value: number | string) => {
+  const n = typeof value === 'string' ? Number(value) : value;
+  if (!Number.isFinite(n)) return '0 Night';
+  return `${Math.round(n).toLocaleString('en-US')} Night`;
+};
+
 const shortMiddle = (value: string, head = 16, tail = 10) =>
   value.length > head + tail + 3 ? `${value.slice(0, head)}...${value.slice(-tail)}` : value;
 
@@ -102,13 +104,11 @@ export function FoundationsFlowView({
   const [showTx, setShowTx] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [txStatus, setTxStatus] = useState<TxStatus>('awaiting');
-  const [txStatusText, setTxStatusText] = useState('Awaiting signature in wallet...');
+  const [txStatusText, setTxStatusText] = useState('Awaiting custody deposit...');
   const [txConfirms, setTxConfirms] = useState(0);
   const [txId, setTxId] = useState('');
   const [busy, setBusy] = useState('');
   const [error, setError] = useState('');
-  const [dynamicState, setDynamicState] = useState<DynamicMidnightState | null>(null);
-  const [dynamicError, setDynamicError] = useState('');
   const [positions, setPositions] = useState<Position[]>(() => {
     try {
       return JSON.parse(localStorage.getItem('passport-foundations-positions') ?? '[]') as Position[];
@@ -124,21 +124,6 @@ export function FoundationsFlowView({
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [scene]);
-
-  useEffect(() => {
-    let cancelled = false;
-    setDynamicError('');
-    loadDynamicMidnightState(ctx)
-      .then((state) => {
-        if (!cancelled) setDynamicState(state);
-      })
-      .catch((e: any) => {
-        if (!cancelled) setDynamicError(String(e?.message ?? e));
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [ctx.mid, ctx.ledger, ctx.session.accountAddress]);
 
   useEffect(() => {
     if (positions.length === 0) return;
@@ -182,7 +167,7 @@ export function FoundationsFlowView({
     setTxId('');
     setTxConfirms(0);
     setTxStatus('confirming');
-    setTxStatusText('Depositing through the 1am connector demo path...');
+    setTxStatusText('Submitting deposit_night from the localnet fee wallet...');
     beginTask('Depositing Night into the MN Passport vault', 'deposit_night');
     try {
       const depositValue = BigInt(Math.max(1, Math.floor(Number(amount))));
@@ -191,7 +176,7 @@ export function FoundationsFlowView({
       setTxId(id);
       setTxConfirms(12);
       setTxStatus('confirmed');
-      setTxStatusText('Deposited into your MN Passport custody account');
+      setTxStatusText('Night deposited into your MN Passport custody account');
       ctx.log(`passport deposit ${amount} -> tx ${id}`);
       await ctx.refreshLedger();
       completeTask(id);
@@ -257,7 +242,7 @@ export function FoundationsFlowView({
           txId,
         },
       ]);
-      ctx.log(`passport position opened: ${fmtUsd(amount)} -> ${activePool.name} ${activePool.serif}`);
+      ctx.log(`passport position opened: ${fmtNight(amount)} -> ${activePool.name} ${activePool.serif}`);
       setShowSuccess(true);
     } catch (e: any) {
       setError(String(e?.message ?? e));
@@ -342,8 +327,8 @@ export function FoundationsFlowView({
       {showSource && (
         <SourceModal
           amount={amount}
-          dynamicState={dynamicState}
-          dynamicError={dynamicError}
+          accountAddress={ctx.session.accountAddress}
+          walletNightTotal={ledgerNightTotal}
           onClose={() => {
             setShowSource(false);
             setScene(0);
@@ -490,7 +475,7 @@ function SceneYield({
 
       <div className="nf-market">
         <MarketCell label="Total value locked" value="$296.8M" delta="+2.4%" />
-        <MarketCell label="Custody balance" value={`${ledgerNightTotal} Night`} />
+        <MarketCell label="Custody balance" value={fmtNight(ledgerNightTotal.toString())} />
         <MarketCell label="Active depositors" value="14,892" />
         <MarketCell label="Yield distributed" value="$8.4M" />
       </div>
@@ -594,7 +579,7 @@ function DepositModal(props: {
           </div>
           <div className="nf-amt">
             <input value={props.amount} onChange={(e) => props.onAmount(e.target.value)} type="number" autoFocus />
-            <span className="nf-amt-cur">USDC</span>
+            <span className="nf-amt-cur">Night</span>
           </div>
           <div className="nf-quick">
             {presets.map((n) => (
@@ -610,7 +595,8 @@ function DepositModal(props: {
                 {isRetail ? 'Retail tier - open access' : 'Accredited tier - verification required'}
               </div>
               <div className="nf-banner-desc">
-                Local demo deposits the matching amount of Night into your MN Passport custody account.
+                This demo submits a real deposit_night transaction into your MN Passport custody
+                account on Midnight localnet.
               </div>
             </div>
           </div>
@@ -625,155 +611,48 @@ function DepositModal(props: {
 
 function SourceModal(props: {
   amount: string;
-  dynamicState: DynamicMidnightState | null;
-  dynamicError: string;
+  accountAddress: string;
+  walletNightTotal: bigint;
   onClose: () => void;
   onContinue: () => void;
 }) {
   return (
     <div className="nf-mb" onClick={props.onClose}>
       <div className="nf-modal nf-source-modal" onClick={(e) => e.stopPropagation()}>
-        <ModalHead title="Step 02 · Source funds" onClose={props.onClose} />
+        <ModalHead title="Step 02 · Fund custody" onClose={props.onClose} />
         <div className="nf-modal-body">
           <p className="nf-small-copy">
-            Bridging <b>{fmtUsd(props.amount)}</b> USDC through the Dynamic Midnight connector
-            path. The demo mirrors the supported 1am flow and keeps social-auth Midnight wallets
-            disabled until embedded wallet state ships.
+            Depositing <b>{fmtNight(props.amount)}</b> from the synced localnet fee wallet into your
+            MN Passport custody contract. This step is the real Midnight <code>deposit_night</code>
+            circuit call.
           </p>
-          <div className="nf-witem selected nf-dynamic-wallet">
-            <div className="nf-wicon">1A</div>
+          <div className="nf-witem selected">
+            <div className="nf-wicon">MN</div>
             <div className="nf-winfo">
               <div className="nf-wname">
-                Dynamic 1am connector <span className="nf-recommended">Supported today</span>
+                Localnet fee wallet <span className="nf-recommended">Synced</span>
               </div>
-              <div className="nf-waddr">@dynamic-labs/midnight · MidnightWalletConnectors</div>
+              <div className="nf-waddr">Genesis-funded wallet pays fees and funds custody.</div>
             </div>
             <div className="nf-wbal">
-              <div className="nf-wbal-lbl">Connect</div>
+              <div className="nf-wbal-lbl">Available</div>
+              <div className="nf-wbal-val">{props.walletNightTotal.toString()} Night</div>
             </div>
           </div>
-          <DynamicConnectorPanel state={props.dynamicState} error={props.dynamicError} />
-          <div className="nf-witem nf-witem-disabled">
-            <div className="nf-wicon muted">S</div>
+          <div className="nf-witem">
+            <div className="nf-wicon muted">AC</div>
             <div className="nf-winfo">
               <div className="nf-wname">
-                Social-auth embedded wallet <span className="nf-recommended muted">Rolling out</span>
+                MN Passport custody account <span className="nf-recommended muted">Destination</span>
               </div>
-              <div className="nf-waddr">
-                No usable Midnight wallet state yet; 1am is the working demo path.
-              </div>
+              <div className="nf-waddr" title={props.accountAddress}>{shortMiddle(props.accountAddress)}</div>
             </div>
           </div>
           <button className="nf-btn" onClick={props.onContinue}>
-            Continue with 1am connector {'->'}
+            Deposit Night into custody {'->'}
           </button>
         </div>
       </div>
-    </div>
-  );
-}
-
-function DynamicConnectorPanel({
-  state,
-  error,
-}: {
-  state: DynamicMidnightState | null;
-  error: string;
-}) {
-  if (error) {
-    return (
-      <div className="nf-dynamic-panel">
-        <div className="nf-dynamic-head">
-          <span>Connector state</span>
-          <span className="bad">needs wallet sync</span>
-        </div>
-        <div className="nf-dynamic-error">{error}</div>
-      </div>
-    );
-  }
-
-  if (!state) {
-    return (
-      <div className="nf-dynamic-panel">
-        <div className="nf-dynamic-head">
-          <span>Connector state</span>
-          <span>syncing...</span>
-        </div>
-        <div className="nf-dynamic-loading">Resolving Midnight address surfaces...</div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="nf-dynamic-panel">
-      <div className="nf-dynamic-head">
-        <span>Connector state</span>
-        <span>3 address surfaces</span>
-      </div>
-      <div className="nf-import-line">{state.importLine}</div>
-      <div className="nf-surface-list">
-        <SurfaceRow
-          method="getUnshieldedAddress()"
-          label="Unshielded deposit address"
-          value={state.addresses.unshieldedAddress}
-        />
-        <SurfaceRow
-          method="getShieldedAddresses()"
-          label="Shielded address plus coin/encryption public keys"
-          value={state.addresses.shieldedAddress}
-        />
-        <SurfaceRow
-          method="getDustAddress()"
-          label="DUST fee address"
-          value={state.addresses.dustAddress}
-        />
-      </div>
-      <div className="nf-balance-grid">
-        <BalanceCell
-          label="Unshielded"
-          symbol={state.balances.unshielded.symbol}
-          value={state.balances.unshielded.amount}
-          detail={`decimals ${state.balances.unshielded.decimals}`}
-        />
-        <BalanceCell
-          label="Shielded"
-          symbol={state.balances.shielded.symbol}
-          value={state.balances.shielded.amount}
-          detail={`token ${state.balances.shielded.tokenKey}`}
-        />
-        <BalanceCell
-          label="Dust"
-          symbol={state.balances.dust.symbol}
-          value={state.balances.dust.amount}
-          detail={`decimals ${state.balances.dust.decimals}`}
-        />
-      </div>
-    </div>
-  );
-}
-
-function SurfaceRow(props: { method: string; label: string; value: string }) {
-  return (
-    <div className="nf-surface-row">
-      <div>
-        <div className="nf-surface-method">{props.method}</div>
-        <div className="nf-surface-label">{props.label}</div>
-      </div>
-      <div className="nf-surface-value" title={props.value}>
-        {shortMiddle(props.value)}
-      </div>
-    </div>
-  );
-}
-
-function BalanceCell(props: { label: string; symbol: string; value: string; detail: string }) {
-  return (
-    <div className="nf-bal-cell">
-      <div className="nf-bal-label">{props.label}</div>
-      <div className="nf-bal-value">
-        {props.value} <span>{props.symbol}</span>
-      </div>
-      <div className="nf-bal-detail">{props.detail}</div>
     </div>
   );
 }
@@ -790,19 +669,19 @@ function TxModal(props: {
   return (
     <div className="nf-mb">
       <div className="nf-modal">
-        <ModalHead title="Step 03 · Bridge transaction" onClose={props.onClose} />
+        <ModalHead title="Step 03 · Custody deposit" onClose={props.onClose} />
         <div className="nf-modal-body">
           <div className="nf-tx-flow">
-            <TxNode label="From" name="MN Passport wallet" active />
+            <TxNode label="From" name="Localnet fee wallet" active />
             <div className={`nf-tx-arr ${props.status === 'confirmed' ? '' : 'flowing'}`} />
-            <TxNode label="To" name="Night vault" active={props.status === 'confirmed'} />
+            <TxNode label="To" name="MN Passport custody" active={props.status === 'confirmed'} />
           </div>
           <div className="nf-tx-rows">
-            <TxRow k="Amount" v={`${fmtUsd(props.amount)} USDC`} />
-            <TxRow k="Bridge" v="MN Passport custody · localnet" />
+            <TxRow k="Amount" v={fmtNight(props.amount)} />
+            <TxRow k="Circuit" v="deposit_night" />
             <TxRow k="Tx hash" v={props.txId || '-'} mono />
             <TxRow k="Confirmations" v={`${props.confirms} / 12`} />
-            <TxRow k="Network fee" v="sponsored in local demo" />
+            <TxRow k="Network" v="Midnight localnet" />
           </div>
           <div className={`nf-tx-status ${props.status}`}>{props.statusText}</div>
           <button className="nf-btn" disabled={props.status !== 'confirmed'} onClick={props.onContinue}>
@@ -902,13 +781,13 @@ function SceneDeploy(props: {
       </div>
       <div className="nf-tx-panel">
         <div className="nf-tx-flow">
-          <TxNode label="Asset" name={`${fmtUsd(props.amount)} USDC`} active />
+          <TxNode label="Asset" name={fmtNight(props.amount)} active />
           <div className="nf-tx-arr flowing" />
           <TxNode label="Destination" name={`${p.name} ${p.serif}`} active />
         </div>
         <div className="nf-tx-rows">
           <TxRow k="Pool" v={`${p.name} ${p.serif}`} />
-          <TxRow k="Amount" v={`${fmtUsd(props.amount)} USDC`} />
+          <TxRow k="Amount" v={fmtNight(props.amount)} />
           <TxRow k="Night ID" v={`${props.handle || 'you'}.night`} />
           <TxRow k="Expected APY" v={`${p.apy}%`} />
           <TxRow k="Custody tx" v={props.txId || '-'} mono />
@@ -960,7 +839,7 @@ function SceneDashboard({
         </button>
       </div>
       <div className="nf-dash-stats">
-        <DashStat label="Total deposited" value={fmtUsd(total)} detail={`${positions.length} active`} />
+        <DashStat label="Total deposited" value={fmtNight(total)} detail={`${positions.length} active`} />
         <DashStat label="Earned" value={fmtUsdDec(earned)} detail="Streaming" />
         <DashStat label="Blended APY" value={`${blended.toFixed(2)}%`} detail="Real-time" />
         <DashStat label="Positions" value={String(positions.length)} detail="Auto-compounded" />
@@ -981,7 +860,7 @@ function SceneDashboard({
               {POOLS[p.pool].name} {POOLS[p.pool].serif}
             </div>
             <div>{POOLS[p.pool].tier}</div>
-            <div>{fmtUsd(p.amount)}</div>
+            <div>{fmtNight(p.amount)}</div>
             <div className="nf-pos-earned">{fmtUsdDec(p.earned)}</div>
             <div className="nf-pos-status active">Active</div>
             <div className="nf-pos-action">
@@ -1016,7 +895,7 @@ function SuccessModal(props: {
         <div className="nf-success-icon">✓</div>
         <h2>Position opened</h2>
         <p>
-          {fmtUsd(props.amount)} deployed to {props.pool} at {props.apy}% APY.
+          {fmtNight(props.amount)} deployed to {props.pool} at {props.apy}% APY.
         </p>
         <button className="nf-btn" onClick={props.onContinue}>
           View dashboard {'->'}
