@@ -51,16 +51,22 @@ function b64decode(s: string): Uint8Array<ArrayBuffer> {
   return out;
 }
 
+async function userIdForLabel(label: string): Promise<ArrayBuffer> {
+  const data = new TextEncoder().encode(`midnight:passport:user:v0:${label}`);
+  return crypto.subtle.digest('SHA-256', data);
+}
+
 export async function createPasskey(label: string): Promise<PasskeyRef> {
+  const stableLabel = label.trim().toLowerCase();
   let cred: PublicKeyCredential | null;
   try {
     cred = (await navigator.credentials.create({
       publicKey: {
         rp: rpEntity(),
         user: {
-          id: crypto.getRandomValues(new Uint8Array(16)),
-          name: label,
-          displayName: label,
+          id: await userIdForLabel(stableLabel),
+          name: stableLabel,
+          displayName: stableLabel,
         },
         challenge: crypto.getRandomValues(new Uint8Array(32)),
         pubKeyCredParams: [
@@ -86,7 +92,7 @@ export async function createPasskey(label: string): Promise<PasskeyRef> {
         'Use a platform passkey (Touch ID / Windows Hello / recent Android) or a PRF-capable security key.',
     );
   }
-  return { credentialIdB64: b64encode(cred.rawId), label };
+  return { credentialIdB64: b64encode(cred.rawId), label: stableLabel };
 }
 
 /**
