@@ -8,7 +8,12 @@ import type { Midnight } from '../lib/midnight.js';
 import { accountForIdentity, registerIdentity } from '../lib/midnight.js';
 import { compiledAccountContract } from '../lib/providers.js';
 import { createPasskey, deriveDeviceSecret, deriveDevModeSecret } from '../lib/passkey.js';
-import { normalizeAlias, saveAlias } from '../lib/session.js';
+import {
+  loadPasskeyForAlias,
+  normalizeAlias,
+  saveAlias,
+  savePasskeyRecord,
+} from '../lib/session.js';
 import type { Session } from '../lib/session.js';
 import { ActionButton, Chip } from '../ui.js';
 
@@ -16,7 +21,10 @@ const LOCAL_DEMO_SECRET = 'mn-passport-foundations-local-demo';
 
 function usesLocalDemoSecret(): boolean {
   const params = new URLSearchParams(window.location.search);
-  return params.get('demoMode') === 'local' || navigator.webdriver === true;
+  const mode = params.get('demoMode');
+  if (mode === 'local') return true;
+  if (mode === 'passkey') return false;
+  return navigator.webdriver === true;
 }
 
 /** Resolves to true iff a contract exists at `address` on the current chain.
@@ -67,9 +75,15 @@ export function OnboardView(props: {
       log('local demo mode: deriving the device secret in this browser…');
       return { secret: await deriveDevModeSecret(LOCAL_DEMO_SECRET), session: { devMode: true } };
     }
+    const storedPasskey = loadPasskeyForAlias(alias)?.passkey;
+    if (storedPasskey) {
+      log(`using saved passkey reference for ${alias}.night; deriving the device secret...`);
+      return { secret: await deriveDeviceSecret(storedPasskey), session: { passkey: storedPasskey } };
+    }
     log(`creating ${alias}.night passkey in this browser...`);
     const passkey = await createPasskey(`${alias}.night`);
-    log(`passkey saved for ${alias}.night; deriving the device secret...`);
+    savePasskeyRecord(alias, passkey);
+    log(`passkey reference saved for ${alias}.night; deriving the device secret...`);
     return { secret: await deriveDeviceSecret(passkey), session: { passkey } };
   };
 
@@ -136,6 +150,9 @@ export function OnboardView(props: {
     );
   }
 
+  const aliasPreview = normalizeAlias(label || 'mn-passport-user');
+  const storedPasskey = !localDemoMode ? loadPasskeyForAlias(aliasPreview) : null;
+
   return (
     <div className="onboard-grid">
       <div className="onboard-copy">
@@ -192,7 +209,13 @@ export function OnboardView(props: {
             <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="alice" />
           </label>
           <ActionButton
-            label={localDemoMode ? 'Deploy MN Passport account' : 'Create passkey & deploy account'}
+            label={
+              localDemoMode
+                ? 'Deploy MN Passport account'
+                : storedPasskey
+                  ? 'Use saved passkey & deploy account'
+                  : 'Create passkey & deploy account'
+            }
             busyLabel={
               localDemoMode ? 'deploying MN Passport custody…' : 'creating passkey & deploying…'
             }
@@ -227,6 +250,13 @@ export function OnboardView(props: {
                 identityRegistryAddress: identity.registryAddress,
                 identityRegistrationTxId: identity.txId,
               });
+              if (partial.passkey) {
+                savePasskeyRecord(alias, partial.passkey, {
+                  accountAddress: account.address,
+                  identityRegistryAddress: identity.registryAddress,
+                  identityRegistrationTxId: identity.txId,
+                });
+              }
               props.onConnected(
                 {
                   accountAddress: account.address,
@@ -244,7 +274,9 @@ export function OnboardView(props: {
           <p className="hint">
             {localDemoMode
               ? 'Automation mode uses a local device secret.'
-              : 'The passkey is stored by the browser/passkey provider for this origin.'}{' '}
+              : storedPasskey
+                ? `Saved passkey reference found for ${aliasPreview}.night.`
+                : 'The passkey is stored by the browser/passkey provider for this origin.'}{' '}
             Night IDs are unique, so a handle like alice.night can only be registered once.
           </p>
         </div>

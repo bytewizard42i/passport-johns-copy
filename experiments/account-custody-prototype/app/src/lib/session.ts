@@ -16,6 +16,7 @@ export interface Session {
 
 const KEY = 'passport-demo-session';
 const ALIAS_KEY = 'passport-demo-aliases';
+const PASSKEY_KEY = 'passport-demo-passkeys';
 
 export interface AliasRecord {
   alias: string;
@@ -23,6 +24,16 @@ export interface AliasRecord {
   identityRegistryAddress?: string;
   identityRegistrationTxId?: string;
   claimedAt: string;
+}
+
+export interface PasskeyRecord {
+  alias: string;
+  passkey: PasskeyRef;
+  accountAddress?: string;
+  identityRegistryAddress?: string;
+  identityRegistrationTxId?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export function loadSession(): Session | null {
@@ -53,6 +64,49 @@ export function loadAliases(): AliasRecord[] {
 
 export function loadAliasForAccount(accountAddress: string): AliasRecord | null {
   return loadAliases().find((r) => r.accountAddress === accountAddress) ?? null;
+}
+
+export function loadPasskeys(): PasskeyRecord[] {
+  try {
+    const raw = localStorage.getItem(PASSKEY_KEY);
+    return raw ? (JSON.parse(raw) as PasskeyRecord[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function loadPasskeyForAlias(alias: string): PasskeyRecord | null {
+  const normalized = normalizeAlias(alias);
+  return loadPasskeys().find((r) => r.alias === normalized) ?? null;
+}
+
+export function savePasskeyRecord(
+  alias: string,
+  passkey: PasskeyRef,
+  account?: {
+    accountAddress?: string;
+    identityRegistryAddress?: string;
+    identityRegistrationTxId?: string;
+  },
+): PasskeyRecord {
+  const normalized = normalizeAlias(alias);
+  const now = new Date().toISOString();
+  const existing = loadPasskeyForAlias(normalized);
+  const record: PasskeyRecord = {
+    alias: normalized,
+    passkey,
+    accountAddress: account?.accountAddress ?? existing?.accountAddress,
+    identityRegistryAddress: account?.identityRegistryAddress ?? existing?.identityRegistryAddress,
+    identityRegistrationTxId:
+      account?.identityRegistrationTxId ?? existing?.identityRegistrationTxId,
+    createdAt: existing?.createdAt ?? now,
+    updatedAt: now,
+  };
+  localStorage.setItem(
+    PASSKEY_KEY,
+    JSON.stringify([...loadPasskeys().filter((r) => r.alias !== normalized), record]),
+  );
+  return record;
 }
 
 export function saveAlias(
