@@ -99,6 +99,9 @@ export function FoundationsFlowView({
   const [pool, setPool] = useState<PoolKey>('retail');
   const [amount, setAmount] = useState('1000');
   const [nightHandle, setNightHandle] = useState(storedAlias);
+  const [passportSignedIn, setPassportSignedIn] = useState(false);
+  const [signInBusy, setSignInBusy] = useState(false);
+  const [signInError, setSignInError] = useState('');
   const [showAmount, setShowAmount] = useState(false);
   const [showSource, setShowSource] = useState(false);
   const [showTx, setShowTx] = useState(false);
@@ -145,6 +148,21 @@ export function FoundationsFlowView({
   const activePool = POOLS[pool];
   const currentStep = positions.length > 0 && scene === 6 ? 6 : scene;
 
+  async function signInWithPassport() {
+    setSignInBusy(true);
+    setSignInError('');
+    try {
+      await ctx.authorizeDevice('Sign in to NightFi');
+      ctx.log(`nightfi connected with MN Passport account ${ctx.session.accountAddress}`);
+      setScene(0);
+      setPassportSignedIn(true);
+    } catch (e: any) {
+      setSignInError(String(e?.message ?? e));
+    } finally {
+      setSignInBusy(false);
+    }
+  }
+
   function pickPool(nextPool: PoolKey) {
     setPool(nextPool);
     setAmount(nextPool === 'retail' ? '1000' : '50000');
@@ -167,11 +185,13 @@ export function FoundationsFlowView({
     setTxId('');
     setTxConfirms(0);
     setTxStatus('confirming');
-    setTxStatusText('Submitting deposit_night from the localnet fee wallet...');
-    beginTask('Depositing Night into the MN Passport vault', 'deposit_night');
+    setTxStatusText('Waiting for passkey approval to sign the custody deposit...');
     try {
       const depositValue = BigInt(Math.max(1, Math.floor(Number(amount))));
-      const result = await ctx.account.depositNight(ctx.nightColor, depositValue);
+      const signer = await ctx.authorizeDevice('Sign custody deposit');
+      setTxStatusText('Submitting deposit_night through the Passport funding rail...');
+      beginTask('Depositing Night into the MN Passport vault', 'deposit_night');
+      const result = await signer.depositNight(ctx.nightColor, depositValue);
       const id = result.txId;
       setTxId(id);
       setTxConfirms(12);
@@ -230,6 +250,7 @@ export function FoundationsFlowView({
     setBusy('deploy');
     setError('');
     try {
+      await ctx.authorizeDevice('Sign deploy intent');
       await new Promise((resolve) => setTimeout(resolve, 900));
       setPositions((current) => [
         ...current,
@@ -264,27 +285,39 @@ export function FoundationsFlowView({
   }
 
   return (
-    <main className="nf-app passport-nf" data-theme="light">
+    <main className="nf-app passport-nf" data-theme="nightfi">
       <div className="nf-grid-bg" />
       <div className="nf-vignette" />
 
       <Topbar
         round={ctx.ledger ? String(ctx.ledger.round) : '...'}
         handle={nightHandle}
-        hasPositions={positions.length > 0}
+        hasPositions={passportSignedIn && positions.length > 0}
         scene={scene}
         onEarn={() => setScene(0)}
-        onDashboard={() => positions.length > 0 && setScene(6)}
+        onDashboard={() => passportSignedIn && positions.length > 0 && setScene(6)}
         onOpenCustody={onOpenCustody}
         onDisconnect={onDisconnect}
       />
 
-      <Rail scene={currentStep} />
+      {passportSignedIn && <Rail scene={currentStep} />}
 
       <div className="nf-stage">
         <div className="nf-stage-inner">
-          {scene === 0 && <SceneYield onPick={pickPool} ledgerNightTotal={ledgerNightTotal} />}
-          {scene === 4 && (
+          {!passportSignedIn && (
+            <ScenePassportSignIn
+              handle={nightHandle}
+              accountAddress={ctx.session.accountAddress}
+              identityTx={ctx.session.identityRegistrationTxId ?? 'pending'}
+              busy={signInBusy}
+              error={signInError}
+              onSignIn={signInWithPassport}
+            />
+          )}
+          {passportSignedIn && scene === 0 && (
+            <SceneYield onPick={pickPool} ledgerNightTotal={ledgerNightTotal} />
+          )}
+          {passportSignedIn && scene === 4 && (
             <SceneNightId
               handle={nightHandle}
               error={error}
@@ -293,7 +326,7 @@ export function FoundationsFlowView({
               onClaim={confirmNightId}
             />
           )}
-          {scene === 5 && (
+          {passportSignedIn && scene === 5 && (
             <SceneDeploy
               pool={pool}
               amount={amount}
@@ -305,7 +338,7 @@ export function FoundationsFlowView({
               onDeploy={deployCapital}
             />
           )}
-          {scene === 6 && (
+          {passportSignedIn && scene === 6 && (
             <SceneDashboard handle={nightHandle} positions={positions} onNew={startNew} />
           )}
         </div>
@@ -389,12 +422,12 @@ function Topbar(props: {
   return (
     <div className="nf-top">
       <div className="nf-brand">
-        <div className="nf-mark">
-          <FoundationsLogo />
+        <div className="nf-mark nf-nightfi-mark">
+          <span>N</span>
         </div>
         <div className="nf-word">
-          <span className="night">MN</span>
-          <span className="fi">Passport</span>
+          <span className="night">Night</span>
+          <span className="fi">Fi</span>
         </div>
       </div>
       <div className="nf-tabs">
@@ -453,6 +486,58 @@ function Rail({ scene }: { scene: Scene }) {
   );
 }
 
+function ScenePassportSignIn(props: {
+  handle: string;
+  accountAddress: string;
+  identityTx: string;
+  busy: boolean;
+  error: string;
+  onSignIn: () => void;
+}) {
+  const handle = normalizeAlias(props.handle || 'bubbles');
+  return (
+    <div className="nf-auth-scene">
+      <section className="nf-auth-panel">
+        <div className="nf-eyebrow">NightFi access</div>
+        <h1 className="nf-title">
+          Sign in with <span className="serif">MN Passport.</span>
+        </h1>
+        <p className="nf-sub-text">
+          NightFi uses the Passport account you created as the account ID for this session.
+        </p>
+        <div className="nf-auth-passport">
+          <div>
+            <span className="nf-auth-label">Night ID</span>
+            <strong>{handle}.night</strong>
+          </div>
+          <div>
+            <span className="nf-auth-label">Passport account ID</span>
+            <code>{shortMiddle(props.accountAddress, 18, 12)}</code>
+          </div>
+          <div>
+            <span className="nf-auth-label">Identity transaction</span>
+            <code>{shortMiddle(props.identityTx, 18, 12)}</code>
+          </div>
+        </div>
+        <button className="nf-btn nf-auth-btn" onClick={props.onSignIn} disabled={props.busy}>
+          {props.busy ? 'Waiting for MN Passport...' : 'Sign in with MN Passport'}
+        </button>
+        {props.error && <div className="nf-tx-status error">{props.error}</div>}
+      </section>
+      <aside className="nf-auth-side">
+        <div className="nf-auth-orbit">
+          <span>N</span>
+        </div>
+        <div className="nf-auth-copy">
+          <span>NightFi receives the account contract address.</span>
+          <span>Your passkey secret stays inside MN Passport.</span>
+          <span>Every custody action still asks Passport to sign.</span>
+        </div>
+      </aside>
+    </div>
+  );
+}
+
 function SceneYield({
   onPick,
   ledgerNightTotal,
@@ -463,7 +548,7 @@ function SceneYield({
   return (
     <div className="nf-scene">
       <div className="nf-scene-head">
-        <div className="nf-eyebrow">MN Passport foundations</div>
+        <div className="nf-eyebrow">NightFi private markets</div>
         <h1 className="nf-title">
           Earn yield, <span className="serif">privately.</span>
         </h1>
@@ -622,7 +707,7 @@ function SourceModal(props: {
         <ModalHead title="Step 02 · Fund custody" onClose={props.onClose} />
         <div className="nf-modal-body">
           <p className="nf-small-copy">
-            Depositing <b>{fmtNight(props.amount)}</b> from the synced localnet fee wallet into your
+            Depositing <b>{fmtNight(props.amount)}</b> from the Passport funding rail into your
             MN Passport custody contract. This step is the real Midnight <code>deposit_night</code>
             circuit call.
           </p>
@@ -630,9 +715,9 @@ function SourceModal(props: {
             <div className="nf-wicon">MN</div>
             <div className="nf-winfo">
               <div className="nf-wname">
-                Localnet fee wallet <span className="nf-recommended">Synced</span>
+                Passport funding rail <span className="nf-recommended">Synced</span>
               </div>
-              <div className="nf-waddr">Genesis-funded wallet pays fees and funds custody.</div>
+              <div className="nf-waddr">Demo funding source for custody deposits on localnet.</div>
             </div>
             <div className="nf-wbal">
               <div className="nf-wbal-lbl">Available</div>
@@ -672,7 +757,7 @@ function TxModal(props: {
         <ModalHead title="Step 03 · Custody deposit" onClose={props.onClose} />
         <div className="nf-modal-body">
           <div className="nf-tx-flow">
-            <TxNode label="From" name="Localnet fee wallet" active />
+            <TxNode label="From" name="Passport funding rail" active />
             <div className={`nf-tx-arr ${props.status === 'confirmed' ? '' : 'flowing'}`} />
             <TxNode label="To" name="MN Passport custody" active={props.status === 'confirmed'} />
           </div>
@@ -776,7 +861,7 @@ function SceneDeploy(props: {
         </h1>
         <p className="nf-sub-text">
           Your capital is now held by the MN Passport custody account. Sign the deploy intent to open
-          the MN Passport position.
+          the NightFi position.
         </p>
       </div>
       <div className="nf-tx-panel">

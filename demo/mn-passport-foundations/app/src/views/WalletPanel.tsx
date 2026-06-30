@@ -18,7 +18,7 @@ interface PendingNote {
 const FAUCET_DOMESTIC_COLOR = hexToBytes32('06');
 
 export function WalletPanel({ ctx }: { ctx: AppContext }) {
-  const { ledger, account, mid, log, nightColor } = ctx;
+  const { ledger, mid, log, nightColor } = ctx;
   const [depositAmt, setDepositAmt] = useState('1000');
   const [withdrawAmt, setWithdrawAmt] = useState('100');
   const [mintAmt, setMintAmt] = useState('500');
@@ -73,7 +73,8 @@ export function WalletPanel({ ctx }: { ctx: AppContext }) {
             busyLabel="depositing…"
             task={{ label: 'Depositing Night into MN Passport custody', circuit: 'deposit_night' }}
             onRun={async () => {
-              const r = await account.depositNight(nightColor, BigInt(depositAmt));
+              const signer = await ctx.authorizeDevice('Sign Night deposit');
+              const r = await signer.depositNight(nightColor, BigInt(depositAmt));
               log(`deposit_night ${depositAmt} → tx ${r.txId}`);
               await ctx.refreshLedger();
               return r.txId;
@@ -87,7 +88,8 @@ export function WalletPanel({ ctx }: { ctx: AppContext }) {
             kind="ghost"
             task={{ label: 'Withdrawing Night to the user wallet', circuit: 'withdraw_night' }}
             onRun={async () => {
-              const r = await account.withdrawNight(
+              const signer = await ctx.authorizeDevice('Sign Night withdrawal');
+              const r = await signer.withdrawNight(
                 nightColor,
                 BigInt(withdrawAmt),
                 userAddressBytes(mid.walletCtx),
@@ -139,8 +141,9 @@ export function WalletPanel({ ctx }: { ctx: AppContext }) {
                     kind="ghost"
                     task={{ label: 'Withdrawing shielded coins', circuit: 'withdraw_shielded' }}
                     onRun={async () => {
+                      const signer = await ctx.authorizeDevice('Sign shielded withdrawal');
                       const state: any = await firstValueFrom(mid.walletCtx.wallet.state());
-                      const r = await account.withdrawShielded(
+                      const r = await signer.withdrawShielded(
                         coinPublicKeyBytes(state),
                         color,
                         BigInt(shieldedWithdrawAmt),
@@ -219,7 +222,8 @@ export function WalletPanel({ ctx }: { ctx: AppContext }) {
               busyLabel="depositing…"
               task={{ label: 'Depositing the shielded note into MN Passport custody', circuit: 'deposit_shielded' }}
               onRun={async () => {
-                const r = await account.depositShielded({
+                const signer = await ctx.authorizeDevice('Sign shielded deposit');
+                const r = await signer.depositShielded({
                   nonce: hexToBytes(note.nonceHex),
                   color: hexToBytes(note.colorHex),
                   value: note.value,

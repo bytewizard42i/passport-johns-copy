@@ -4,6 +4,12 @@ import { ViewHeader, Mono, Chip, Field, X } from '../ui.js';
 import { FlowDiagram } from './FlowDiagram.js';
 import type { AppContext } from '../App.js';
 
+function bytesHex(bytes: Uint8Array): string {
+  return Array.from(bytes)
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
 // Machine-readable-zone line: uppercase, non-alphanumerics become fillers,
 // padded to the classic 44 characters.
 function mrzLine(s: string): string {
@@ -33,6 +39,37 @@ export function OverviewView({ ctx }: { ctx: AppContext }) {
   const mrz2 = mrzLine(
     `${session.accountAddress.slice(0, 20)}<MN<E${String(epoch)}<R${ledger ? String(ledger.round) : ''}`,
   );
+  const explorerSnapshot = {
+    network: 'Midnight localnet',
+    owner_identity: `${session.alias ?? 'bearer'}.night`,
+    account_custody_contract: session.accountAddress,
+    identity_registry_contract: session.identityRegistryAddress ?? null,
+    identity_registration_tx: session.identityRegistrationTxId ?? null,
+    ledger_round: ledger ? String(ledger.round) : null,
+    device_epoch: String(epoch),
+    balances: {
+      night_unshielded: String(nightTotal),
+      shielded_coin_count: coinCount,
+      recovery_shares: shares,
+    },
+    devices: ledger
+      ? [...ledger.devices].map(([commitment, deviceEpoch]) => ({
+          commitment: commitment.toString(),
+          epoch: String(deviceEpoch),
+          active: deviceEpoch === epoch,
+        }))
+      : [],
+    grants: ledger
+      ? [...ledger.grants].map(([grant, value]) => ({
+          grant: grant.toString(),
+          epoch: String(value.epoch),
+          color: bytesHex(value.color),
+          cap: String(value.cap),
+          spent: String(value.spent),
+          active: value.active && value.epoch === epoch,
+        }))
+      : [],
+  };
 
   return (
     <>
@@ -40,6 +77,46 @@ export function OverviewView({ ctx }: { ctx: AppContext }) {
         title="Your MN Passport wallet is a contract"
         narration="A personal Compact contract on the Midnight ledger holds this wallet. Everything on this page is read live from chain state — hover any dotted term for what it means."
       />
+
+      <section className="station-section">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">App Store</p>
+            <h2>Launch a dApp from Passport</h2>
+          </div>
+          <Chip tone="info">single account demo</Chip>
+        </div>
+        <div className="app-store-grid">
+          <button
+            className="app-card app-card-live"
+            onClick={() => ctx.goToView('flow')}
+            data-x="NightFi is intentionally separate from MN Passport. It receives the account context and asks the custody contract to sign the deposit flow."
+          >
+            <span className="app-logo app-logo-night">N</span>
+            <span className="app-copy">
+              <strong>NightFi</strong>
+              <small>Private yield deposits</small>
+            </span>
+            <span className="app-action">Open</span>
+          </button>
+          <button className="app-card" disabled>
+            <span className="app-logo app-logo-city">MC</span>
+            <span className="app-copy">
+              <strong>Midnight City</strong>
+              <small>Coming next</small>
+            </span>
+            <span className="app-action muted">Soon</span>
+          </button>
+          <button className="app-card" disabled>
+            <span className="app-logo app-logo-sig">S</span>
+            <span className="app-copy">
+              <strong>Sig Network</strong>
+              <small>C2C claim path</small>
+            </span>
+            <span className="app-action muted">Soon</span>
+          </button>
+        </div>
+      </section>
 
       <section className="doc">
         <header className="doc-head">
@@ -192,6 +269,39 @@ export function OverviewView({ ctx }: { ctx: AppContext }) {
           <span className="tile-sub">{shares === 3 ? 'kit ready' : `${shares} shares on-chain`}</span>
         </button>
       </div>
+
+      <section className="station-section explorer-section">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">Local explorer</p>
+            <h2>Account custody inspection</h2>
+          </div>
+          <Chip tone={ledger ? 'ok' : 'muted'}>{ledger ? 'synced' : 'syncing'}</Chip>
+        </div>
+        <div className="explorer-grid">
+          <div className="explorer-kpis">
+            <div>
+              <span>Contract</span>
+              <Mono v={session.accountAddress} short group />
+            </div>
+            <div>
+              <span>Identity tx</span>
+              <Mono v={session.identityRegistrationTxId ?? 'pending'} short group />
+            </div>
+            <div>
+              <span>Devices</span>
+              <strong>{ledger ? activeDevices : '...'}</strong>
+            </div>
+            <div>
+              <span>Grants</span>
+              <strong>{ledger ? activeGrants : '...'}</strong>
+            </div>
+          </div>
+          <pre className="explorer-json">
+            {JSON.stringify(explorerSnapshot, null, 2)}
+          </pre>
+        </div>
+      </section>
 
       <FlowDiagram ctx={ctx} />
     </>

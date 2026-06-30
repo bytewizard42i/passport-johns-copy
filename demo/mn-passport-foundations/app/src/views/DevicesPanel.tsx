@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { createPasskey, deriveDeviceSecret, deriveDevModeSecret } from '../lib/passkey.js';
 import { ViewHeader, Panel, ActionButton, Mono, Chip } from '../ui.js';
 import type { AppContext } from '../App.js';
 
 export function DevicesPanel({ ctx }: { ctx: AppContext }) {
-  const { ledger, account, log } = ctx;
-  const [devPassphrase, setDevPassphrase] = useState('');
+  const { ledger, log } = ctx;
 
   const epoch = ledger?.device_epoch ?? 0n;
   const devices = ledger ? [...ledger.devices] : [];
@@ -46,7 +44,8 @@ export function DevicesPanel({ ctx }: { ctx: AppContext }) {
                   disabled={active.length <= 1}
                   task={{ label: 'Removing the device', circuit: 'remove_device' }}
                   onRun={async () => {
-                    const r = await account.removeDeviceByCommitment(commitment);
+                    const signer = await ctx.authorizeDevice('Sign device removal');
+                    const r = await signer.removeDeviceByCommitment(commitment);
                     log(`remove_device → tx ${r.txId}`);
                     await ctx.refreshLedger();
                     return r.txId;
@@ -67,45 +66,12 @@ export function DevicesPanel({ ctx }: { ctx: AppContext }) {
             </div>
           ))}
         </div>
-        <div className="row controls">
-          <ActionButton
-            label="Add device (new passkey)"
-            busyLabel="adding…"
-            task={{ label: 'Registering a new device', circuit: 'add_device' }}
-            onRun={async () => {
-              const ref = await createPasskey(`device-${Date.now() % 10_000}`);
-              const secret = await deriveDeviceSecret(ref);
-              const r = await account.addDevice(secret);
-              log(`add_device (passkey ${ref.label}) → tx ${r.txId}`);
-              await ctx.refreshLedger();
-              return r.txId;
-            }}
-          />
-          <span className="ctrl-gap" />
-          <label className="field field-inline">
-            <span className="field-label">or dev-mode passphrase</span>
-            <input
-              type="password"
-              value={devPassphrase}
-              onChange={(e) => setDevPassphrase(e.target.value)}
-              size={14}
-            />
-          </label>
-          <ActionButton
-            label="Add (dev mode)"
-            busyLabel="adding…"
-            kind="ghost"
-            disabled={!devPassphrase}
-            task={{ label: 'Registering a new device', circuit: 'add_device' }}
-            onRun={async () => {
-              const secret = await deriveDevModeSecret(devPassphrase);
-              const r = await account.addDevice(secret);
-              log(`add_device (dev mode) → tx ${r.txId}`);
-              setDevPassphrase('');
-              await ctx.refreshLedger();
-              return r.txId;
-            }}
-          />
+        <div className="caveat">
+          <Chip tone="info">demo scope</Chip>
+          <p>
+            Additional passkey enrollment is hidden in this branch so the Thursday flow stays on one
+            Passport account and one active device. Recovery still demonstrates account re-keying.
+          </p>
         </div>
       </Panel>
     </>

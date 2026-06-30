@@ -86,6 +86,15 @@ let identityRegistryHandle: IdentityRegistry | null = null;
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+function looksLikeRejectedRegistryWrite(e: unknown): boolean {
+  const message = String((e as any)?.message ?? e);
+  return (
+    message.includes('Invalid Transaction') ||
+    message.includes('SubmissionError') ||
+    message.includes('Custom error: 117')
+  );
+}
+
 export async function getIdentityRegistry(mid: Midnight): Promise<IdentityRegistry> {
   if (identityRegistryHandle) return identityRegistryHandle;
   if (mid.identityRegistryAddress) {
@@ -160,7 +169,9 @@ export async function registerIdentity(
       if (attempt === 2) break;
       await sleep(3_000 + attempt * 2_000);
       await awaitSync(mid.walletCtx);
-      registry = await reconnectIdentityRegistry(mid);
+      registry = looksLikeRejectedRegistryWrite(e)
+        ? await deployFreshIdentityRegistry(mid)
+        : await reconnectIdentityRegistry(mid);
       const landed = await registry.accountFor(handle);
       if (landed && landed !== accountAddress.toLowerCase()) {
         throw new Error(`${handle}.night is already registered; choose a different Night ID`);

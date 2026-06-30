@@ -114,8 +114,8 @@ try {
   await setFirstTextInput(demoHandle);
   await clickButton('Deploy MN Passport account');
   console.log('… deploying account and registering identity from the browser (this takes a while)');
-  await waitForText('Earn yield, privately.', 300_000);
-  await waitForText('Custody balance', 60_000);
+  await waitForText('Launch a dApp from Passport', 300_000);
+  await waitForText('Account custody inspection', 60_000);
   const identitySession = await page.evaluate(() => {
     const raw = localStorage.getItem('passport-demo-session');
     return raw ? JSON.parse(raw) : null;
@@ -127,11 +127,18 @@ try {
     `✓ identity registry ${identitySession.identityRegistryAddress} tx ${identitySession.identityRegistrationTxId}`,
   );
 
+  await clickButtonContaining('Open');
+  await waitForText('Sign in with MN Passport', 60_000);
+  await waitForText('Passport account ID', 60_000);
+  await clickButtonContaining('Sign in with MN Passport');
+  await waitForText('Earn yield, privately.', 60_000);
+  await waitForText('Custody balance', 60_000);
+
   // One real circuit call: deposit 1000 Night through the account-custody contract.
   await clickButtonContaining('Deposit into pool');
   await waitForText('Deposit amount', 60_000);
   await clickButton('Continue - choose source');
-  await waitForText('Localnet fee wallet', 60_000);
+  await waitForText('Passport funding rail', 60_000);
   await waitForText('deposit_night', 60_000);
   await clickButtonContaining('Deposit Night into custody');
   console.log('… proving deposit_night through the localnet custody path');
@@ -162,11 +169,12 @@ try {
   }
   console.log('✓ custody holdings show the deposited Night balance');
 
-  await clickNav('Wallet Overview');
+  await clickNav('Passport Home');
   await waitForText('Your MN Passport wallet is a contract', 60_000);
   await waitForText('MN Passport ID registry', 60_000);
   await waitForText('Identity tx', 60_000);
   await waitForText('Recovery shares', 60_000);
+  await waitForText('Account custody inspection', 60_000);
   console.log('✓ wallet overview exposes contract, identity, device, grant, and recovery state');
 
   await clickNav('Connections');
@@ -181,7 +189,10 @@ try {
   await waitForText('Recovery shares', 60_000);
   await waitForText('Simulate the disaster', 60_000);
 
-  await clickNav('Foundations Flow');
+  await clickNav('Passport Home');
+  await clickButtonContaining('Open');
+  await waitForText('Sign in with MN Passport', 60_000);
+  await clickButtonContaining('Sign in with MN Passport');
   await waitForText('Earn yield, privately.', 60_000);
   console.log('✓ custody workspace completed — overview, holdings, connections, devices, recovery, and return flow render');
 

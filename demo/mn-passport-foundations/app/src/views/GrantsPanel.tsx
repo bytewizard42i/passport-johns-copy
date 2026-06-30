@@ -7,7 +7,7 @@ import { ViewHeader, Panel, ActionButton, Mono, Chip, CapBar } from '../ui.js';
 import type { AppContext } from '../App.js';
 
 export function GrantsPanel({ ctx }: { ctx: AppContext }) {
-  const { ledger, account, mid, log, nightColor } = ctx;
+  const { ledger, mid, log, nightColor } = ctx;
   const [cap, setCap] = useState('300');
   const [issuedSecret, setIssuedSecret] = useState<string | null>(null);
   const [dappSecret, setDappSecret] = useState('');
@@ -55,7 +55,8 @@ export function GrantsPanel({ ctx }: { ctx: AppContext }) {
                     kind="danger"
                     task={{ label: 'Revoking the grant', circuit: 'revoke_grant' }}
                     onRun={async () => {
-                      const r = await account.revokeGrantByCommitment(commitment);
+                      const signer = await ctx.authorizeDevice('Sign grant revocation');
+                      const r = await signer.revokeGrantByCommitment(commitment);
                       log(`revoke_grant → tx ${r.txId}`);
                       await ctx.refreshLedger();
                       return r.txId;
@@ -77,8 +78,9 @@ export function GrantsPanel({ ctx }: { ctx: AppContext }) {
             busyLabel="issuing…"
             task={{ label: 'Issuing a scoped grant', circuit: 'add_grant' }}
             onRun={async () => {
+              const signer = await ctx.authorizeDevice('Sign grant issuance');
               const grantSecret = randomBytes32();
-              const r = await account.addGrant(grantSecret, nightColor, BigInt(cap));
+              const r = await signer.addGrant(grantSecret, nightColor, BigInt(cap));
               setIssuedSecret(bytesToHex(grantSecret));
               log(`add_grant cap=${cap} → tx ${r.txId}`);
               await ctx.refreshLedger();

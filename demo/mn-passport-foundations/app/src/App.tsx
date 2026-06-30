@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { PassportAccount } from '../../src/wallet/account.js';
-import type { Ledger } from '../../src/wallet/contract.js';
+import { deviceCommitment as deriveDeviceCommitment, type Ledger } from '../../src/wallet/contract.js';
 import { hexToBytes32 } from '../../src/wallet/hex.js';
 
 import { getMidnight, type Midnight } from './lib/midnight.js';
 import { compiledAccountContract, BROWSER_PROVER } from './lib/providers.js';
+import { deriveDeviceSecret, deriveDevModeSecret } from './lib/passkey.js';
 import { loadSession, saveSession, clearSession, type Session } from './lib/session.js';
 import { useTxTask, dismissTask, type TxTask } from './lib/txTracker.js';
 import { Busy, Mono, Chip } from './ui.js';
@@ -32,6 +33,7 @@ export interface AppContext {
     grantSecret?: Uint8Array;
     recoverySecret?: Uint8Array;
   }) => Promise<PassportAccount>;
+  authorizeDevice: (reason: string) => Promise<PassportAccount>;
   setSession: (s: Session) => void;
   /** Commitment (decimal string) of this browser's device secret, when known. */
   deviceCommitment: string | null;
@@ -41,23 +43,14 @@ export interface AppContext {
 
 export type ViewId = 'flow' | 'overview' | 'assets' | 'grants' | 'devices' | 'recovery';
 
-// App navigation — MN Passport is the product shell; these are the embedded
-// custody surfaces behind the earn flow.
+const LOCAL_DEMO_SECRET = 'mn-passport-foundations-local-demo';
+
+// App navigation — MN Passport is the product shell. Demo dApps launch from
+// the home dashboard so the custody wallet and dApp UI stay separate.
 const NAV: { id: ViewId; label: string; icon: React.ReactNode }[] = [
   {
-    id: 'flow',
-    label: 'Foundations Flow',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
-        <path d="M4 6h8a4 4 0 0 1 4 4v8" />
-        <path d="M4 6l3.5-3.5M4 6l3.5 3.5" />
-        <circle cx="16" cy="18" r="2.5" />
-      </svg>
-    ),
-  },
-  {
     id: 'overview',
-    label: 'Wallet Overview',
+    label: 'Passport Home',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
         <rect x="3.5" y="3.5" width="7.5" height="7.5" rx="2" />
@@ -118,7 +111,7 @@ export default function App() {
   const [ledger, setLedger] = useState<Ledger | null>(null);
   const [logLines, setLogLines] = useState<string[]>([]);
   const [deviceCommitment, setDeviceCommitment] = useState<string | null>(null);
-  const [nav, setNav] = useState<ViewId>('flow');
+  const [nav, setNav] = useState<ViewId>('overview');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [explain, setExplain] = useState(() => localStorage.getItem('passport-explain') !== '0');
 
@@ -167,7 +160,7 @@ export default function App() {
     setAccount(null);
     setLedger(null);
     setDeviceCommitment(null);
-    setNav('flow');
+    setNav('overview');
   }, []);
 
   // Lock: drop the in-memory account handle (and with it the device secret's
@@ -178,7 +171,7 @@ export default function App() {
     setAccount(null);
     setLedger(null);
     setDeviceCommitment(null);
-    setNav('flow');
+    setNav('overview');
   }, [log]);
 
   const refreshLedger = useCallback(async () => {
@@ -225,6 +218,53 @@ export default function App() {
       );
     },
     [mid, session],
+  );
+
+  const authorizeDevice = useCallback(
+    async (reason: string): Promise<PassportAccount> => {
+      if (!mid || !session) throw new Error('no active MN Passport session');
+
+      log(
+        session.devMode
+          ? `${reason}: deriving the local demo device secret...`
+          : `${reason}: approve with your MN Passport passkey...`,
+      );
+
+      const secret = session.devMode
+        ? await deriveDevModeSecret(LOCAL_DEMO_SECRET)
+        : await deriveDeviceSecret(session.passkey);
+      const commitment = deriveDeviceCommitment(secret).toString();
+
+      if (deviceCommitment && deviceCommitment !== commitment) {
+        throw new Error('the passkey did not match the currently unlocked MN Passport device');
+      }
+
+      if (ledger) {
+        const active = [...ledger.devices].some(
+          ([registered, epoch]) =>
+            registered.toString() === commitment && epoch === ledger.device_epoch,
+        );
+        if (!active) {
+          throw new Error('this passkey is not an active device for the current MN Passport account');
+        }
+      }
+
+      const authed = await PassportAccount.connect(
+        mid.accountProviders,
+        compiledAccountContract(),
+        session.accountAddress,
+        { deviceSecret: secret },
+      );
+      setAccount(authed);
+      setDeviceCommitment(commitment);
+      log(
+        session.devMode
+          ? `${reason}: local demo device authorized.`
+          : `${reason}: passkey verified.`,
+      );
+      return authed;
+    },
+    [deviceCommitment, ledger, log, mid, session],
   );
 
   const nightColor = useMemo(
@@ -280,7 +320,7 @@ export default function App() {
             setSession(s);
             setAccount(a);
             setDeviceCommitment(commitment ?? null);
-            setNav('flow');
+            setNav('overview');
           }}
           onReset={resetSession}
         />
@@ -303,6 +343,7 @@ export default function App() {
     nightColor,
     resetSession,
     reconnect,
+    authorizeDevice,
     setSession,
     deviceCommitment,
     setDeviceCommitment,
@@ -408,7 +449,6 @@ function BrandMark(props: { large?: boolean }) {
           <span>MN</span>
           <em>Passport</em>
         </span>
-        <span className="brand-tag">Foundations demo</span>
       </div>
     </div>
   );

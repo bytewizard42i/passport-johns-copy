@@ -162,13 +162,12 @@ export function OnboardView(props: {
         {localDemoMode ? (
           <p className="lede">
             Automation mode derives a local device secret, deploys a MN Passport custody account on
-            Midnight, and walks straight into the earn flow.
+            Midnight, and opens Passport Home.
           </p>
         ) : (
           <p className="lede">
             Save a browser passkey for your Night ID first. Its PRF output becomes the device
-            secret, then MN Passport deploys the custody account on Midnight and walks straight into
-            the earn flow.
+            secret, then MN Passport deploys the custody account on Midnight and opens Passport Home.
           </p>
         )}
         <ol className="hero-steps">
@@ -270,6 +269,20 @@ export function OnboardView(props: {
               );
             }}
           />
+          <div className="login-lanes" aria-label="demo login options">
+            <button className="login-lane login-lane-active" type="button">
+              <span>Passkey</span>
+              <small>active signer</small>
+            </button>
+            <button className="login-lane" type="button" disabled>
+              <span>Google</span>
+              <small>Dynamic lane</small>
+            </button>
+            <button className="login-lane" type="button" disabled>
+              <span>Discord</span>
+              <small>Dynamic lane</small>
+            </button>
+          </div>
           {error && <p className="error">{error}</p>}
           <p className="hint">
             {localDemoMode
