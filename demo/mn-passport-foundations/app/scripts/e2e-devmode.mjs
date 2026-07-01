@@ -178,6 +178,11 @@ try {
   await waitForText('Transaction inspector', 60_000);
   await waitForText('NightFi custody deposit', 60_000);
   await waitForText('deposit_night', 60_000);
+  await clickButtonContaining('Open explorer view');
+  await waitForText('Explorer transaction detail', 60_000);
+  await waitForText('Full transaction hash', 60_000);
+  await waitForText('Local explorer payload', 60_000);
+  await clickButton('Close');
   console.log('✓ wallet overview exposes contract, identity, device, grant, and recovery state');
 
   await clickNav('Connections');

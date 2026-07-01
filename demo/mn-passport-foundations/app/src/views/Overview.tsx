@@ -189,8 +189,19 @@ export function OverviewView({ ctx }: { ctx: AppContext }) {
     positions,
   });
   const [selectedExplorerTxId, setSelectedExplorerTxId] = React.useState<string | null>(null);
+  const [explorerModalTxId, setExplorerModalTxId] = React.useState<string | null>(null);
   const selectedExplorerTx =
     explorerTxs.find((tx) => tx.id === selectedExplorerTxId) ?? explorerTxs[0];
+  const explorerModalTx = explorerTxs.find((tx) => tx.id === explorerModalTxId) ?? null;
+
+  React.useEffect(() => {
+    if (!explorerModalTxId) return undefined;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setExplorerModalTxId(null);
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [explorerModalTxId]);
 
   const mrz1 = mrzLine(`N<FI${holder}<<MN PASSPORT<WALLET`);
   const mrz2 = mrzLine(
@@ -494,10 +505,16 @@ export function OverviewView({ ctx }: { ctx: AppContext }) {
               </span>
             </div>
             <p>{selectedExplorerTx.summary}</p>
-            <div className="explorer-hash">
+            <button
+              type="button"
+              className="explorer-hash explorer-hash-button"
+              onClick={() => setExplorerModalTxId(selectedExplorerTx.id)}
+              aria-label={`Open transaction ${selectedExplorerTx.txId} in the local explorer`}
+            >
               <span>Tx hash</span>
               <Mono v={selectedExplorerTx.txId} short group />
-            </div>
+              <small>Open explorer view</small>
+            </button>
             <div className="explorer-detail-grid">
               {selectedExplorerTx.rows.map((row) => (
                 <div key={`${selectedExplorerTx.id}-${row.k}`}>
@@ -519,6 +536,64 @@ export function OverviewView({ ctx }: { ctx: AppContext }) {
           </aside>
         </div>
       </section>
+
+      {explorerModalTx && (
+        <div
+          className="explorer-modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="explorer-modal-title"
+          onClick={() => setExplorerModalTxId(null)}
+        >
+          <section className="explorer-modal" onClick={(event) => event.stopPropagation()}>
+            <header className="explorer-modal-head">
+              <div>
+                <span className="explorer-inspector-label">Explorer transaction detail</span>
+                <h3 id="explorer-modal-title">{explorerModalTx.title}</h3>
+              </div>
+              <button
+                type="button"
+                className="btn btn-ghost explorer-modal-close"
+                onClick={() => setExplorerModalTxId(null)}
+              >
+                Close
+              </button>
+            </header>
+
+            <div className="explorer-modal-hero">
+              <span className={`explorer-status ${explorerModalTx.status}`}>
+                {explorerModalTx.status}
+              </span>
+              <div className="explorer-modal-hash">
+                <span>Full transaction hash</span>
+                <code>{explorerModalTx.txId}</code>
+              </div>
+            </div>
+
+            <p className="explorer-modal-summary">{explorerModalTx.summary}</p>
+
+            <div className="explorer-modal-grid">
+              {explorerModalTx.rows.map((row) => (
+                <div key={`modal-${explorerModalTx.id}-${row.k}`}>
+                  <span>{row.k}</span>
+                  {row.mono ? <code>{row.v}</code> : <strong>{row.v}</strong>}
+                </div>
+              ))}
+            </div>
+
+            <details className="explorer-raw explorer-modal-raw" open>
+              <summary>Local explorer payload</summary>
+              <pre className="explorer-json explorer-modal-json">
+                {JSON.stringify(
+                  { selected_transaction: explorerModalTx.json, account_snapshot: explorerSnapshot },
+                  null,
+                  2,
+                )}
+              </pre>
+            </details>
+          </section>
+        </div>
+      )}
 
       <FlowDiagram ctx={ctx} />
     </>
