@@ -31,7 +31,9 @@ ideas in both directions and to prepare a first, high-value contribution back to
 | [`02_DIDzM-Ecosystem-Overview-for-the-Passport-Team.md`](02_DIDzM-Ecosystem-Overview-for-the-Passport-Team.md) | A concise tour of the DIDz product family for someone on the Passport team, with the one-line "why this matters to Passport" for each. |
 | [`03_DIDz-Product-to-Passport-Component-Crosswalk.md`](03_DIDz-Product-to-Passport-Component-Crosswalk.md) | The bidirectional map: our products ↔ their promises/components. The heart of the cross-pollination. |
 | [`04_First-PR-to-Passport-Origin-Strategy.md`](04_First-PR-to-Passport-Origin-Strategy.md) | How we make our first PR to origin: what, where, with whom, and in what order. |
+| [`05_Passport-Whiteboard-Session-Key-Takeaways.md`](05_Passport-Whiteboard-Session-Key-Takeaways.md) | Distilled facts + cross-pollination map from the Charles/Karmel/Hector whiteboard session. |
 | [`references/John-Santi-DID-Videos-and-SentinelDID-Disaster-Relief.md`](references/John-Santi-DID-Videos-and-SentinelDID-Disaster-Relief.md) | Source material: John's DID videos and the SentinelDID disaster-relief concept (Venezuela / World Mobile / Starlink / Ai). |
+| [`references/Passport-Product-Presentation-Whiteboard-Transcript-2026.md`](references/Passport-Product-Presentation-Whiteboard-Transcript-2026.md) | Full verbatim transcript (EN + RU) of the Passport product presentation / whiteboard session. |
 
 ## Who
 
@@ -42,9 +44,10 @@ ideas in both directions and to prepare a first, high-value contribution back to
 
 ## Passport team contacts (for warm collaboration)
 
-- **Hector Bulgarini** — GitHub `hbulgarini`, X `@hectorest06`. Authored the
-  `demo/mn-passport-foundations` end-to-end demo. Best first technical contact.
-- **Karmel** — GitHub `Karmoola` (X likely `@karmoola`, verify). Product-side.
+- **Karmel ("Carmel")** — **Passport product lead** (confirmed by Charles Hoskinson in the
+  whiteboard session), backed by ARC. GitHub `Karmoola` (X likely `@karmoola`, verify).
+- **Hector Bulgarini** — GitHub `hbulgarini`, X `@hectorest06`. Runs the technical demo;
+  authored the `demo/mn-passport-foundations` end-to-end demo. Best first technical contact.
 - General: the official Midnight Discord and the
   [`midnight-improvement-proposals`](https://github.com/midnightntwrk/midnight-improvement-proposals)
   repo (discussions + MIP PRs).
