@@ -6,6 +6,14 @@
 (technical demo).
 **Captured:** 2026-07-04. Preserved verbatim (English original + Russian translation).
 
+**Recordings:** the raw call videos (Bravo Call P1, P2 with CH, Hector, Karmel; ~361 MB)
+are too large for git and are stored as **GitHub Release assets** on
+`bytewizard42i/passport-johns-copy` (tag `passport-bravo-calls-2026-07-02`), downloadable
+from any device:
+https://github.com/bytewizard42i/passport-johns-copy/releases/tag/passport-bravo-calls-2026-07-02
+The AMA slide deck is committed alongside this transcript as
+`AMA-with-Charles-Hoskinson-2026-07-02.pdf`.
+
 > Naming note: the transcript spells the product lead "Carmel." Our contributor records
 > show GitHub `Karmoola` / email `karmel.abdeljawad@gmail.com`. This session **confirms
 > Karmel is the Passport product lead**, backed by ARC ("Ark") and cryptographers.

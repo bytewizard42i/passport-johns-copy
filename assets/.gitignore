@@ -1,0 +1,7 @@
+# Large call recordings / source media are stored in GitHub Releases, NOT in git.
+# See DIDz-Passport-Collaboration/references/ for the transcript + release link.
+*.mp4
+*.mov
+*.mp3
+*.pdf
+*:Zone.Identifier
