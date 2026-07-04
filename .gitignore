@@ -36,3 +36,12 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+
+# Large media binaries (keep out of git; use Git LFS or external storage if versioning is truly needed)
+media/*.mp4
+media/*.mov
+media/*.webm
+*.mp4
+
+# Windows "mark of the web" metadata files
+*.Zone.Identifier
