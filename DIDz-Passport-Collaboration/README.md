@@ -32,6 +32,7 @@ ideas in both directions and to prepare a first, high-value contribution back to
 | [`03_DIDz-Product-to-Passport-Component-Crosswalk.md`](03_DIDz-Product-to-Passport-Component-Crosswalk.md) | The bidirectional map: our products ↔ their promises/components. The heart of the cross-pollination. |
 | [`04_First-PR-to-Passport-Origin-Strategy.md`](04_First-PR-to-Passport-Origin-Strategy.md) | How we make our first PR to origin: what, where, with whom, and in what order. |
 | [`05_Passport-Whiteboard-Session-Key-Takeaways.md`](05_Passport-Whiteboard-Session-Key-Takeaways.md) | Distilled facts + cross-pollination map from the Charles/Karmel/Hector whiteboard session. |
+| [`06_Why-John-Author-Background.md`](06_Why-John-Author-Background.md) | John's origin story in his own words: EncryptVault, day-one Midnight, the bartender scenario, Night Paper. Context and credibility for the recovery (MIP-4) and credentials (MIP-6) proposals. |
 | [`references/John-Santi-DID-Videos-and-SentinelDID-Disaster-Relief.md`](references/John-Santi-DID-Videos-and-SentinelDID-Disaster-Relief.md) | Source material: John's DID videos and the SentinelDID disaster-relief concept (Venezuela / World Mobile / Starlink / Ai). |
 | [`references/Passport-Product-Presentation-Whiteboard-Transcript-2026.md`](references/Passport-Product-Presentation-Whiteboard-Transcript-2026.md) | Full verbatim transcript (EN + RU) of the Passport product presentation / whiteboard session. |
 
