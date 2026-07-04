@@ -22,12 +22,32 @@ Identus for DID infrastructure, QR-code out-of-band exchange, biometric binding
 (C2), already prototyped. The biometric-binding and binary-ZKQuery patterns are directly
 reusable for Passport's selective disclosure (P9) and for soulbound recovery factors (C14).
 
-### KYCz — identityless KYC
+### KYCz — self-custodied, verifiable KYC
 A no-frills base layer: "identityless KYC verification protocol." Proves KYC-grade facts
 without revealing the underlying data. Designed to inform how DIDz is built on Midnight.
 **Why it matters to Passport:** the **trusted-issuer** half of credential-based recovery
 factors (SSN, driver's license proofs in John's recovery vision) and of privacy-preserving
 credentials (MIP-6 / C20).
+
+**The strategic upside — what Passport unlocks (John's framing):** the moment Passport
+ships, it *is* the infrastructure for **self-custodied, verifiable KYC (KYCz)**. Passport
+supplies the named, recoverable, key-bound account; KYCz turns it into portable,
+privacy-preserving proof of who you are and how you behave. That unlocks a myriad of
+high-value functionality, each expressed as a selective-disclosure proof rather than a
+data dump:
+
+- **Lower over-collateralised loans and micro-loans** — verifiable self-custodied credit
+  and reputation lets lenders cut collateral, DeFi's biggest friction, with no custodial
+  data broker.
+- **Instant real estate and other RWA qualifications** — prove income / residency /
+  accreditation / jurisdiction in one proof; RWA onboarding becomes instant.
+- **Accurate, up-to-date credit scores** — user-held, selectively proven, not bureau-siloed.
+- **Proof of reputation, participation, and authority** — soulbound, hard-to-fake,
+  reusable across the ecosystem.
+
+**Recovery and KYCz are two faces of one soulbound-credential engine** — the same P9 /
+C20 primitive, pointed at economic qualification instead of account recovery. Full
+narrative in `01_...` §8.
 
 ---
 

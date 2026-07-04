@@ -23,6 +23,17 @@ disclosure), Components **C14** (total-loss recovery flow), **C15** (helper prot
 >
 > I had a project that was for Disaster relief. This would have helped with Venezuela. A combination of World Mobile and Starlink and Ai (see `references/`).
 
+### Follow-up message (verbatim, 2026-07-04)
+
+> So once you guys make passport, you will now have the infrastructure for self custodied, verifiable KYC I call this KYCz. It then allows a myriad of functionality such as lowered over collateralized loans and micro loans, instant real estate and other rwa qualifications. Super excitng stuff. Accurate and up to date credit scores and proof of reputation, participation, authority, and many other things.
+>
+> And this if you didnt get it: The bottom line is to never being locked out of your soulbound passport object that is very hard to fake ownership of. I had this idea for Ai proctored soulbound 'traits'. I once got caught cheating in school because I drew a picture for a friend's art project. My art is distinctive and impressionist in nature. The art teacher was able to identify me in the whole school as the artist who made the picture. We interact with Ai every day and there is a measure of predictability where the Ai can challenge an individual having all the persistant memory of their past conversations and preferences. another powerful angle where you Ai could 'vouch' for you socially!
+
+_Note: the second paragraph reiterates the Ai-proctored soulbound-traits / Ai-vouching
+vision captured in §2 and §3e above. The first paragraph adds a new pillar — the **KYCz
+value narrative** — expanded in §8 below and in
+`02_DIDzM-Ecosystem-Overview-for-the-Passport-Team.md`._
+
 ---
 
 ## 2. The core thesis
@@ -121,5 +132,35 @@ needs to leave the user's device or be revealed on chain.
 - Cross-referenced products that already build these primitives are catalogued in
   `02_DIDzM-Ecosystem-Overview-for-the-Passport-Team.md` and mapped in
   `03_DIDz-Product-to-Passport-Component-Crosswalk.md`.
+
+## 8. The KYCz value narrative — what Passport unlocks
+
+John's key strategic point: **the moment Passport ships, it becomes the infrastructure
+for self-custodied, verifiable KYC** — what John calls **KYCz**. Passport gives the
+world a named, recoverable, key-bound account; KYCz gives that account **portable,
+privacy-preserving, self-custodied proofs of who you are and how you behave**. Together
+they unlock a myriad of high-value functionality:
+
+- **Lower over-collateralised loans and micro-loans.** Verifiable, self-custodied
+  reputation and credit lets lenders reduce collateral requirements — the single biggest
+  friction in DeFi lending — without a custodial data broker.
+- **Instant real estate and other RWA qualifications.** Prove you qualify (income,
+  residency, accreditation, jurisdiction) in one selective-disclosure proof, so
+  real-world-asset onboarding becomes instant instead of a paperwork marathon.
+- **Accurate, up-to-date credit scores.** A score derived from verifiable on- and
+  off-chain history, held by the user, proven selectively — not siloed in a bureau.
+- **Proof of reputation, participation, and authority.** Soulbound, hard-to-fake
+  attestations of standing, contribution, and role — reusable across the ecosystem.
+
+**Why this is Midnight-shaped:** every one of these is a *proof about the user*, never a
+disclosure of the underlying data. It is the same privacy primitive as recovery
+(selective disclosure of soulbound attributes, P9 / C20), pointed at economic
+qualification instead of account recovery. Recovery and KYCz are **two faces of one
+soulbound-credential engine.** This is the "super exciting" upside: Passport is not just
+a wallet, it is the substrate for a verifiable, self-owned economic identity.
+
+**Where it maps in Passport:** MIP-6 (ECO-02, privacy-preserving credentials) / C18 /
+C20, with trusted-issuer binding from the KYCz / DIDz.io model. See
+`02_...` (KYCz section) and `03_...` (crosswalk).
 
 _Last updated: 2026-07-04._
