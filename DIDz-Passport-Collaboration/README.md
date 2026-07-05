@@ -50,7 +50,7 @@ resolve in the MIP discussion). Then a direct note to Hector.
 ## Who
 
 - **John M.P. Santi** — EnterpriseZK Labs LLC; Midnight NightForce Bravo; Midnight
-  Ambassador; Midnight Aliit cohort 0 (inactive); Cardano Certified Blockchain
+  Aliit cohort 0 (inactive); Cardano Certified Blockchain
   Associate; Emurgo Certified Blockchain Business Consultant; Midnight Academy
   triple-certified.
 - **Ecosystem** — the DIDzMonolith superrepo of privacy-first products built on

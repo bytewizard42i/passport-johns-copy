@@ -6,7 +6,7 @@ Passport C14 total-loss-recovery canvas. Distilled from file 01 (John Santi's
 recovery vision), tightened to the canvas's terse house style, framed as
 input that defers to the DeRec direction rather than replacing it._
 
-**Author:** John Santi (johnny5i) — Midnight Ambassador, NightForce Bravo,
+**Author:** John Santi (johnny5i) — NightForce Bravo,
 Midnight Aliit cohort 0 (inactive)
 **Status:** Draft, not yet opened upstream · **Date:** 2026/07/05
 **Target file:** `docs/plans/components/C14-total-loss-recovery-flow.md`

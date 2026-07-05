@@ -40,7 +40,7 @@ The repo enforces its own conventions (see `.claude/rules/`):
 - Reach **Hector Bulgarini** (X `@hectorest06`, GitHub `hbulgarini`) — he authored the
   foundations demo and contributes to the MIP repo, so he is the right first human.
 - Join the **Midnight Discord**; watch the passport / dev channels.
-- Lead with John's credentials (NightForce Bravo, Ambassador) and a one-line offer:
+- Lead with John's credentials (NightForce Bravo) and a one-line offer:
   "I have extensive recovery design work I'd like to contribute to MIP-4."
 
 ### Rung 1 — Ice-breaker PR (trivial, real, low-risk)

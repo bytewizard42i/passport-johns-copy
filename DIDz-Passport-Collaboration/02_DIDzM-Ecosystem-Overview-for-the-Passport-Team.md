@@ -96,7 +96,7 @@ recovery-factor registry could reuse.
 ## The one-paragraph pitch
 
 DIDzM is a large, coherent body of privacy-first Midnight products with **identity and
-credentials at the core**, and a founder (John M.P. Santi, NightForce Bravo / Ambassador)
+credentials at the core**, and a founder (John M.P. Santi, NightForce Bravo)
 who has thought hard about the exact problems Passport is standardising: naming, DID
 surface, selective disclosure, scoped grants, and above all **recovery of a soulbound
 account you can never be locked out of**. We want to contribute that thinking upstream.
