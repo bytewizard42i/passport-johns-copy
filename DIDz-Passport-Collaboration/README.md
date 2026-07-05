@@ -39,8 +39,9 @@ ideas in both directions and to prepare a first, high-value contribution back to
 ## Who
 
 - **John M.P. Santi** — EnterpriseZK Labs LLC; Midnight NightForce Bravo; Midnight
-  Ambassador; Midnight Aliit cohort 0 (inactive); Cardano Certified; Emurgo Certified;
-  Midnight Academy triple-certified.
+  Ambassador; Midnight Aliit cohort 0 (inactive); Cardano Certified Blockchain
+  Associate; Emurgo Certified Blockchain Business Consultant; Midnight Academy
+  triple-certified.
 - **Ecosystem** — the DIDzMonolith superrepo of privacy-first products built on
   Midnight, with identity (DIDz.io) and identityless KYC (KYCz) at the foundation.
 
