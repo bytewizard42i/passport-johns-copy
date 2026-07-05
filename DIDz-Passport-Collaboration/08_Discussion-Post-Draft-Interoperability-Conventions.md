@@ -53,9 +53,15 @@ Where it is useful, I can also share compiling prior art for some of your
 open questions — in particular a ZK-attested **scoped-grant** primitive
 (operation × object × bounds, with chain-side enforcement) that maps onto
 your C10–C12, and a **proof-of-life** module encoding "permanent identity,
-renewable eligibility" that pairs with your C14 recovery work. I separately
-have an m-of-n soulbound recovery design I would like to offer as input to
-MIP-4, deferring to your DeRec direction.
+renewable eligibility" that pairs with your C14 recovery work.
+
+As a first concrete step, I have opened a small PR adding an **Alternative E**
+(m-of-n soulbound-attribute recovery, with an Ai-vouch factor) to the C14
+recovery canvas — offered as input to MIP-4, deferring to your DeRec
+direction: <https://github.com/midnightntwrk/passport/pull/91>. A fuller
+technical overview of how our engine is structured (the five conventions
+above, in depth) is here:
+<https://github.com/bytewizard42i/passport-johns-copy/blob/main/DIDz-Passport-Collaboration/07_DIDz-Engine-Architecture-Overview-for-Passport.md>
 
 For context, this foundation carries a broader product line — self-custodied
 KYC, patient-held health records, civic voting, estate automation, animal
