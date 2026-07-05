@@ -1,6 +1,6 @@
 # John Santi's Recovery Vision — Soulbound Attributes, Social Recovery, and Ai Vouching
 
-**Author:** John M.P. Santi (EnterpriseZK Labs; Midnight NightForce Bravo; Midnight Ambassador)
+**Author:** John M.P. Santi (EnterpriseZK Labs; Midnight NightForce Bravo; Midnight Ambassador; Midnight Aliit cohort 0, inactive)
 **Date captured:** 2026-07-04
 **Maps to Passport:** Promise **P5** (recover-from-zero), Promise **P9** (selective
 disclosure), Components **C14** (total-loss recovery flow), **C15** (helper protocol),

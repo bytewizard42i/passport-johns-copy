@@ -6,7 +6,8 @@ Passport's converge, we would rather align early than translate later; where
 they differ, we hope our shipped, compiling prior art is useful input to your
 open component questions._
 
-**Author:** John Santi (johnny5i) — Midnight Ambassador, NightForce Bravo
+**Author:** John Santi (johnny5i) — Midnight Ambassador, NightForce Bravo,
+Midnight Aliit cohort 0 (inactive)
 **Status:** Draft for the Passport team · **Date:** 2026/07/05
 **Spelling:** British, to match the Passport / MIP house style.
 
