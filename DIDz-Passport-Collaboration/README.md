@@ -9,6 +9,17 @@ DIDzMonolith as `midnight-Passport-johns_copy`). Its purpose is to cross-pollina
 ideas in both directions and to prepare a first, high-value contribution back to
 `midnightntwrk/passport` and the Midnight Improvement Proposals (MIP) process.
 
+## Live upstream artefacts (status)
+
+| Date | Artefact | Where | Status |
+|---|---|---|---|
+| 2026/07/05 | **PR #91** — C14 Alternative E (m-of-n soulbound recovery + Ai-vouch) | `midnightntwrk/passport` <https://github.com/midnightntwrk/passport/pull/91> | Open, all checks passed (CLA signed, no conflicts). Awaiting maintainer review. |
+| 2026/07/05 | **Discussion** — interoperability conventions | `midnightntwrk/midnight-improvement-proposals` | Posted (see file `08` for as-posted text). URL: _paste when confirmed._ |
+
+**Next nudge:** `@hbulgarini` + `@UvRoxx` are contributors on the `passport`
+repo, so mentions resolve there — cc them in a PR #91 comment (they will NOT
+resolve in the MIP discussion). Then a direct note to Hector.
+
 ## Golden rules for this folder
 
 1. **Never lose information.** We only add. Older thinking is kept, dated, and

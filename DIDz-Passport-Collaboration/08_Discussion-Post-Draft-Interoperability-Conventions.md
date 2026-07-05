@@ -1,9 +1,8 @@
-# Draft: Discussion Post for midnight-improvement-proposals
+# Discussion Post for midnight-improvement-proposals (AS POSTED)
 
-_Not yet opened. For John's review. Target: a **Discussion** (not a PR) on
-`midnightntwrk/midnight-improvement-proposals`, the low-friction surface the
-strategy doc (file 04) identifies. British-spelled, courteous, framed as
-context + an offer, never as a demand. Get explicit go-ahead before posting._
+_This is the final version John posted (2026/07/05) as a **Discussion** on
+`midnightntwrk/midnight-improvement-proposals`, following PR #91. Recorded
+here verbatim so our archive matches what actually went out._
 
 ---
 
@@ -14,13 +13,15 @@ external identity engine — offering shipped prior art
 
 Hello Passport and MIP maintainers,
 
-I am John Santi (johnny5i), a Midnight Ambassador. Alongside a small team I
-have been building an identity engine on Midnight — a set of Compact
-primitives and products (decentralised identifiers, real-world-asset titles,
-private contact exchange, agent identity) that compile today against compiler
-0.31.1 with full ZK key generation.
+I am John Santi (johnny5i), a Midnight Aliit Cohort-0 (inactive) & NightForce
+Bravo.
 
-Reading the Passport component canvases, it struck me how cleanly our two
+Alongside a small team I have been building a multi-faceted identity engine on
+Midnight, a set of Compact primitives and products (decentralised identifiers,
+real-world-asset titles, private contact exchange, agent identity) that
+compile today against compiler 0.31.1 with full ZK key generation.
+
+Reading the Midnight Passport component canvases, it struck me how cleanly our two
 efforts compose rather than compete. Passport answers *which key or device
 may act for an account, and how that account is recovered*. Our engine
 answers *who or what an entity is, whether it is currently alive and in good
@@ -75,15 +76,21 @@ them. Public repositories, with more being opened as they are readied:
 - realVote (private verifiable voting): <https://github.com/bytewizard42i/realVote>
 - RWAz (real-world-asset titles): <https://github.com/bytewizard42i/RWAz>
 
-I am not proposing anyone adopt our specification — I am offering context and
-working code, and asking whether it is worth comparing notes on these
-conventions before either side freezes them. Happy to bring any of this to
-the appropriate MIP thread in whatever form is most useful.
+I am offering context and working code, and asking whether it is worth
+comparing notes on these conventions before either side freezes them. "An oz.
+of prevention beats a lb. of cure".
 
-With thanks for the open component canvases — they made this easy to reason
+I am hopeful that together we can create a comprehensive system that will
+revolutionise online interactions with privacy-preserving digital identity for
+the world's digital systems.
+
+With thanks for the open component canvases, they made this easy to reason
 about.
 
 — John Santi
+
+cc   https://github.com/hbulgarini
+re: https://github.com/midnightntwrk/passport
 
 ---
 
