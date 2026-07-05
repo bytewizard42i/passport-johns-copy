@@ -67,6 +67,7 @@ them. Public repositories, with more being opened as they are readied:
 - AgenticDID (Ai-agent identity): <https://github.com/bytewizard42i/AgenticDID_io_me>
 - SelectConnect (private contact exchange): <https://github.com/bytewizard42i/selectConnect_app_pro>
 - realVote (private verifiable voting): <https://github.com/bytewizard42i/realVote>
+- RWAz (real-world-asset titles): <https://github.com/bytewizard42i/RWAz>
 
 I am not proposing anyone adopt our specification — I am offering context and
 working code, and asking whether it is worth comparing notes on these
@@ -91,12 +92,11 @@ about.
 - **Attach nothing** from `DIDz-Passport-Collaboration/`. If they bite, the
   next artefact is the C14 Alternative E patch (file 04, Rung 2).
 - **Repo visibility (checked 2026/07/05):** didz-dapp-system, AgenticDID_io_me,
-  selectConnect_app_pro, realVote, equineProData, petProData are PUBLIC.
-  RWAz, midnight-modules, safeHealthData_me, KYCz_us_app, SCIFz, DownMan,
-  GeoZ, huddlebridge are PRIVATE — do NOT link them until John flips them
-  public (GitHub → repo Settings → Danger Zone → Change visibility). RWAz
-  scanned clean of secrets and is safe to open; scan the others before
-  opening.
+  selectConnect_app_pro, realVote, RWAz, equineProData, petProData are PUBLIC.
+  midnight-modules, safeHealthData_me, KYCz_us_app, SCIFz, DownMan, GeoZ,
+  huddlebridge are still PRIVATE — do NOT link them until John flips them
+  public (GitHub → repo Settings → Danger Zone → Change visibility) AND they
+  are scanned clean of secrets.
 - **Tone check:** every "we offer / we would gladly / we are not proposing you
   adopt" is deliberate — the strategy doc's core lesson is that "conform to
   us" becomes shelfware; "useful, in your format, easy to say yes to" gets

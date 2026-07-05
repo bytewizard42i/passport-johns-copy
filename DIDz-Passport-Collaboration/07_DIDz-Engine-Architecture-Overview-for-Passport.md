@@ -60,10 +60,10 @@ aligning with Passport.
 | AgenticDID — identity for Ai agents | <https://github.com/bytewizard42i/AgenticDID_io_me> |
 | SelectConnect — private contact exchange | <https://github.com/bytewizard42i/selectConnect_app_pro> |
 | realVote — private verifiable voting | <https://github.com/bytewizard42i/realVote> |
+| RWAz — real-world-asset titles | <https://github.com/bytewizard42i/RWAz> |
 | equineProData / petProData — animal records | <https://github.com/bytewizard42i/equineProData> · <https://github.com/bytewizard42i/petProData> |
 
-_RWAz (real-world-asset titles) and the `midnight-modules` engine itself are
-being made public; links to follow._
+_The shared `midnight-modules` engine is being made public; link to follow._
 
 ---
 
