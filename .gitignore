@@ -45,3 +45,4 @@ media/*.webm
 
 # Windows "mark of the web" metadata files
 *.Zone.Identifier
+*:Zone.Identifier
