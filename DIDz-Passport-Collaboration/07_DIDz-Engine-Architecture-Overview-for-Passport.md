@@ -178,7 +178,7 @@ the same engine:
 - **realVote** — one-person-one-vote civic voting: proof-of-life freshness
   (§ keeper epochs) plus per-context nullifiers (§4) — a living person votes
   once per election, unlinkably across elections.
-- **DownMan** — estate and inheritance automation, triggered by the same
+- **LegacyKey** — estate and inheritance automation, triggered by the same
   irreversible death attestation the proof-of-life module records.
 - **SCIFz** — clearance-gated knowledge compartments; access is an
   attestation-gated scoped grant.

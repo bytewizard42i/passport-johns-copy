@@ -106,7 +106,7 @@ re: https://github.com/midnightntwrk/passport
   next artefact is the C14 Alternative E patch (file 04, Rung 2).
 - **Repo visibility (checked 2026/07/05):** didz-dapp-system, AgenticDID_io_me,
   selectConnect_app_pro, realVote, RWAz, equineProData, petProData are PUBLIC.
-  midnight-modules, safeHealthData_me, KYCz_us_app, SCIFz, DownMan, GeoZ,
+  midnight-modules, safeHealthData_me, KYCz_us_app, SCIFz, DownMan (LegacyKey), GeoZ,
   huddlebridge are still PRIVATE — do NOT link them until John flips them
   public (GitHub → repo Settings → Danger Zone → Change visibility) AND they
   are scanned clean of secrets.
